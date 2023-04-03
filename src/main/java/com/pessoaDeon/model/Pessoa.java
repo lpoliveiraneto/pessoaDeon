@@ -63,11 +63,11 @@ public class Pessoa {
     @Enumerated(EnumType.STRING)
     private CorPele corPele;
 
-//    private Pais pais;
+    private Pais pais;
 
-//    private Estado estado;
+    private Estado estadoNaturalidade;
 
-//    private Cidade cidade;
+    private Cidade cidadeNaturalidade;
 
     private Email email;
 
