@@ -1,9 +1,6 @@
 package com.pessoaDeon.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity(name="telefone")
@@ -20,4 +17,8 @@ public class Telefone {
     private String telefone;
 
     private boolean atual;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_pessoa")
+    private Pessoa pessoa;
 }

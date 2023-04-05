@@ -7,8 +7,9 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-//@Entity
+@Entity
 @Table(name="pessoa")
 @Getter
 @Setter
@@ -41,6 +42,7 @@ public class Pessoa {
     private LocalDateTime dataNascimento;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
     @Size(max=50)
@@ -62,15 +64,31 @@ public class Pessoa {
     @Enumerated(EnumType.STRING)
     private CorPele corPele;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_pais")
     private Pais pais;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_estado")
     private Estado estadoNaturalidade;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_cidade")
     private Cidade cidadeNaturalidade;
 
-    private Email email;
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Email> email;
 
-    private Telefone telefone;
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Telefone> telefone;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_profissao")
     private Profissao profissao;
+
+    @Enumerated(EnumType.STRING)
+    private Escolaridade escolaridade;
 }
