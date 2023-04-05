@@ -1,9 +1,13 @@
 package com.pessoaDeon.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
 @Entity(name="endereco")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Endereco {
 
     @Id

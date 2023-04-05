@@ -1,10 +1,13 @@
 package com.pessoaDeon.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity(name="estado")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Estado {
 
     @Id

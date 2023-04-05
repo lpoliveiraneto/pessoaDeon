@@ -1,9 +1,12 @@
 package com.pessoaDeon.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name="cidade")
 public class Cidade {
 
