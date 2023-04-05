@@ -1,9 +1,6 @@
 package com.pessoaDeon.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity(name="logradouro")
@@ -12,7 +9,8 @@ public class Logradouro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_logradouro;
+    @Column(name = "id_logradouro")
+    private int idLogradouro;
 
     private String cep;
 

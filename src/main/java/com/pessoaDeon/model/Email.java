@@ -17,4 +17,6 @@ public class Email {
 
     private String email;
 
+    private boolean atual;
+
 }

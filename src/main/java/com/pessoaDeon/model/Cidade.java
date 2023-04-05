@@ -1,9 +1,6 @@
 package com.pessoaDeon.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -12,7 +9,18 @@ public class Cidade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_cidade")
     private int idCidade;
 
     private String descricao;
+
+    @Column(name = "cod_ibge")
+    private int codigoIbge;
+
+    @Column(name = "eh_capital")
+    private boolean capital;
+
+    private float latitude;
+
+    private float longitude;
 }

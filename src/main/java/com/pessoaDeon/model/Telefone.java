@@ -14,4 +14,6 @@ public class Telefone {
     private int idTelefone;
 
     private String telefone;
+
+    private boolean atual;
 }
