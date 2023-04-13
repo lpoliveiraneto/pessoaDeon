@@ -20,4 +20,12 @@ public class Endereco {
     private String referencia;
 
     private boolean atual;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_pessoa")
+    private Pessoa pessoa;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_logradouro")
+    private Logradouro logradouro;
 }
