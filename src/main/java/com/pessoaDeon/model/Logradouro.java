@@ -23,4 +23,16 @@ public class Logradouro {
 
     private String complemento;
 
+    private String localidade;
+
+    private String uf;
+
+    private String ibge;
+
+    private String gia;
+
+    private String ddd;
+
+    private String siafi;
+
 }
