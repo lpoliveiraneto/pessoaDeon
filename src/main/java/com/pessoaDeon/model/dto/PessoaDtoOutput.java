@@ -1,11 +1,14 @@
 package com.pessoaDeon.model.dto;
 
 import com.pessoaDeon.model.enumeration.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class PessoaDtoOutput {
 
+    private Long id;
     private String nome;
     private String nomeMae;
     private String nomePai;
