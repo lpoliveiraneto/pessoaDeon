@@ -1,6 +1,7 @@
 package com.pessoaDeon.service;
 
 import com.pessoaDeon.model.Logradouro;
+import com.pessoaDeon.repository.LogradouroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,10 +10,16 @@ public class LogradouroService {
 
     @Autowired
     private RestTemplate http;
+    @Autowired
+    private LogradouroRepository logradouroRepository;
+
     private static final String viaCepUrl = "https://viacep.com.br/ws/";
 
+    public Logradouro getByCep(String cep){
+        return logradouroRepository.findByCep(cep).get();
+    }
 
-    public Logradouro getLogradouroByCep(String cep){
+    private Logradouro getLogradouroByCep(String cep){
         try{
             Logradouro buscaLogradouro = http.getForObject(this.getUriCEPAPI(cep), Logradouro.class);
             return buscaLogradouro;
