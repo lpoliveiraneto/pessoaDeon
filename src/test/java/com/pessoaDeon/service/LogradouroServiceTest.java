@@ -1,8 +1,7 @@
 package com.pessoaDeon.service;
 
+import com.pessoaDeon.domain.service.LogradouroService;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LogradouroServiceTest {
 
