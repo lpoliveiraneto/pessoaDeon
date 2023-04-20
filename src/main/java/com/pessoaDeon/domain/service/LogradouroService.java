@@ -19,12 +19,14 @@ public class LogradouroService {
     private static final String viaCepUrl = "https://viacep.com.br/ws/";
 
     public Logradouro getByCep(String cep){
-        Optional logradouro =  logradouroRepository.findByCep(cepTratamento(cep));
+        Optional<Logradouro> logradouro =  logradouroRepository.findByCep(cep);
 
         if(logradouro.isPresent()){
-            return (Logradouro) logradouro.get();
+            return logradouro.get();
         }else {
-            return getLogradouroByCep(cep);
+            Logradouro logradouroViaCep = getLogradouroByCep(cep);;
+            logradouroRepository.save(logradouroViaCep);
+            return logradouroViaCep;
         }
     }
 

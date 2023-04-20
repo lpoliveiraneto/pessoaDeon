@@ -18,7 +18,7 @@ public class LogradouroController {
 
     @GetMapping("/{cep}")
     public ResponseEntity getBuscaPorCep(@PathVariable String cep){
-        Logradouro logradouro = logradouroService.getLogradouroByCep(cep);
+        Logradouro logradouro = logradouroService.getByCep(cep);
 
         return ResponseEntity.ok().body(logradouro);
 

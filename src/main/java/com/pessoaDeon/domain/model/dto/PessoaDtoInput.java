@@ -1,7 +1,6 @@
 package com.pessoaDeon.domain.model.dto;
 
 import com.pessoaDeon.domain.model.enumeration.*;
-import com.pessoaDeon.model.enumeration.*;
 import lombok.Getter;
 import lombok.Setter;
 
