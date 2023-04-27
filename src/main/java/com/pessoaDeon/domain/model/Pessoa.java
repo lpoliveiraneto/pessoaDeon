@@ -1,5 +1,6 @@
 package com.pessoaDeon.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pessoaDeon.domain.model.enumeration.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,8 +10,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name="pessoa")
+@Entity(name="pessoa")
+//@Table(name="pessoa")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name= "id_pessoa")
     private Long id;
 
     @NotNull
@@ -65,17 +67,19 @@ public class Pessoa {
     private CorPele corPele;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    //@ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_pais")
     private Pais pais;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "fk_estado")
     private Estado estadoNaturalidade;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "fk_cidade")
     private Cidade cidadeNaturalidade;
 
@@ -85,9 +89,9 @@ public class Pessoa {
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Telefone> telefone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_profissao")
-    private Profissao profissao;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "fk_profissao")
+//    private Profissao profissao;
 
     @Enumerated(EnumType.STRING)
     private Escolaridade escolaridade;

@@ -29,7 +29,8 @@ public class PessoaController {
         Optional<Pessoa> pessoa = pessoaService.buscarPessoa(id);
 
         if(pessoa.isPresent()){
-            return ResponseEntity.ok().body(pessoa.get());
+            Pessoa pesquisaPessoa = pessoa.get();
+            return ResponseEntity.ok().body(pesquisaPessoa);
         }else{
             return ResponseEntity.notFound().build();
         }

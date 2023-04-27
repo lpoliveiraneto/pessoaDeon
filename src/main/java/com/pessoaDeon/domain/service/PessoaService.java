@@ -32,9 +32,17 @@ public class PessoaService {
 
     @Transactional
     public PessoaDtoOutput salvarPessoa(PessoaDtoInput pessoaDto) {
-        Pessoa pessoa =  modelMapper.map(pessoaDto, Pessoa.class);
-        pessoaRepository.save(pessoa);
 
-        return modelMapper.map(pessoa, PessoaDtoOutput.class);
+        Optional<Pessoa> pessoa = pessoaRepository.findByCpf(pessoaDto.getCpf());
+
+        if(pessoa.isPresent()){
+          throw new RuntimeException("ESTE FELA JÁ FOI ADICIONADO");
+        }else{
+            Pessoa newPessoa =  modelMapper.map(pessoaDto, Pessoa.class);
+            pessoaRepository.save(newPessoa);
+            return modelMapper.map(pessoa, PessoaDtoOutput.class);
+        }
+
+
     }
 }

@@ -18,12 +18,12 @@ public class Cidade {
     private String descricao;
 
     @Column(name = "cod_ibge")
-    private int codigoIbge;
+    private Integer codigoIbge;
 
     @Column(name = "eh_capital")
     private boolean capital;
 
-    private float latitude;
+    private Float latitude;
 
-    private float longitude;
+    private Float longitude;
 }
