@@ -1,8 +1,8 @@
 package com.pessoaDeon.domain.service;
 
 import com.pessoaDeon.domain.model.Endereco;
-import com.pessoaDeon.domain.repository.EnderecoRepository;
-import com.pessoaDeon.domain.repository.PessoaRepository;
+import com.pessoaDeon.domain.repository.endereco.EnderecoRepository;
+import com.pessoaDeon.domain.repository.pessoa.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +21,7 @@ public class EnderecoService {
     public List<Endereco> listarEnderecos(){
         return enderecoRepository.findAll();
     }
+
+//    public void salvarObjeto
 
 }

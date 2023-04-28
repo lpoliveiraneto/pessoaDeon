@@ -1,4 +1,4 @@
-package com.pessoaDeon.api.controller;
+package com.pessoaDeon.api.controller.pessoa;
 
 import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.dto.PessoaDtoInput;
@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/pessoas")
+@CrossOrigin(origins= "*")
 public class PessoaController {
 
     @Autowired

@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.repository;
+package com.pessoaDeon.domain.repository.pessoa;
 
 import com.pessoaDeon.domain.model.Pessoa;
 import org.springframework.data.jpa.repository.JpaRepository;

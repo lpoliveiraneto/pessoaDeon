@@ -3,7 +3,7 @@ package com.pessoaDeon.domain.service;
 import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.dto.PessoaDtoInput;
 import com.pessoaDeon.domain.model.dto.PessoaDtoOutput;
-import com.pessoaDeon.domain.repository.PessoaRepository;
+import com.pessoaDeon.domain.repository.pessoa.PessoaRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +37,10 @@ public class PessoaService {
 
         if(pessoa.isPresent()){
           throw new RuntimeException("ESTE FELA JÁ FOI ADICIONADO");
-        }else{
-            Pessoa newPessoa =  modelMapper.map(pessoaDto, Pessoa.class);
+        }else {
+            Pessoa newPessoa = modelMapper.map(pessoaDto, Pessoa.class);
             pessoaRepository.save(newPessoa);
             return modelMapper.map(pessoa, PessoaDtoOutput.class);
         }
-
-
     }
 }

@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.repository;
+package com.pessoaDeon.domain.repository.endereco;
 
 import com.pessoaDeon.domain.model.Logradouro;
 import org.springframework.data.jpa.repository.JpaRepository;

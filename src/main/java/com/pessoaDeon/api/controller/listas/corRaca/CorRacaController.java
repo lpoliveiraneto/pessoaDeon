@@ -1,6 +1,7 @@
 package com.pessoaDeon.api.controller.listas.corRaca;
 
 import com.pessoaDeon.domain.model.enumeration.CorPele;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/racas")
+@CrossOrigin(origins= "*")
 public class CorRacaController {
 
     @GetMapping
