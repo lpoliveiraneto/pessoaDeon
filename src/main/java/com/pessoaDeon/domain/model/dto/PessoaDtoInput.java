@@ -1,5 +1,8 @@
 package com.pessoaDeon.domain.model.dto;
 
+import com.pessoaDeon.domain.model.Cidade;
+import com.pessoaDeon.domain.model.Estado;
+import com.pessoaDeon.domain.model.Pais;
 import com.pessoaDeon.domain.model.enumeration.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +25,7 @@ public class PessoaDtoInput {
     private IdentidadeGenero identidadeGenero;
     private Deficiencia deficiencia;
     private CorPele corPele;
-    private Integer pais;
-    private Integer estadoNaturalidade;
-    private Integer cidadeNaturalidade;
+    private Pais pais;
+    private Estado estadoNaturalidade;
+    private Cidade cidadeNaturalidade;
 }
