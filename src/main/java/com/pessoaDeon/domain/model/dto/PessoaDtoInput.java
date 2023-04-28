@@ -22,7 +22,7 @@ public class PessoaDtoInput {
     private IdentidadeGenero identidadeGenero;
     private Deficiencia deficiencia;
     private CorPele corPele;
-    private int pais;
-    private int estado;
-    private int cidade;
+    private Integer pais;
+    private Integer estadoNaturalidade;
+    private Integer cidadeNaturalidade;
 }
