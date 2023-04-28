@@ -38,7 +38,7 @@ public class PessoaService {
         if(pessoa.isPresent()){
           throw new RuntimeException("ESTE FELA JÁ FOI ADICIONADO");
         }else{
-            Pessoa newPessoa =  modelMapper.map(pessoaDto, Pessoa.class);
+            Pessoa newPessoa = modelMapper.map(pessoaDto, Pessoa.class);
             pessoaRepository.save(newPessoa);
             return modelMapper.map(pessoa, PessoaDtoOutput.class);
         }
