@@ -1,9 +1,11 @@
 package com.pessoaDeon.domain.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.enumeration.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -16,7 +18,9 @@ public class PessoaDtoOutput {
     private String nomePai;
     private String alcunha;
     private String cpf;
-    private LocalDateTime dataNascimento;
+    
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataNascimento;
     private Sexo sexo;
     private String nomeSocial;
     private OrientacaoSexual orientacaoSexual;

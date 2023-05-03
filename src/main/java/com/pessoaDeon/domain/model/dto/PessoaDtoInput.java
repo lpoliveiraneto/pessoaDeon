@@ -1,13 +1,19 @@
 package com.pessoaDeon.domain.model.dto;
 
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.Cidade;
 import com.pessoaDeon.domain.model.Estado;
 import com.pessoaDeon.domain.model.Pais;
-import com.pessoaDeon.domain.model.enumeration.*;
+import com.pessoaDeon.domain.model.enumeration.CorPele;
+import com.pessoaDeon.domain.model.enumeration.Deficiencia;
+import com.pessoaDeon.domain.model.enumeration.IdentidadeGenero;
+import com.pessoaDeon.domain.model.enumeration.OrientacaoSexual;
+import com.pessoaDeon.domain.model.enumeration.Sexo;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,7 +24,9 @@ public class PessoaDtoInput {
     private String nomePai;
     private String alcunha;
     private String cpf;
-    private LocalDateTime dataNascimento;
+    
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataNascimento;
     private Sexo sexo;
     private String nomeSocial;
     private OrientacaoSexual orientacaoSexual;

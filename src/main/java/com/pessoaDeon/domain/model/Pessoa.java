@@ -1,5 +1,6 @@
 package com.pessoaDeon.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pessoaDeon.domain.model.enumeration.*;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +43,8 @@ public class Pessoa {
     private String cpf;
 
     @NotNull
-    private LocalDateTime dataNascimento;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataNascimento;
 
     @NotNull
     @Enumerated(EnumType.STRING)
