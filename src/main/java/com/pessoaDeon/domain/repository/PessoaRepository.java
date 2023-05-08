@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
     @Override
-    Optional<Pessoa> findById(Long idPessoa);
+    Optional<Pessoa> findById(Integer idPessoa);
 
     Optional<Pessoa> findByCpf(String cpf);
 

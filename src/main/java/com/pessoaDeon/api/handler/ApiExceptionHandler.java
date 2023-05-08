@@ -1,7 +1,7 @@
 package com.pessoaDeon.api.handler;
 
-import com.pessoaDeon.domain.exception.LogradouroNotFoundException;
-import com.pessoaDeon.domain.exception.PessoaNotFoundException;
+import java.time.LocalDateTime;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import com.pessoaDeon.domain.exception.EnderecoNotFoundException;
+import com.pessoaDeon.domain.exception.LogradouroNotFoundException;
+import com.pessoaDeon.domain.exception.PessoaNotFoundException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -28,5 +30,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         return handleExceptionInternal(exception, problema, new HttpHeaders(), status, request);
+    }
+    
+    @ExceptionHandler(EnderecoNotFoundException.class)
+    public ResponseEntity<?> handlerEnderecoNotFoundException(EnderecoNotFoundException enderecoException, WebRequest request){
+    	Problema problemaEndereco = new Problema(LocalDateTime.now(), enderecoException.getMessage(), enderecoException.toString());
+    	HttpStatus status = HttpStatus.NOT_FOUND;
+    	return handleExceptionInternal(enderecoException, problemaEndereco, new HttpHeaders(), status, request);
     }
 }

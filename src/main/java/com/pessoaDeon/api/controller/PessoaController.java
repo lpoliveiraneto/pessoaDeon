@@ -26,8 +26,8 @@ public class PessoaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getPessoa(@PathVariable Long id){
-        Optional<Pessoa> pessoa = pessoaService.buscarPessoa(id);
+    public ResponseEntity getPessoa(@PathVariable Integer idPessoa){
+        Optional<Pessoa> pessoa = pessoaService.buscarPessoa(idPessoa);
 
         if(pessoa.isPresent()){
             Pessoa pesquisaPessoa = pessoa.get();

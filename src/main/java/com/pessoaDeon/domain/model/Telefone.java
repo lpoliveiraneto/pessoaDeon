@@ -12,11 +12,11 @@ public class Telefone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idTelefone;
+    private Integer idTelefone;
 
     private String telefone;
 
-    private boolean atual;
+    private Boolean atual;
 
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")

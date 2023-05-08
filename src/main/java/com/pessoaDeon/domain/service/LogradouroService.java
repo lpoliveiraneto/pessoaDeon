@@ -16,7 +16,7 @@ public class LogradouroService {
     @Autowired
     private LogradouroRepository logradouroRepository;
 
-    private static final String viaCepUrl = "https://viacep.com.br/ws/";
+    private final String viaCepUrl = "https://viacep.com.br/ws/";
 
     public Logradouro getByCep(String cep){
         Optional<Logradouro> logradouro =  logradouroRepository.findByCep(cep);

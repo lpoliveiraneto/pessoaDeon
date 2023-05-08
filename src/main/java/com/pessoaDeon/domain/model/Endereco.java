@@ -13,13 +13,13 @@ public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_endereco")
-    private int idEndereco;
+    private Integer idEndereco;
 
-    private int numero;
+    private String numero;
 
     private String referencia;
 
-    private boolean atual;
+    private Boolean atual;
 
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")

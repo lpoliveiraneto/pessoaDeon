@@ -16,11 +16,11 @@ public class Email {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_email;
+    private Integer id_email;
 
     private String email;
 
-    private boolean atual;
+    private Boolean atual;
 
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")

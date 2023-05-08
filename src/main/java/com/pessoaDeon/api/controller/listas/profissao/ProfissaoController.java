@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/profissoes")
-public class ProfissãoController{
+public class ProfissaoController{
     @Autowired
     private ProfissaoRepository profissaoRepository;
 
