@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pessoaDeon.domain.model.enumeration.CorPele;
 import com.pessoaDeon.domain.model.enumeration.Deficiencia;
 import com.pessoaDeon.domain.model.enumeration.Escolaridade;
@@ -99,6 +100,7 @@ public class Pessoa implements Serializable {
     @JoinColumn(name = "fk_pais")
     private Pais pais;
 
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @NotNull
     @ManyToOne
     @JoinColumn(name = "fk_estado")

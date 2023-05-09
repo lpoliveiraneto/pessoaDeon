@@ -25,7 +25,7 @@ public class PessoaController {
         return pessoaService.listarPessoas();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idPessoa}")
     public ResponseEntity getPessoa(@PathVariable Integer idPessoa){
         Optional<Pessoa> pessoa = pessoaService.buscarPessoa(idPessoa);
 
@@ -37,6 +37,7 @@ public class PessoaController {
         }
     }
 
+    @ResponseBody
     @PostMapping("/salvar")
     public ResponseEntity<PessoaDtoOutput> cadastrarPessoa(@RequestBody PessoaDtoInput pessoaDto){
         PessoaDtoOutput pessoa = pessoaService.salvarPessoa(pessoaDto);
