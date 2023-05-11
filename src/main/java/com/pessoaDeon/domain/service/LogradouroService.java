@@ -4,6 +4,7 @@ import com.pessoaDeon.domain.model.Logradouro;
 import com.pessoaDeon.domain.repository.LogradouroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -18,14 +19,17 @@ public class LogradouroService {
 
     private final String viaCepUrl = "https://viacep.com.br/ws/";
 
+    @Transactional
     public Logradouro getByCep(String cep){
         Optional<Logradouro> logradouro =  logradouroRepository.findByCep(cep);
 
         if(logradouro.isPresent()){
             return logradouro.get();
         }else {
-            Logradouro logradouroViaCep = getLogradouroByCep(cep);;
-            logradouroRepository.save(logradouroViaCep);
+            Logradouro logradouroViaCep = getLogradouroByCep(cep);
+            if(!logradouroViaCep.getErro()) {
+            	logradouroRepository.save(logradouroViaCep);
+            }
             return logradouroViaCep;
         }
     }

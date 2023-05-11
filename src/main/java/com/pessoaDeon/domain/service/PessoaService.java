@@ -1,7 +1,11 @@
 package com.pessoaDeon.domain.service;
 
 import com.pessoaDeon.domain.exception.PessoaNotFoundException;
+import com.pessoaDeon.domain.model.Endereco;
+import com.pessoaDeon.domain.model.Logradouro;
 import com.pessoaDeon.domain.model.Pessoa;
+import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
+import com.pessoaDeon.domain.model.dto.EnderecoDtoInput;
 import com.pessoaDeon.domain.model.dto.PessoaDtoInput;
 import com.pessoaDeon.domain.model.dto.PessoaDtoOutput;
 import com.pessoaDeon.domain.repository.PessoaRepository;
@@ -18,6 +22,7 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+    
     @Autowired
     private ModelMapper modelMapper;
 
@@ -43,7 +48,16 @@ public class PessoaService {
             var p = pessoaRepository.save(newPessoa);
             return modelMapper.map(p, PessoaDtoOutput.class);
         }
-
-
     }
+
+    @Transactional
+	public Pessoa salvarPessoaDeon(Pessoa pessoa) {
+		Optional<Pessoa> pessoaOpt = pessoaRepository.findByCpf(pessoa.getCpf());
+
+        if(!pessoaOpt.isPresent()){
+        	return pessoaRepository.save(pessoa);
+        }else{
+        	throw new PessoaNotFoundException("Pessoa já consta na base de dados");
+        }
+	}
 }

@@ -1,5 +1,7 @@
 package com.pessoaDeon.domain.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,9 +10,11 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Telefone {
+public class Telefone implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTelefone;
 

@@ -8,14 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.domain.model.Endereco;
-import com.pessoaDeon.domain.model.dto.EnderecoDtoInput;
 import com.pessoaDeon.domain.service.EnderecoService;
 
 @RestController
@@ -37,11 +34,11 @@ public class EnderecoController {
     	return ResponseEntity.status(HttpStatus.OK).body(endereco);
     }
 
-    @ResponseBody
-    @PostMapping("/salvarEndereco")
-    public ResponseEntity<?> salvarEndereco(@RequestBody EnderecoDtoInput endereco, Integer idPessoa) {
-    	
-    	Endereco enderecoNovo = enderecoService.salvarEnderecoPessoa(endereco, idPessoa);
-    	return ResponseEntity.status(HttpStatus.OK).body(enderecoNovo);
-    }
+//    @ResponseBody
+//    @PostMapping("/salvarEndereco")
+//    public ResponseEntity<?> salvarEndereco(@RequestBody EnderecoDtoInput endereco, Integer idPessoa) {
+//    	
+//    	Endereco enderecoNovo = enderecoService.salvarEnderecoPessoa(endereco, idPessoa);
+//    	return ResponseEntity.status(HttpStatus.OK).body(enderecoNovo);
+//    }
 }
