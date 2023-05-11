@@ -38,5 +38,8 @@ public class Logradouro implements Serializable{
     private String ddd;
 
     private String siafi;
+    
+    @Transient
+    private Boolean erro = false;
 
 }

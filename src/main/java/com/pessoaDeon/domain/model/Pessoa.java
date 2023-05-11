@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -67,7 +69,8 @@ public class Pessoa implements Serializable {
     private String cpf;
 
     @NotNull
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
 
     @NotNull
@@ -100,12 +103,13 @@ public class Pessoa implements Serializable {
     @JoinColumn(name = "fk_pais")
     private Pais pais;
 
-    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @NotNull
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_estado")
     private Estado estadoNaturalidade;
 
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @NotNull
     @ManyToOne
     @JoinColumn(name = "fk_cidade")
