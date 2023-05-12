@@ -1,5 +1,7 @@
 package com.pessoaDeon.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,11 @@ public class ContatoService {
 	
 	@Transactional
 	public Telefone saveContato(Telefone telefone) {
+		Optional<Telefone> buscaTelefone = contatoRepository.findById(telefone.getIdTelefone());
+		
+		if(buscaTelefone.isPresent()) {
+			throw new RuntimeException("Telefone já cadastrado!");
+		}
 		return contatoRepository.save(telefone);
 	}
 }
