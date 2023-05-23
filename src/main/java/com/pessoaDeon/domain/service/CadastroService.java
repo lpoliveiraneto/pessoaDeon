@@ -62,21 +62,22 @@ public class CadastroService {
 	}
 	
 	@Transactional
-	private Telefone salvarTelefone(CadastroRequestDto cadastroRequestDto, Pessoa telefonePessoa) {
+	private Telefone salvarTelefone(CadastroRequestDto requestDto, Pessoa pessoa) {
 		Telefone telefone = new Telefone();
-		telefone.setTelefone(cadastroRequestDto.getTelefone());
-		telefone.setAtual(cadastroRequestDto.getTelefoneAtual());
-		telefone.setPessoa(telefonePessoa);
+		telefone.setTelefone(requestDto.getTelefone());
+		telefone.setAtual(true);
+		telefone.setPessoa(pessoa);
+		telefone.setTipoWhatsapp(requestDto.getTipoWhatsapp());
+		telefone.setTipoTelegram(requestDto.getTipoTelegram());
 		var telefoneSave = contatoService.saveContato(telefone);
 		return telefoneSave;
 	}
 	
 	@Transactional
 	private Email salvarEmail(CadastroRequestDto dto, Pessoa pessoa) {
-//		Email email = modelMapper.map(dto, Email.class);
 		Email email = new Email();
 		email.setEmail(dto.getEmail());
-		email.setAtual(dto.getEmailAtual());
+		email.setAtual(true);
 		email.setPessoa(pessoa);
 		var emailSave = emailService.salvarEmail(email);
 		return emailSave;

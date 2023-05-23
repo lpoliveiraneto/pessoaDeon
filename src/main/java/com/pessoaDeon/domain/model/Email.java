@@ -20,7 +20,7 @@ public class Email {
 
     private String email;
 
-    private Boolean atual;
+    private Boolean atual = false;
 
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")

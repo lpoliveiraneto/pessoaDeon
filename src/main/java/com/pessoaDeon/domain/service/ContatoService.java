@@ -17,11 +17,11 @@ public class ContatoService {
 	
 	@Transactional
 	public Telefone saveContato(Telefone telefone) {
-		Optional<Telefone> buscaTelefone = contatoRepository.findById(telefone.getIdTelefone());
-		
-		if(buscaTelefone.isPresent()) {
-			throw new RuntimeException("Telefone já cadastrado!");
-		}
 		return contatoRepository.save(telefone);
+		//Optional<Telefone> buscaTelefone = contatoRepository.findById(telefone.getIdTelefone());
+		
+//		if(buscaTelefone.isPresent()) {
+	//		throw new RuntimeException("Telefone já cadastrado!");
+	//	}
 	}
 }

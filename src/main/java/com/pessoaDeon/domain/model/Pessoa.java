@@ -4,23 +4,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.pessoaDeon.domain.model.enumeration.CorPele;
-import com.pessoaDeon.domain.model.enumeration.Deficiencia;
-import com.pessoaDeon.domain.model.enumeration.Escolaridade;
-import com.pessoaDeon.domain.model.enumeration.IdentidadeGenero;
-import com.pessoaDeon.domain.model.enumeration.OrientacaoSexual;
-import com.pessoaDeon.domain.model.enumeration.Sexo;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -69,32 +58,37 @@ public class Pessoa implements Serializable {
     private String cpf;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
+//    @Enumerated(EnumType.STRING)
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "fk_sexo")
     private Sexo sexo;
 
     @Size(max=50)
     private String nomeSocial;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "fk_orientacao_sexual")
+    @ManyToOne
     private OrientacaoSexual orientacaoSexual;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "fk_identidade_genero")
+    @ManyToOne
     private IdentidadeGenero identidadeGenero;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "fk_deficiencia")
+    @ManyToOne
     private Deficiencia deficiencia;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private CorPele corPele;
+    @JoinColumn(name = "fk_raca")
+    @ManyToOne
+    private Raca corPele;
 
     @NotNull
     //@ManyToOne(fetch = FetchType.LAZY)
@@ -121,10 +115,17 @@ public class Pessoa implements Serializable {
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Telefone> telefone;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "fk_profissao")
-//    private Profissao profissao;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_profissao")
+    private Profissao profissao;
+    
+    @NotNull
+    @JoinColumn(name = "fk_estado_civil")
+    @ManyToOne
+    private EstadoCivil estadoCivil;
 
-    @Enumerated(EnumType.STRING)
+    @NotNull
+    @JoinColumn(name = "fk_escolaridade")
+    @ManyToOne
     private Escolaridade escolaridade;
 }

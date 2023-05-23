@@ -17,10 +17,10 @@ public class EmailService {
 	
 	@Transactional
 	public Email salvarEmail(Email email) {
-		Optional<Email> buscaEmail = emailRepository.findById(email.getId_email());
-		if(buscaEmail.isPresent()) {
-			throw new RuntimeException("Email já está cadastrado para uma pessoa");
-		}
+//		Optional<Email> buscaEmail = emailRepository.findById(email.getId_email());
+//		if(buscaEmail.isPresent()) {
+//			throw new RuntimeException("Email já está cadastrado para uma pessoa");
+//		}
 		return emailRepository.save(email);
 	}
 }

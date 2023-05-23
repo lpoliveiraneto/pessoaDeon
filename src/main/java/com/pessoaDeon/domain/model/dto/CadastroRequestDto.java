@@ -1,28 +1,31 @@
 package com.pessoaDeon.domain.model.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.Cidade;
+import com.pessoaDeon.domain.model.Deficiencia;
+import com.pessoaDeon.domain.model.Escolaridade;
 import com.pessoaDeon.domain.model.Estado;
+import com.pessoaDeon.domain.model.EstadoCivil;
+import com.pessoaDeon.domain.model.IdentidadeGenero;
+import com.pessoaDeon.domain.model.OrientacaoSexual;
 import com.pessoaDeon.domain.model.Pais;
 import com.pessoaDeon.domain.model.Profissao;
-import com.pessoaDeon.domain.model.enumeration.CorPele;
-import com.pessoaDeon.domain.model.enumeration.Deficiencia;
-import com.pessoaDeon.domain.model.enumeration.Escolaridade;
-import com.pessoaDeon.domain.model.enumeration.EstadoCivil;
-import com.pessoaDeon.domain.model.enumeration.IdentidadeGenero;
+import com.pessoaDeon.domain.model.Raca;
+import com.pessoaDeon.domain.model.Sexo;
 import com.pessoaDeon.domain.model.enumeration.Nacionalidade;
-import com.pessoaDeon.domain.model.enumeration.OrientacaoSexual;
-import com.pessoaDeon.domain.model.enumeration.Sexo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CadastroRequestDto {
 	
 //	pessoa
@@ -33,20 +36,19 @@ public class CadastroRequestDto {
 	private String alcunha;
 	private String nomeSocial;
 	private Sexo sexo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private LocalDate dataNascimento;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataNascimento;
 	private EstadoCivil estadoCivil;
 	private OrientacaoSexual orientacaoSexual;
 	private Deficiencia deficiencia;
-	private CorPele corPele;
-	private IdentidadeGenero identidadeGenero;
+	private Raca corPele;
 	private Profissao profissao;
 	private Escolaridade escolaridade;
 	private Nacionalidade nacionalidade;
 	private Pais pais;
 	private Estado estadoNaturalidade;
 	private Cidade cidadeNaturalidade;
+	private IdentidadeGenero identidadeGenero;
 	
 	
 //	logradouro	
@@ -54,6 +56,7 @@ public class CadastroRequestDto {
 	private Estado estado;
 	private Cidade cidade;
 	private String logradouro;
+	private String bairro;
 	
 //	endereco
 	private String numero;
@@ -66,6 +69,8 @@ public class CadastroRequestDto {
 	private String telefone;
 	private Boolean telefoneAtual;
 	private String tipoCelular;
+	private Boolean tipoWhatsapp;
+	private Boolean tipoTelegram;
 
 //email	
 	private String email;

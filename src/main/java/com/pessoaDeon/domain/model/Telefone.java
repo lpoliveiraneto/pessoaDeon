@@ -20,9 +20,14 @@ public class Telefone implements Serializable {
 
     private String telefone;
 
-    private Boolean atual;
+    private Boolean atual = false;
 
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;
+    
+    private Boolean tipoWhatsapp = false;
+    
+    private Boolean tipoTelegram = false;
+    
 }

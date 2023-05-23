@@ -19,7 +19,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(PessoaNotFoundException.class)
     public ResponseEntity<Object> handlerPessoaNotFoundException(PessoaNotFoundException exception, WebRequest request){
         Problema problema = new Problema(LocalDateTime.now(), exception.getMessage(), exception.toString());
-        HttpStatus status = HttpStatus.NOT_FOUND;
+        HttpStatus status = HttpStatus.CONFLICT;
 
         return handleExceptionInternal(exception, problema, new HttpHeaders(), status, request);
     }
@@ -27,7 +27,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(LogradouroNotFoundException.class)
     public ResponseEntity<Object> handlerLogradouroNotFoundException(LogradouroNotFoundException exception, WebRequest request){
         Problema problema = new Problema(LocalDateTime.now(), exception.getMessage(), exception.toString());
-        HttpStatus status = HttpStatus.NOT_FOUND;
+        HttpStatus status = HttpStatus.CONFLICT;
 
         return handleExceptionInternal(exception, problema, new HttpHeaders(), status, request);
     }
@@ -35,7 +35,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EnderecoNotFoundException.class)
     public ResponseEntity<?> handlerEnderecoNotFoundException(EnderecoNotFoundException enderecoException, WebRequest request){
     	Problema problemaEndereco = new Problema(LocalDateTime.now(), enderecoException.getMessage(), enderecoException.toString());
-    	HttpStatus status = HttpStatus.NOT_FOUND;
+    	HttpStatus status = HttpStatus.CONFLICT;
     	return handleExceptionInternal(enderecoException, problemaEndereco, new HttpHeaders(), status, request);
     }
 }
