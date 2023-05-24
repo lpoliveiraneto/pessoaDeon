@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pessoaDeon.domain.model.Bairro;
 import com.pessoaDeon.domain.model.Cidade;
 import com.pessoaDeon.domain.model.Deficiencia;
 import com.pessoaDeon.domain.model.Escolaridade;
@@ -56,7 +57,7 @@ public class CadastroRequestDto {
 	private Estado estado;
 	private Cidade cidade;
 	private String logradouro;
-	private String bairro;
+	private Bairro bairro;
 	
 //	endereco
 	private String numero;

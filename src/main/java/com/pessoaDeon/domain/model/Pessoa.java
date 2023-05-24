@@ -61,7 +61,6 @@ public class Pessoa implements Serializable {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
-//    @Enumerated(EnumType.STRING)
     @NotNull
     @ManyToOne
     @JoinColumn(name = "fk_sexo")
@@ -91,22 +90,19 @@ public class Pessoa implements Serializable {
     private Raca corPele;
 
     @NotNull
-    //@ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_pais")
     private Pais pais;
 
-    @NotNull
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_estado")
     private Estado estadoNaturalidade;
 
-    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "fk_cidade")
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     private Cidade cidadeNaturalidade;
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -119,13 +115,12 @@ public class Pessoa implements Serializable {
     @JoinColumn(name = "fk_profissao")
     private Profissao profissao;
     
-    @NotNull
     @JoinColumn(name = "fk_estado_civil")
     @ManyToOne
     private EstadoCivil estadoCivil;
 
-    @NotNull
     @JoinColumn(name = "fk_escolaridade")
     @ManyToOne
     private Escolaridade escolaridade;
+    
 }

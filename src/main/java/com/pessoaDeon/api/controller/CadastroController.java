@@ -23,8 +23,7 @@ public class CadastroController {
 	
 	@PostMapping("/salvar")
 	public ResponseEntity<?> salvarCadastroPessoa(@RequestBody CadastroRequestDto cadastroDto){
-		Pessoa newPessoa = cadastroService.salvar(cadastroDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(newPessoa);
+		return ResponseEntity.status(HttpStatus.CREATED).body(cadastroService.salvar(cadastroDto));
 	}
 	
 }
