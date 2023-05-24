@@ -26,8 +26,8 @@ public class Telefone implements Serializable {
     @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;
     
-    private Boolean tipoWhatsapp = false;
+    private Boolean tipowhatsapp = false;
     
-    private Boolean tipoTelegram = false;
+    private Boolean tipotelegram = false;
     
 }

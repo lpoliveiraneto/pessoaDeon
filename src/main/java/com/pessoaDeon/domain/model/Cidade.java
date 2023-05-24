@@ -50,4 +50,5 @@ public class Cidade implements Serializable {
     private Float latitude;
 
     private Float longitude;
+    
 }

@@ -19,7 +19,7 @@ public class Endereco {
 
     private String referencia;
 
-    private Boolean atual;
+    private Boolean atual = false;
 
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")

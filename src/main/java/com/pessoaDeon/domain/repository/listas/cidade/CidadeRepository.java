@@ -13,4 +13,6 @@ public interface CidadeRepository extends JpaRepository<Cidade, Integer> {
 	List<Cidade> findByEstadoIdEstado(Integer idEstado);
 
 	List<Cidade> findByEstadoIdEstadoAndCodigoIbgeIsNotNull(Integer idEstado);
+
+	Cidade findByCodigoIbge(Integer codigoIbge);
 }

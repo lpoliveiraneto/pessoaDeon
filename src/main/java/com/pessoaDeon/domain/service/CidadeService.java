@@ -18,4 +18,12 @@ public class CidadeService {
 		return cidadeRepository.findByEstadoIdEstadoAndCodigoIbgeIsNotNull(idEstado);
 	}
 	
+	public Cidade findByCidadeIdCidade(Integer idCidade) {
+		return cidadeRepository.findById(idCidade).get();
+	}
+	
+	public Cidade findByCidadeAndCodigoIbge(Integer codigoIbge) {
+		return cidadeRepository.findByCodigoIbge(codigoIbge);
+	}
+	
 }

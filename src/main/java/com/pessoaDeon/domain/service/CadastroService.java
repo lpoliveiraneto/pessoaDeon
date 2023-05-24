@@ -1,15 +1,26 @@
 package com.pessoaDeon.domain.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
+import com.pessoaDeon.domain.model.Bairro;
+import com.pessoaDeon.domain.model.Cidade;
 import com.pessoaDeon.domain.model.Email;
 import com.pessoaDeon.domain.model.Endereco;
 import com.pessoaDeon.domain.model.Logradouro;
 import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.Telefone;
+import com.pessoaDeon.domain.model.dto.BairroDto;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 
 @Service
@@ -53,7 +64,7 @@ public class CadastroService {
 	@Transactional
 	private Endereco salvarEndereco(CadastroRequestDto dto, Pessoa pessoa, Logradouro logradouro) {
 		Endereco endereco = new Endereco();
-		endereco.setAtual(dto.getEnderecoAtual());
+		endereco.setAtual(true);
 		endereco.setNumero(dto.getNumero());
 		endereco.setReferencia(dto.getReferencia());
 		endereco.setPessoa(pessoa);
@@ -67,8 +78,16 @@ public class CadastroService {
 		telefone.setTelefone(requestDto.getTelefone());
 		telefone.setAtual(true);
 		telefone.setPessoa(pessoa);
-		telefone.setTipoWhatsapp(requestDto.getTipoWhatsapp());
-		telefone.setTipoTelegram(requestDto.getTipoTelegram());
+		if (requestDto.getTipoWhatsapp() != null) {
+			telefone.setTipowhatsapp(requestDto.getTipoWhatsapp());
+		} else {
+			telefone.setTipowhatsapp(false);
+		}
+		if (requestDto.getTipoTelegram() != null) {
+			telefone.setTipotelegram(requestDto.getTipoTelegram());
+		} else {
+			telefone.setTipotelegram(false);
+		}
 		var telefoneSave = contatoService.saveContato(telefone);
 		return telefoneSave;
 	}
@@ -82,4 +101,5 @@ public class CadastroService {
 		var emailSave = emailService.salvarEmail(email);
 		return emailSave;
 	}
+
 }
