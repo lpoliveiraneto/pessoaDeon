@@ -51,7 +51,7 @@ public class CadastroService {
 		
 		if(pessoaSave != null) {
 			Logradouro logradouro = modelMapper.map(cadastroRequestDto, Logradouro.class);
-			if(logradouro.getCep() != null) {
+			if(logradouro.getCep() != null && !logradouro.getCep().isEmpty()) {
 				var logradouroSave = logradouroService.getByCep(logradouro.getCep());
 				this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroSave);
 			}

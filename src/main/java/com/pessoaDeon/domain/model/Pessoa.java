@@ -54,7 +54,7 @@ public class Pessoa implements Serializable {
     @Size(max = 50)
     private String alcunha;
 
-    @NotNull
+//    @NotNull
     private String cpf;
 
     @NotNull
@@ -122,5 +122,7 @@ public class Pessoa implements Serializable {
     @JoinColumn(name = "fk_escolaridade")
     @ManyToOne
     private Escolaridade escolaridade;
+    
+    private String rne;
     
 }

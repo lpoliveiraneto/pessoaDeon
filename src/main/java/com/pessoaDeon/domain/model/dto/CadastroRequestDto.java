@@ -45,11 +45,13 @@ public class CadastroRequestDto {
 	private Raca corPele;
 	private Profissao profissao;
 	private Escolaridade escolaridade;
-	private Nacionalidade nacionalidade;
+//	private Nacionalidade nacionalidade;
 	private Pais pais;
 	private Estado estadoNaturalidade;
 	private Cidade cidadeNaturalidade;
 	private IdentidadeGenero identidadeGenero;
+	private String rne;
+	private Boolean estrangeiro;
 	
 	
 //	logradouro	

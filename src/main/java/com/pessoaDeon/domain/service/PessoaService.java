@@ -52,12 +52,19 @@ public class PessoaService {
 
     @Transactional
 	public Pessoa salvarPessoaDeon(Pessoa pessoa) {
-		Optional<Pessoa> pessoaOpt = pessoaRepository.findByCpf(pessoa.getCpf());
-
-        if(!pessoaOpt.isPresent()){
-        	return pessoaRepository.save(pessoa);
-        }else{
-        	throw new PessoaNotFoundException("Pessoa já consta na base de dados");
-        }
-	}
+    	Optional<Pessoa> pessoaOpt = null;
+    	if (pessoa.getCpf() != null) {
+    		pessoaOpt = pessoaRepository.findByCpf(pessoa.getCpf());
+    	} else if(pessoa.getRne() != null) {
+    		pessoaOpt = pessoaRepository.findByRne(pessoa.getRne());
+    	} else if(pessoa.getNome() != null) {
+    		pessoaOpt = pessoaRepository.findByNome(pessoa.getNome());
+    	}
+    	
+    	if (!pessoaOpt.isPresent()) {
+			return pessoaRepository.save(pessoa);
+		} else {
+        	throw new PessoaNotFoundException("Pessoa já consta na base de dados");			
+		}
+    }
 }
