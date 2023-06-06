@@ -12,7 +12,7 @@ public class Profissao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idProfissao;
+    private Integer idProfissao;
 
     private String descricao;
 }

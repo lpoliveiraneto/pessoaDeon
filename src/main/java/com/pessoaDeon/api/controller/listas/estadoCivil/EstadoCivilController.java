@@ -1,28 +1,43 @@
 package com.pessoaDeon.api.controller.listas.estadoCivil;
 
-import com.pessoaDeon.domain.model.enumeration.EstadoCivil;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.pessoaDeon.domain.model.EstadoCivil;
+import com.pessoaDeon.domain.repository.listas.estadoCivil.EstadoCivilRepository;
 
 @RestController
 @RequestMapping("api/v1/estadoCivil")
-@CrossOrigin(origins= "*")
 public class EstadoCivilController {
+	
+	@Autowired
+	private EstadoCivilRepository estadoCivilRepository;
 
-    @GetMapping
-    public Map<String, String> listarEstadoCivil(){
-        List<EstadoCivil> listEnum = Arrays.asList(EstadoCivil.values());
-        Map<String, String> listaEstadoCivil = new HashMap<>();
-        listEnum.forEach(e ->{
-            listaEstadoCivil.put(e.toString(), e.getDescricao());
-        });
-        return listaEstadoCivil;
-    }
+//	@GetMapping
+//	public List<EnumToObject> listarEstadoCivil(){
+//		List<EstadoCivil> list = Arrays.asList(EstadoCivil.values());
+//		Map<String, String> listaEstadoCivil = new HashMap<>();
+//		list.forEach(lista -> {
+//			listaEstadoCivil.put(lista.toString(), lista.getDescricao());
+//		});
+//		
+//		List<EnumToObject> lista = new ArrayList<>();
+//        for(String chave : listaEstadoCivil.keySet()) {
+//        	EnumToObject novoEnum = new EnumToObject();
+//        	novoEnum.setKey(chave);
+//        	novoEnum.setValue(listaEstadoCivil.get(chave));
+//        	lista.add(novoEnum);
+//        }
+//        return lista;
+//	}
+	
+	@GetMapping("/lista")
+	public List<EstadoCivil> listarEstadoCivil(){
+		return estadoCivilRepository.findAll();
+	}
+	
 }

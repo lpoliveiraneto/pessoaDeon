@@ -1,28 +1,42 @@
 package com.pessoaDeon.api.controller.listas.orientacaoSexual;
 
-import com.pessoaDeon.domain.model.enumeration.OrientacaoSexual;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.pessoaDeon.domain.model.OrientacaoSexual;
+import com.pessoaDeon.domain.repository.listas.orientacaoSexual.OrientacaoSexualRepository;
 
 @RestController
 @RequestMapping("api/v1/orientacaoSexual")
-@CrossOrigin(origins= "*")
 public class OrientacaoSexualController {
 
-    @GetMapping
-    public Map<String, String> listarOrientacaoSexual(){
-        List<OrientacaoSexual> listaEnum = Arrays.asList(OrientacaoSexual.values());
-        Map<String, String> listaOrientacao = new HashMap<>();
-        listaEnum.forEach(o->{
-            listaOrientacao.put(o.toString(), o.getDescricao());
-        });
-        return listaOrientacao;
-    }
+	@Autowired
+	private OrientacaoSexualRepository oRepository;
+//	@GetMapping
+//    public List<EnumToObject> listarDeficiencias(){
+//        List<OrientacaoSexual> listaEnum = Arrays.asList(OrientacaoSexual.values());
+//        Map<String, String> listaOrientacaoSexual = new HashMap<>();
+//        listaEnum.forEach(d -> {
+//        	listaOrientacaoSexual.put(d.toString(), d.getDescricao());
+//        });
+//
+//        List<EnumToObject> lista = new ArrayList<>();
+//        for(String chave : listaOrientacaoSexual.keySet()) {
+//        	EnumToObject novoEnum = new EnumToObject();
+//        	novoEnum.setKey(chave);
+//        	novoEnum.setValue(listaOrientacaoSexual.get(chave));
+//        	lista.add(novoEnum);
+//        }
+//        return lista;
+//        
+//    }
+	
+	@GetMapping("/lista")
+	public List<OrientacaoSexual> listarOrientacaoSexual() {
+		return oRepository.findAll();
+	}
 }

@@ -1,5 +1,7 @@
 package com.pessoaDeon.domain.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,12 +10,14 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Logradouro {
+public class Logradouro implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_logradouro")
-    private int idLogradouro;
+    private Integer idLogradouro;
 
     private String cep;
 
@@ -34,5 +38,8 @@ public class Logradouro {
     private String ddd;
 
     private String siafi;
+    
+    @Transient
+    private Boolean erro = false;
 
 }

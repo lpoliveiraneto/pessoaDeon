@@ -1,6 +1,11 @@
 package com.pessoaDeon.domain.service;
 
+import com.pessoaDeon.domain.exception.PessoaNotFoundException;
+import com.pessoaDeon.domain.model.Endereco;
+import com.pessoaDeon.domain.model.Logradouro;
 import com.pessoaDeon.domain.model.Pessoa;
+import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
+import com.pessoaDeon.domain.model.dto.EnderecoDtoInput;
 import com.pessoaDeon.domain.model.dto.PessoaDtoInput;
 import com.pessoaDeon.domain.model.dto.PessoaDtoOutput;
 import com.pessoaDeon.domain.repository.pessoa.PessoaRepository;
@@ -17,6 +22,7 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+    
     @Autowired
     private ModelMapper modelMapper;
 
@@ -25,8 +31,8 @@ public class PessoaService {
         return pessoaRepository.findAll();
     }
 
-    public Optional<Pessoa> buscarPessoa(Long id) {
-         Optional<Pessoa> pessoa = pessoaRepository.findById(id);
+    public Optional<Pessoa> buscarPessoa(Integer idPessoa) {
+         Optional<Pessoa> pessoa = pessoaRepository.findById(idPessoa);
          return pessoa;
     }
 
@@ -36,13 +42,29 @@ public class PessoaService {
         Optional<Pessoa> pessoa = pessoaRepository.findByCpf(pessoaDto.getCpf());
 
         if(pessoa.isPresent()){
-          throw new RuntimeException("ESTE FELA JÁ FOI ADICIONADO");
+          throw new PessoaNotFoundException("Pessoa já consta na base de dados");
         }else{
             Pessoa newPessoa =  modelMapper.map(pessoaDto, Pessoa.class);
             pessoaRepository.save(newPessoa);
             return modelMapper.map(pessoa, PessoaDtoOutput.class);
         }
+    }
 
-
+    @Transactional
+	public Pessoa salvarPessoaDeon(Pessoa pessoa) {
+    	Optional<Pessoa> pessoaOpt = null;
+    	if (pessoa.getCpf() != null) {
+    		pessoaOpt = pessoaRepository.findByCpf(pessoa.getCpf());
+    	} else if(pessoa.getRne() != null) {
+    		pessoaOpt = pessoaRepository.findByRne(pessoa.getRne());
+    	} else if(pessoa.getNome() != null) {
+    		pessoaOpt = pessoaRepository.findByNome(pessoa.getNome());
+    	}
+    	
+    	if (!pessoaOpt.isPresent()) {
+			return pessoaRepository.save(pessoa);
+		} else {
+        	throw new PessoaNotFoundException("Pessoa já consta na base de dados");			
+		}
     }
 }

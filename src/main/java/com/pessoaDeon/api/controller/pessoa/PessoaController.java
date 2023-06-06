@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("api/v1/pessoas")
-@CrossOrigin(origins= "*")
 public class PessoaController {
 
     @Autowired
@@ -25,9 +25,9 @@ public class PessoaController {
         return pessoaService.listarPessoas();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getPessoa(@PathVariable Long id){
-        Optional<Pessoa> pessoa = pessoaService.buscarPessoa(id);
+    @GetMapping("/{idPessoa}")
+    public ResponseEntity getPessoa(@PathVariable Integer idPessoa){
+        Optional<Pessoa> pessoa = pessoaService.buscarPessoa(idPessoa);
 
         if(pessoa.isPresent()){
             Pessoa pesquisaPessoa = pessoa.get();
@@ -37,6 +37,7 @@ public class PessoaController {
         }
     }
 
+    @ResponseBody
     @PostMapping("/salvar")
     public ResponseEntity<PessoaDtoOutput> cadastrarPessoa(@RequestBody PessoaDtoInput pessoaDto){
         PessoaDtoOutput pessoa = pessoaService.salvarPessoa(pessoaDto);
