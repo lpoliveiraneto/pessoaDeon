@@ -47,14 +47,43 @@ public class CadastroService {
 	@Transactional
 	public Pessoa salvar(CadastroRequestDto cadastroRequestDto){
 		Pessoa pessoa = modelMapper.map(cadastroRequestDto, Pessoa.class);
+		
+		switch (cadastroRequestDto.getTipoDocumento()) {
+			case "CPF":{
+				pessoa.setCpf(cadastroRequestDto.getNumeroDocumento());
+				break;
+			}
+			case "RNE":{
+				pessoa.setRne(cadastroRequestDto.getNumeroDocumento());
+				break;
+			}
+			case "Passaporte":{
+				pessoa.setRne(cadastroRequestDto.getNumeroDocumento());
+				break;
+			}
+			
+		}
+		
 		var pessoaSave = pessoaService.salvarPessoaDeon(pessoa);
 		
 		if(pessoaSave != null) {
 			Logradouro logradouro = modelMapper.map(cadastroRequestDto, Logradouro.class);
-			if(logradouro.getCep() != null && !logradouro.getCep().isEmpty()) {
+			
+//			if(logradouro.getCep() != null && !logradouro.getCep().isEmpty()) {
 				var logradouroSave = logradouroService.getByCep(logradouro.getCep());
-				this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroSave);
-			}
+				
+				if (logradouroSave.getCep() != null) {
+					this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroSave);
+				} else {
+					var logradouroWithoutCepNotFound = logradouroService.save(logradouro);
+					this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroWithoutCepNotFound);
+				}
+				
+			
+//			} else {
+//			}
+			
+//			this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroWithoutCep);
 			this.salvarTelefone(cadastroRequestDto, pessoaSave);
 			this.salvarEmail(cadastroRequestDto, pessoaSave);
 		}
@@ -69,6 +98,7 @@ public class CadastroService {
 		endereco.setReferencia(dto.getReferencia());
 		endereco.setPessoa(pessoa);
 		endereco.setLogradouro(logradouro);
+		endereco.setTipoLocal(dto.getTipoLocal());
 		return enderecoService.salvarEndereco(endereco);
 	}
 	

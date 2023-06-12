@@ -8,5 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface LogradouroRepository extends JpaRepository<Logradouro, Long> {
-    Optional<Logradouro> findByCep(String cep);
+    
+	Optional<Logradouro> findByCep(String cep);
+    
+    Optional<Logradouro> findByCepAndCepDesconhecidoFalse(String cep);
+    
 }

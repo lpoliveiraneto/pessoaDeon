@@ -42,6 +42,10 @@ public class BairroService {
 		return bairroRepository.findByCidadeIdCidade(idCidade);
 	}
 	
+	public Bairro findByBairroPorIdCidadeNome(Integer idCidade, String descricao) {
+		return bairroRepository.findByCidadeIdCidadeAndDescricao(idCidade, descricao);
+	}
+	
 	/**
 	 * @author Jeff Andrade
 	 *

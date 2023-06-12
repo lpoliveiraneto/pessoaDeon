@@ -12,4 +12,6 @@ public interface BairroRepository extends JpaRepository<Bairro, Integer> {
 
 	List<Bairro> findByCidadeIdCidade(Integer idCidade);
 
+	Bairro findByCidadeIdCidadeAndDescricao(Integer idCidade, String descricao);
+
 }

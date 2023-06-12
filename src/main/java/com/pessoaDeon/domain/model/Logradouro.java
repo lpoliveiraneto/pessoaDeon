@@ -2,6 +2,8 @@ package com.pessoaDeon.domain.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,21 +25,26 @@ public class Logradouro implements Serializable{
 
     private String logradouro;
 
-    private String bairro;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @JoinColumn(name = "fk_bairro")
+    private Bairro bairro;
 
     private String complemento;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @JoinColumn(name = "fk_cidade")
+    private Cidade cidade;
 
-    private String localidade;
-
-    private String uf;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @JoinColumn(name = "fk_estado")
+    private Estado estado;
 
     private String ibge;
-
-    private String gia;
-
-    private String ddd;
-
-    private String siafi;
+    
+    private Boolean cepDesconhecido = false;
     
     @Transient
     private Boolean erro = false;

@@ -9,6 +9,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Problema {
     private LocalDateTime data;
-    private String mensagem;
+    private String message;
     private String exception;
 }

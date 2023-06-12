@@ -1,21 +1,20 @@
 package com.pessoaDeon.domain.service;
 
-import com.pessoaDeon.domain.exception.PessoaNotFoundException;
-import com.pessoaDeon.domain.model.Endereco;
-import com.pessoaDeon.domain.model.Logradouro;
-import com.pessoaDeon.domain.model.Pessoa;
-import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
-import com.pessoaDeon.domain.model.dto.EnderecoDtoInput;
-import com.pessoaDeon.domain.model.dto.PessoaDtoInput;
-import com.pessoaDeon.domain.model.dto.PessoaDtoOutput;
-import com.pessoaDeon.domain.repository.PessoaRepository;
-import jakarta.transaction.Transactional;
+import java.text.Normalizer;
+import java.util.List;
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.pessoaDeon.domain.exception.PessoaNotFoundException;
+import com.pessoaDeon.domain.model.Pessoa;
+import com.pessoaDeon.domain.model.dto.PessoaDtoInput;
+import com.pessoaDeon.domain.model.dto.PessoaDtoOutput;
+import com.pessoaDeon.domain.repository.PessoaRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PessoaService {
@@ -52,19 +51,66 @@ public class PessoaService {
 
     @Transactional
 	public Pessoa salvarPessoaDeon(Pessoa pessoa) {
+    	Pessoa pessoa2 = existsPessoa(pessoa);
+    	if (pessoa2 != null) {
+    		return pessoaRepository.save(pessoa2);
+		}
+		return pessoa2;
+    }
+    
+    private Pessoa existsPessoa(Pessoa pessoa) {
     	Optional<Pessoa> pessoaOpt = null;
-    	if (pessoa.getCpf() != null) {
+    	if(pessoa.getCpf() != null && pessoa.getCpf() != "") {
     		pessoaOpt = pessoaRepository.findByCpf(pessoa.getCpf());
     	} else if(pessoa.getRne() != null) {
     		pessoaOpt = pessoaRepository.findByRne(pessoa.getRne());
-    	} else if(pessoa.getNome() != null) {
-    		pessoaOpt = pessoaRepository.findByNome(pessoa.getNome());
-    	}
+    	} 
     	
-    	if (!pessoaOpt.isPresent()) {
-			return pessoaRepository.save(pessoa);
-		} else {
-        	throw new PessoaNotFoundException("Pessoa já consta na base de dados");			
+    	if (pessoaOpt.isPresent()) {
+    		throw new PessoaNotFoundException("Pessoa já consta na base de dados");			
 		}
+    	
+    	Pessoa pessoa2 = trataPessoa(pessoa);
+
+    	if (!verificaPessoaTriChave(pessoa2).isEmpty()) {
+    		throw new PessoaNotFoundException("Pessoa já consta na base de dados");
+		} 
+    	
+    	return pessoa2;
     }
+    
+    private List<Pessoa> verificaPessoaTriChave(Pessoa pessoa) {
+    	return pessoaRepository.findByNomeAndNomeMaeAndDataNascimento(pessoa.getNome(), pessoa.getNomeMae(), pessoa.getDataNascimento());
+    }
+    
+
+	public Pessoa trataPessoa(Pessoa pessoa) {
+		if (pessoa.getNome() != null && !pessoa.getNome().isEmpty()) {
+			pessoa.setNome(removerAcentos(pessoa.getNome()).toUpperCase().trim());
+		}
+		if (pessoa.getAlcunha() != null && !pessoa.getAlcunha().isEmpty()) {
+			pessoa.setAlcunha(removerAcentos(pessoa.getAlcunha()).toUpperCase().trim());
+		}
+		if (pessoa.getNomeMae() != null && !pessoa.getNomeMae().isEmpty()) {
+			pessoa.setNomeMae(removerAcentos(pessoa.getNomeMae()).toUpperCase().trim());
+		}
+		if (pessoa.getNomePai() != null && !pessoa.getNomePai().isEmpty()) {
+			pessoa.setNomePai(removerAcentos(pessoa.getNomePai()).toUpperCase().trim());
+		}
+		if (pessoa.getNomeSocial() != null && !pessoa.getNomeSocial().isEmpty()) {
+			pessoa.setNomeSocial(removerAcentos(pessoa.getNomeSocial()).toUpperCase().trim());
+		}
+		if (pessoa.getRne() != null && !pessoa.getRne().isEmpty()) {
+			pessoa.setRne(removerAcentos(pessoa.getRne()).toUpperCase().trim());
+		}
+//		if (pessoa.getPassaporte() != null && !pessoa.getPassaporte().isEmpty()) {
+//			pessoa.setPassaporte(removerAcentos(pessoa.getPassaporte()).trim());
+//		}
+		return pessoa;
+	}
+	
+	public static String removerAcentos(String str) {
+		return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+	}
+	
 }

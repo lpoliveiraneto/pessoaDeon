@@ -18,6 +18,7 @@ import com.pessoaDeon.domain.model.Pais;
 import com.pessoaDeon.domain.model.Profissao;
 import com.pessoaDeon.domain.model.Raca;
 import com.pessoaDeon.domain.model.Sexo;
+import com.pessoaDeon.domain.model.TipoLocal;
 import com.pessoaDeon.domain.model.enumeration.Nacionalidade;
 
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class CadastroRequestDto {
 	
 //	pessoa
 	private String nome;
-	private String cpf;
+//	private String cpf;
 	private String nomeMae;
 	private String nomePai;
 	private String alcunha;
@@ -50,8 +51,10 @@ public class CadastroRequestDto {
 	private Estado estadoNaturalidade;
 	private Cidade cidadeNaturalidade;
 	private IdentidadeGenero identidadeGenero;
-	private String rne;
+//	private String rne;
 	private Boolean estrangeiro;
+	private String tipoDocumento;
+	private String numeroDocumento;
 	
 	
 //	logradouro	
@@ -64,7 +67,7 @@ public class CadastroRequestDto {
 //	endereco
 	private String numero;
 	private Boolean enderecoAtual;
-	private String tipoLocal;
+	private TipoLocal tipoLocal;
 	private String complemento;
 	private String referencia;
 

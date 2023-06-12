@@ -28,4 +28,8 @@ public class Endereco {
     @ManyToOne
     @JoinColumn(name = "fk_logradouro")
     private Logradouro logradouro;
+    
+    @ManyToOne
+    @JoinColumn(name = "fk_tipo_local")
+    private TipoLocal tipoLocal;
 }
