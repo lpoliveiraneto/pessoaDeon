@@ -1,26 +1,15 @@
 package com.pessoaDeon.domain.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
-import com.pessoaDeon.domain.model.Bairro;
-import com.pessoaDeon.domain.model.Cidade;
 import com.pessoaDeon.domain.model.Email;
 import com.pessoaDeon.domain.model.Endereco;
 import com.pessoaDeon.domain.model.Logradouro;
 import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.Telefone;
-import com.pessoaDeon.domain.model.dto.BairroDto;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 
 @Service
@@ -63,13 +52,12 @@ public class CadastroService {
 			}
 			
 		}
-		
+
 		var pessoaSave = pessoaService.salvarPessoaDeon(pessoa);
 		
 		if(pessoaSave != null) {
 			Logradouro logradouro = modelMapper.map(cadastroRequestDto, Logradouro.class);
-			
-//			if(logradouro.getCep() != null && !logradouro.getCep().isEmpty()) {
+
 				var logradouroSave = logradouroService.getByCep(logradouro.getCep());
 				
 				if (logradouroSave.getCep() != null) {
@@ -78,12 +66,7 @@ public class CadastroService {
 					var logradouroWithoutCepNotFound = logradouroService.save(logradouro);
 					this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroWithoutCepNotFound);
 				}
-				
-			
-//			} else {
-//			}
-			
-//			this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroWithoutCep);
+
 			this.salvarTelefone(cadastroRequestDto, pessoaSave);
 			this.salvarEmail(cadastroRequestDto, pessoaSave);
 		}

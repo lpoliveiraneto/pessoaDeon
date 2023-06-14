@@ -43,9 +43,9 @@ public class PessoaService {
         if(pessoa.isPresent()){
           throw new PessoaNotFoundException("Pessoa já consta na base de dados");
         }else{
-            Pessoa newPessoa = modelMapper.map(pessoaDto, Pessoa.class);
-            var p = pessoaRepository.save(newPessoa);
-            return modelMapper.map(p, PessoaDtoOutput.class);
+            Pessoa newPessoa =  modelMapper.map(pessoaDto, Pessoa.class);
+            pessoaRepository.save(newPessoa);
+            return modelMapper.map(pessoa, PessoaDtoOutput.class);
         }
     }
 

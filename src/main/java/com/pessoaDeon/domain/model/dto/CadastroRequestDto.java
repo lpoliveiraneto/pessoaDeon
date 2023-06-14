@@ -1,9 +1,6 @@
 package com.pessoaDeon.domain.model.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.Bairro;
@@ -18,8 +15,8 @@ import com.pessoaDeon.domain.model.Pais;
 import com.pessoaDeon.domain.model.Profissao;
 import com.pessoaDeon.domain.model.Raca;
 import com.pessoaDeon.domain.model.Sexo;
+
 import com.pessoaDeon.domain.model.TipoLocal;
-import com.pessoaDeon.domain.model.enumeration.Nacionalidade;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +29,7 @@ public class CadastroRequestDto {
 	
 //	pessoa
 	private String nome;
-//	private String cpf;
+	private String cpf;
 	private String nomeMae;
 	private String nomePai;
 	private String alcunha;
@@ -51,12 +48,10 @@ public class CadastroRequestDto {
 	private Estado estadoNaturalidade;
 	private Cidade cidadeNaturalidade;
 	private IdentidadeGenero identidadeGenero;
-//	private String rne;
 	private Boolean estrangeiro;
 	private String tipoDocumento;
 	private String numeroDocumento;
-	
-	
+
 //	logradouro	
 	private String cep;
 	private Estado estado;
@@ -68,6 +63,7 @@ public class CadastroRequestDto {
 	private String numero;
 	private Boolean enderecoAtual;
 	private TipoLocal tipoLocal;
+
 	private String complemento;
 	private String referencia;
 
