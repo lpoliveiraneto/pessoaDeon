@@ -1,0 +1,1 @@
+ALTER TABLE logradouro ADD cep_desconhecido bool NULL;
