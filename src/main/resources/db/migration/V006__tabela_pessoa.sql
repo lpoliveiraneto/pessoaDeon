@@ -8,6 +8,7 @@ CREATE TABLE pessoa(
     data_nascimento DATE NOT NULL,
     sexo varchar(10) NOT NULL,
     nome_social varchar(255),
+    escolaridade varchar(255),
     orientacao_sexual varchar(10) NOT NULL,
     identidade_genero varchar(10) NOT NULL,
     deficiencia varchar(20) NOT NULL,
