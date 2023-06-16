@@ -23,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="cidade")
+@Table(name="cidade", schema = "listas")
 public class Cidade implements Serializable {
     /**
 	 * 

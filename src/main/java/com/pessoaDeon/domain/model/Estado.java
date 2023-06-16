@@ -18,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="estado")
+@Table(name="estado", schema = "listas")
 public class Estado implements Serializable{
 	/**
 	 * 
