@@ -1,0 +1,11 @@
+package com.pessoaDeon.domain.repository.listas.tipoDocumento;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.pessoaDeon.domain.model.TipoDocumento;
+
+@Repository
+public interface TipoDocumentoRepository extends JpaRepository<TipoDocumento, Integer> {
+
+}
