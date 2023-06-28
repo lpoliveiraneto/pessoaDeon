@@ -11,6 +11,7 @@ import com.pessoaDeon.domain.model.Logradouro;
 import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.Telefone;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
+//import com.pessoaDeon.domain.model.enumeration.TipoDocumento;
 
 @Service
 public class CadastroService {
@@ -36,22 +37,6 @@ public class CadastroService {
 	@Transactional
 	public Pessoa salvar(CadastroRequestDto cadastroRequestDto){
 		Pessoa pessoa = modelMapper.map(cadastroRequestDto, Pessoa.class);
-		
-		switch (cadastroRequestDto.getTipoDocumento()) {
-			case "CPF":{
-				pessoa.setCpf(cadastroRequestDto.getNumeroDocumento());
-				break;
-			}
-			case "RNE":{
-				pessoa.setRne(cadastroRequestDto.getNumeroDocumento());
-				break;
-			}
-			case "Passaporte":{
-				pessoa.setRne(cadastroRequestDto.getNumeroDocumento());
-				break;
-			}
-			
-		}
 
 		var pessoaSave = pessoaService.salvarPessoaDeon(pessoa);
 		

@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,7 +56,7 @@ public class Pessoa implements Serializable {
     private String alcunha;
 
 //    @NotNull
-    private String cpf;
+//    private String cpf;
 
     @NotNull
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -123,6 +124,12 @@ public class Pessoa implements Serializable {
     @ManyToOne
     private Escolaridade escolaridade;
     
-    private String rne;
+    @JoinColumn(name = "fk_tipo_documento")
+    @ManyToOne
+    @NotNull
+    private TipoDocumento tipoDocumento;
+    
+    @NotNull
+    private String numeroDocumento;
     
 }

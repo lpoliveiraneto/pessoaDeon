@@ -15,7 +15,7 @@ import com.pessoaDeon.domain.model.Pais;
 import com.pessoaDeon.domain.model.Profissao;
 import com.pessoaDeon.domain.model.Raca;
 import com.pessoaDeon.domain.model.Sexo;
-
+import com.pessoaDeon.domain.model.TipoDocumento;
 import com.pessoaDeon.domain.model.TipoLocal;
 
 import lombok.AllArgsConstructor;
@@ -49,7 +49,7 @@ public class CadastroRequestDto {
 	private Cidade cidadeNaturalidade;
 	private IdentidadeGenero identidadeGenero;
 	private Boolean estrangeiro;
-	private String tipoDocumento;
+	private TipoDocumento tipoDocumento;
 	private String numeroDocumento;
 
 //	logradouro	

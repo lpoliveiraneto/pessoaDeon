@@ -1,16 +1,18 @@
 package com.pessoaDeon.api.controller;
 
-import com.pessoaDeon.domain.model.Pessoa;
-import com.pessoaDeon.domain.model.dto.PessoaDtoInput;
-import com.pessoaDeon.domain.model.dto.PessoaDtoOutput;
-import com.pessoaDeon.domain.service.PessoaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.pessoaDeon.domain.model.Pessoa;
+import com.pessoaDeon.domain.service.PessoaService;
 
 @CrossOrigin("*")
 @RestController
@@ -36,11 +38,11 @@ public class PessoaController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @ResponseBody
-    @PostMapping("/salvar")
-    public ResponseEntity<PessoaDtoOutput> cadastrarPessoa(@RequestBody PessoaDtoInput pessoaDto){
-        PessoaDtoOutput pessoa = pessoaService.salvarPessoa(pessoaDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pessoa);
-    }
+//
+//    @ResponseBody
+//    @PostMapping("/salvar")
+//    public ResponseEntity<PessoaDtoOutput> cadastrarPessoa(@RequestBody PessoaDtoInput pessoaDto){
+//        PessoaDtoOutput pessoa = pessoaService.salvarPessoa(pessoaDto);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(pessoa);
+//    }
 }

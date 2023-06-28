@@ -1,0 +1,1 @@
+ALTER TABLE pessoa ADD FOREIGN KEY (fk_tipo_documento) REFERENCES listas.tipo_documento(id_tipo_documento);
