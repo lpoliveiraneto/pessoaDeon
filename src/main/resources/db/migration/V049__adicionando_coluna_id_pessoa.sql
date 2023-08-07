@@ -1,0 +1,1 @@
+ALTER TABLE pessoa ADD COLUMN usuario_id serial;
