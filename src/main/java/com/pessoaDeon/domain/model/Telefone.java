@@ -2,6 +2,8 @@ package com.pessoaDeon.domain.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +24,7 @@ public class Telefone implements Serializable {
 
     private Boolean atual = false;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;

@@ -1,5 +1,7 @@
 package com.pessoaDeon.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +24,7 @@ public class Email {
 
     private Boolean atual = false;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;
