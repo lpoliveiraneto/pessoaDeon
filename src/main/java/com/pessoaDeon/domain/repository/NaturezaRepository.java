@@ -1,0 +1,16 @@
+package com.pessoaDeon.domain.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.pessoaDeon.domain.model.NaturezaSigma;
+
+@Repository
+public interface NaturezaRepository extends JpaRepository<NaturezaSigma, Integer> {
+
+	Page<NaturezaSigma> findAll(Pageable pageable);
+	
+	Page<NaturezaSigma> findAllByNomeContains(String nome, Pageable pageable);
+}
