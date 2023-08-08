@@ -1,9 +1,11 @@
 package com.pessoaDeon.api.controller.seguranca;
 
+import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.config.security.TokenService;
+import com.pessoaDeon.domain.service.PessoaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +25,17 @@ public class AutenticacaoController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private PessoaService pessoaService;
+
     @PostMapping
     public ResponseEntity efetuarLoginCliente(@RequestBody @Valid DadosAutenticacao dados){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
         var authentication = manager.authenticate(authenticationToken);
 
         var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+        var pessoa = pessoaService.buscaPessoaEmail(dados.email());
 
-        return ResponseEntity.ok(new DadosTokenJwt(tokenJWT));
+        return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT));
     }
 }

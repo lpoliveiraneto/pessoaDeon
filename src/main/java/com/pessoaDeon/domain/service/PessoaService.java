@@ -4,6 +4,7 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 
+import com.pessoaDeon.domain.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,6 +81,10 @@ public class PessoaService {
 	
 	public static String removerAcentos(String str) {
 		return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+	}
+
+	public Pessoa buscaPessoaEmail(String email){
+		return pessoaRepository.findByEmailEmail(email).get();
 	}
 	
 }

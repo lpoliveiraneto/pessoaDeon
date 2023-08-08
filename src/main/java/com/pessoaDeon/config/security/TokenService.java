@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class TokenService {
@@ -22,9 +24,17 @@ public class TokenService {
     public String gerarToken(Usuario usuario){
         try{
             var algoritmo = Algorithm.HMAC256(secret);
+            Map informacaoToken = new HashMap<String, Object>();
+            informacaoToken.put("id", usuario.getIdUsuario());
+            informacaoToken.put("email", usuario.getEmail());
+
             return JWT.create()
                     .withIssuer("Api NovaDeon")
-                    .withSubject(usuario.getUsername())
+                    .withPayload(informacaoToken)
+                    //.withKeyId(usuario.getIdUsuario().toString())
+                    //.withSubject(usuario.getEmail())
+                    //.withSubject(usuario.getEmail())
+                    //.withSubject(usuario.getIdUsuario().toString())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         }catch (JWTCreationException exception){
