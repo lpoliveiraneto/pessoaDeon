@@ -1,7 +1,11 @@
 package com.pessoaDeon.domain.service;
 
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +15,12 @@ import com.pessoaDeon.domain.model.Logradouro;
 import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.Telefone;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
-//import com.pessoaDeon.domain.model.enumeration.TipoDocumento;
+
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 @Service
 public class CadastroService {
@@ -33,11 +42,14 @@ public class CadastroService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-	
+	@Autowired
+	private UsuarioService usuarioService;
+
 	@Transactional
 	public Pessoa salvar(CadastroRequestDto cadastroRequestDto){
 		Pessoa pessoa = modelMapper.map(cadastroRequestDto, Pessoa.class);
-
+		var user = salvarUsuario(cadastroRequestDto);
+		pessoa.setUsuario(user);
 		var pessoaSave = pessoaService.salvarPessoaDeon(pessoa);
 		
 		if(pessoaSave != null) {
@@ -98,6 +110,30 @@ public class CadastroService {
 		email.setPessoa(pessoa);
 		var emailSave = emailService.salvarEmail(email);
 		return emailSave;
+	}
+
+	@Transactional
+	private Usuario salvarUsuario(CadastroRequestDto cadastroDto){
+		Usuario usuario = new Usuario();
+		usuario.setEmail(cadastroDto.getEmail());
+		String senha = gerarSenhaAleatoria(5);
+		System.out.println(senha);
+		usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
+		usuario.setStatus(Status.PE);
+		usuario.setDataCadastro(LocalDateTime.now());
+		//usuario.setPessoa(pessoa);
+		var user = usuarioService.salvarUsuario(usuario);
+		return usuario;
+	}
+
+	private String gerarSenhaAleatoria(int tamanho) {
+		final String chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+		SecureRandom random = new SecureRandom();
+		return IntStream.range(0, tamanho)
+				.map(i -> random.nextInt(chars.length()))
+				.mapToObj(randomIndex -> String.valueOf(chars.charAt(randomIndex)))
+				.collect(Collectors.joining());
 	}
 
 }
