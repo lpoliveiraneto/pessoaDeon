@@ -8,16 +8,18 @@ import com.pessoaDeon.config.security.TokenService;
 import com.pessoaDeon.domain.service.PessoaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/v1/login")
 public class AutenticacaoController {
 
     @Autowired
@@ -31,11 +33,17 @@ public class AutenticacaoController {
     @PostMapping
     public ResponseEntity efetuarLoginCliente(@RequestBody @Valid DadosAutenticacao dados){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
-        var authentication = manager.authenticate(authenticationToken);
+        try{
+            var authentication = manager.authenticate(authenticationToken);
 
-        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
-        var pessoa = pessoaService.buscaPessoaEmail(dados.email());
+            var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+            var pessoa = pessoaService.buscaPessoaEmail(dados.email());
+            return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT));
 
-        return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT));
+        }catch (AuthenticationException e){
+            //System.err.println("entrei no erro: "+ e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+
     }
 }

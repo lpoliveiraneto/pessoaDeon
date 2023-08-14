@@ -30,11 +30,9 @@ public class TokenService {
 
             return JWT.create()
                     .withIssuer("Api NovaDeon")
-                    .withPayload(informacaoToken)
+                    //.withPayload(informacaoToken)
                     //.withKeyId(usuario.getIdUsuario().toString())
-                    //.withSubject(usuario.getEmail())
-                    //.withSubject(usuario.getEmail())
-                    //.withSubject(usuario.getIdUsuario().toString())
+                    .withSubject(usuario.getEmail())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         }catch (JWTCreationException exception){
