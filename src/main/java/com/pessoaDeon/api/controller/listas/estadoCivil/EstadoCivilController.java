@@ -11,7 +11,7 @@ import com.pessoaDeon.domain.model.EstadoCivil;
 import com.pessoaDeon.domain.repository.listas.estadoCivil.EstadoCivilRepository;
 
 @RestController
-@RequestMapping("api/v1/estadoCivil")
+@RequestMapping("api/v1/lista/estadoCivil")
 public class EstadoCivilController {
 	
 	@Autowired
@@ -35,7 +35,8 @@ public class EstadoCivilController {
 //        return lista;
 //	}
 	
-	@GetMapping("/lista")
+//	@GetMapping("/lista")
+	@GetMapping
 	public List<EstadoCivil> listarEstadoCivil(){
 		return estadoCivilRepository.findAll();
 	}

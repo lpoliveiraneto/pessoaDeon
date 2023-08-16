@@ -11,7 +11,7 @@ import com.pessoaDeon.domain.model.OrientacaoSexual;
 import com.pessoaDeon.domain.repository.listas.orientacaoSexual.OrientacaoSexualRepository;
 
 @RestController
-@RequestMapping("api/v1/orientacaoSexual")
+@RequestMapping("api/v1/lista/orientacaoSexual")
 public class OrientacaoSexualController {
 
 	@Autowired
@@ -35,7 +35,8 @@ public class OrientacaoSexualController {
 //        
 //    }
 	
-	@GetMapping("/lista")
+//	@GetMapping("/lista")
+	@GetMapping
 	public List<OrientacaoSexual> listarOrientacaoSexual() {
 		return oRepository.findAll();
 	}

@@ -14,7 +14,7 @@ import com.pessoaDeon.domain.model.Bairro;
 import com.pessoaDeon.domain.service.BairroService;
 
 @RestController
-@RequestMapping("api/v1/bairros")
+@RequestMapping("api/v1/lista/bairros")
 public class BairroController {
 
 	@Autowired

@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/v1/estados")
+@RequestMapping("/api/v1/lista/estados")
 public class EstadoController {
 
     @Autowired

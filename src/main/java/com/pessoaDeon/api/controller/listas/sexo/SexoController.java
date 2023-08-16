@@ -11,7 +11,7 @@ import com.pessoaDeon.domain.model.Sexo;
 import com.pessoaDeon.domain.repository.listas.sexo.SexoRepository;
 
 @RestController
-@RequestMapping("api/v1/sexo")
+@RequestMapping("api/v1/lista/sexo")
 public class SexoController {
 	
 	@Autowired
@@ -35,7 +35,8 @@ public class SexoController {
 //        return lista;
 //    }
 	
-	@GetMapping("/lista")
+	//@GetMapping("/lista")
+	@GetMapping
 	public List<Sexo> listSexo(){
 		return sexoRepository.findAll();
 	}

@@ -11,7 +11,7 @@ import com.pessoaDeon.domain.model.Deficiencia;
 import com.pessoaDeon.domain.repository.listas.deficiencia.DeficienciaRepository;
 
 @RestController
-@RequestMapping("api/v1/deficiencias")
+@RequestMapping("api/v1/lista/deficiencias")
 public class DeficienciaController {
 		
 	@Autowired
@@ -34,7 +34,8 @@ public class DeficienciaController {
 //        return lista;
 //    }
 	
-	@GetMapping("/lista")
+//	@GetMapping("/listas")
+	@GetMapping
 	public List<Deficiencia> listarDeficiencias(){
 		return deficienciaRepository.findAll();
 	}

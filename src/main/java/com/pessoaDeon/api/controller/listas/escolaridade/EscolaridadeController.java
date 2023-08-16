@@ -12,7 +12,7 @@ import com.pessoaDeon.domain.repository.listas.escolaridade.EscolaridadeReposito
 
 
 @RestController
-@RequestMapping("api/v1/escolaridade")
+@RequestMapping("api/v1/lista/escolaridade")
 public class EscolaridadeController {
 
 	@Autowired
@@ -34,7 +34,8 @@ public class EscolaridadeController {
 //        return lista;
 //    }
 	
-	@GetMapping("/lista")
+//	@GetMapping("/lista")
+	@GetMapping
 	public List<Escolaridade> listarEscolaridade(){
 		return escolaridadeRepository.findAll();
 	}

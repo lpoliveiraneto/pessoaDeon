@@ -11,7 +11,7 @@ import com.pessoaDeon.domain.model.IdentidadeGenero;
 import com.pessoaDeon.domain.repository.listas.identidadeGenero.IdentidadeGeneroRepository;
 
 @RestController
-@RequestMapping("api/v1/identidadeGenero")
+@RequestMapping("api/v1/lista/identidadeGenero")
 public class IdentidadeGeneroController {
 
 	@Autowired
@@ -34,7 +34,8 @@ public class IdentidadeGeneroController {
 //        return lista;
 //        
 //    }
-	@GetMapping("/lista")
+	//@GetMapping("/lista")
+	@GetMapping
 	public List<IdentidadeGenero> listarIdentidadeGenero(){
 		return identidadeGeneroRepository.findAll();
 	}
