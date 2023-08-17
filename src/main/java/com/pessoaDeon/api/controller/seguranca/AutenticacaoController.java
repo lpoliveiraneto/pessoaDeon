@@ -41,7 +41,6 @@ public class AutenticacaoController {
             return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT));
 
         }catch (AuthenticationException e){
-            //System.err.println("entrei no erro: "+ e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
 

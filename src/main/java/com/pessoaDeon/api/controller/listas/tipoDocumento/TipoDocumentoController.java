@@ -16,8 +16,7 @@ public class TipoDocumentoController {
 
 	@Autowired
 	private TipoDocumentoRepository tipoDocumentoRepository;
-	
-	//@GetMapping("/lista")
+
 	@GetMapping
 	public List<TipoDocumento> listarTipoDoc(){
 		return tipoDocumentoRepository.findAll();

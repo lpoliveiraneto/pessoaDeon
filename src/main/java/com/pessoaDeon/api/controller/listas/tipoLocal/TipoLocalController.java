@@ -17,7 +17,7 @@ public class TipoLocalController {
 	@Autowired
 	private TipoLocalRepository tipoLocalRepository;
 	
-	//@GetMapping("/lista")
+
 	@GetMapping
 	public List<TipoLocal> listarTipoLocal(){
 		return tipoLocalRepository.findAll();

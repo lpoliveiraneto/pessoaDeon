@@ -16,25 +16,7 @@ public class DeficienciaController {
 		
 	@Autowired
 	private DeficienciaRepository deficienciaRepository;
-	
-//    @GetMapping
-//    public List<EnumToObject> listarDeficiencias(){
-//        List<Deficiencia> listaEnum = Arrays.asList(Deficiencia.values());
-//        Map<String, String> listaDeficiencias = new HashMap<>();
-//        listaEnum.forEach(d -> {
-//            listaDeficiencias.put(d.toString(), d.getDescricao());
-//        });
-//        List<EnumToObject> lista = new ArrayList<>();
-//        for(String key : listaDeficiencias.keySet()) {
-//        	EnumToObject to = new EnumToObject();
-//        	to.setKey(key);
-//        	to.setValue(listaDeficiencias.get(key));
-//        	lista.add(to);
-//        }
-//        return lista;
-//    }
-	
-//	@GetMapping("/listas")
+
 	@GetMapping
 	public List<Deficiencia> listarDeficiencias(){
 		return deficienciaRepository.findAll();

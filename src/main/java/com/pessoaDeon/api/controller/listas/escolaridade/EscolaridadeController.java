@@ -17,24 +17,7 @@ public class EscolaridadeController {
 
 	@Autowired
 	private EscolaridadeRepository escolaridadeRepository;
-//	@GetMapping
-//    public List<EnumToObject> listarEscolaridade(){
-//        List<Escolaridade> list = Arrays.asList(Escolaridade.values());
-//        Map<String, String> listaEscolaridade = new HashMap<>();
-//        list.forEach(lista -> {
-//        	listaEscolaridade.put(lista.toString(), lista.getDescricao());
-//        });
-//        List<EnumToObject> lista = new ArrayList<>();
-//        for(String chave : listaEscolaridade.keySet()) {
-//        	EnumToObject novoEnum = new EnumToObject();
-//        	novoEnum.setKey(chave);
-//        	novoEnum.setValue(listaEscolaridade.get(chave));
-//        	lista.add(novoEnum);
-//        }
-//        return lista;
-//    }
-	
-//	@GetMapping("/lista")
+
 	@GetMapping
 	public List<Escolaridade> listarEscolaridade(){
 		return escolaridadeRepository.findAll();

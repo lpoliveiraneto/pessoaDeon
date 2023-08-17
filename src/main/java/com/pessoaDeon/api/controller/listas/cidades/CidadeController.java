@@ -21,11 +21,6 @@ public class CidadeController {
     @Autowired
     private CidadeService cidadeService;
 
-//    @GetMapping
-//    public List<Cidade> listarCidades(){
-//        return cidadeRepository.findAll();
-//    }
-    
     @GetMapping("/{idEstado}")
     public List<Cidade> cidadesPorEstado(@PathVariable("idEstado") Integer idEstado){
     	return cidadeService.findByEstadoIdEstado(idEstado);
