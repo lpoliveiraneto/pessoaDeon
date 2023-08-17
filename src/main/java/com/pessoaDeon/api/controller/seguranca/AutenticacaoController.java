@@ -38,7 +38,7 @@ public class AutenticacaoController {
 
             var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
             var pessoa = pessoaService.buscaPessoaEmail(dados.email());
-            return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT));
+            return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT, pessoa.getUsuario().getPerfis()));
 
         }catch (AuthenticationException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
