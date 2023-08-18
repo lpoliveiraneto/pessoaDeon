@@ -11,13 +11,14 @@ import com.pessoaDeon.domain.model.TipoLocal;
 import com.pessoaDeon.domain.repository.listas.tipoLocal.TipoLocalRepository;
 
 @RestController
-@RequestMapping("api/v1/tipoLocal")
+@RequestMapping("api/v1/lista/tipoLocal")
 public class TipoLocalController {
 	
 	@Autowired
 	private TipoLocalRepository tipoLocalRepository;
 	
-	@GetMapping("/lista")
+
+	@GetMapping
 	public List<TipoLocal> listarTipoLocal(){
 		return tipoLocalRepository.findAll();
 	}

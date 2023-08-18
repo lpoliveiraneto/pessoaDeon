@@ -30,7 +30,9 @@ public class SecurityConfigurations {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req ->{
-                    req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/cadastro/salvar").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

@@ -11,30 +11,13 @@ import com.pessoaDeon.domain.model.IdentidadeGenero;
 import com.pessoaDeon.domain.repository.listas.identidadeGenero.IdentidadeGeneroRepository;
 
 @RestController
-@RequestMapping("api/v1/identidadeGenero")
+@RequestMapping("api/v1/lista/identidadeGenero")
 public class IdentidadeGeneroController {
 
 	@Autowired
 	private IdentidadeGeneroRepository identidadeGeneroRepository;
-//	@GetMapping
-//    public List<EnumToObject> listarDeficiencias(){
-//        List<IdentidadeGenero> listaEnum = Arrays.asList(IdentidadeGenero.values());
-//        Map<String, String> listaIdentidadeGenero = new HashMap<>();
-//        listaEnum.forEach(lista -> {
-//        	listaIdentidadeGenero.put(lista.toString(), lista.getDescricao());
-//        });
-//        
-//        List<EnumToObject> lista = new ArrayList<>();
-//        for(String chave : listaIdentidadeGenero.keySet()) {
-//        	EnumToObject novoEnum = new EnumToObject();
-//        	novoEnum.setKey(chave);
-//        	novoEnum.setValue(listaIdentidadeGenero.get(chave));
-//        	lista.add(novoEnum);
-//        }
-//        return lista;
-//        
-//    }
-	@GetMapping("/lista")
+
+	@GetMapping
 	public List<IdentidadeGenero> listarIdentidadeGenero(){
 		return identidadeGeneroRepository.findAll();
 	}

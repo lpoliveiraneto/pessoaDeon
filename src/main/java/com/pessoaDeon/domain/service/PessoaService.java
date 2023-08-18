@@ -4,10 +4,11 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 
+import com.pessoaDeon.domain.exception.PessoaAlreadyRegisteredException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pessoaDeon.domain.exception.PessoaNotFoundException;
 import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.TipoDocumento;
 import com.pessoaDeon.domain.repository.PessoaRepository;
@@ -47,7 +48,7 @@ public class PessoaService {
     	Pessoa pessoa2 = trataPessoa(pessoa);
 
     	if (!verificaPessoaTriChave(pessoa2).isEmpty() || pessoaOpt.isPresent() ) {
-    		throw new PessoaNotFoundException("Pessoa já consta na base de dados");
+    		throw new PessoaAlreadyRegisteredException("Pessoa já consta na base de dados");
 		} 
     	
     	return pessoa2;
@@ -80,6 +81,10 @@ public class PessoaService {
 	
 	public static String removerAcentos(String str) {
 		return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+	}
+
+	public Pessoa buscaPessoaEmail(String email){
+		return pessoaRepository.findByEmailEmail(email).get();
 	}
 	
 }

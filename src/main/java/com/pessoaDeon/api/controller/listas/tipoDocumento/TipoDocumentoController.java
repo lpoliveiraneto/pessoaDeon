@@ -11,13 +11,13 @@ import com.pessoaDeon.domain.model.TipoDocumento;
 import com.pessoaDeon.domain.repository.listas.tipoDocumento.TipoDocumentoRepository;
 
 @RestController
-@RequestMapping("api/v1/tipoDocumento")
+@RequestMapping("api/v1/lista/tipoDocumento")
 public class TipoDocumentoController {
 
 	@Autowired
 	private TipoDocumentoRepository tipoDocumentoRepository;
-	
-	@GetMapping("/lista")
+
+	@GetMapping
 	public List<TipoDocumento> listarTipoDoc(){
 		return tipoDocumentoRepository.findAll();
 	}

@@ -5,10 +5,7 @@ import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.security.Perfil;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +19,7 @@ import java.util.List;
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="idUsuario")
@@ -48,6 +46,10 @@ public class Usuario implements UserDetails {
             name = "usuarios_perfis"
     )
     private List<Perfil> perfis = new ArrayList<>();
+
+    public void adicionarPerfil(Perfil perfil){
+        perfis.add(perfil);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
