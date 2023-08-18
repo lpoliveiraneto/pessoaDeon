@@ -1,7 +1,9 @@
 package com.pessoaDeon.domain.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -10,8 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,43 +31,22 @@ public class BoDeon implements Serializable {
 	private Integer idBo;
 	
 	@NotNull
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	private Date dataFato;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East" , pattern = "yyyy-MM-dd")
+	private LocalDate dataFato;
 	
 	@NotNull
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm")
-	private Date horaFato;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "HH:mm")
+	private LocalTime horaFato;
 	
-	private String logradouro;
-	private String complemento;
-	private String pontoReferencia;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime dataRegistro;
 	
+	@NotEmpty
+	private String protocolo;
+
 	@Column(columnDefinition = "text")
 	private String relato;
-	
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "fk_estado")
-	private Estado fkEstado;
-	
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "fk_cidade")
-	private Cidade fkCidade;
-	
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "fk_bairro")
-	private Bairro fkBairro;
-	
-	@NotNull
-	private String numeroLocal;
-	
-//	@NotNull
-	private String cep;
 
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "fk_tipo_local")
-	private TipoLocal tipoLocal;
+	@Column(columnDefinition = "text")
+	private String relatoEditado;
 }

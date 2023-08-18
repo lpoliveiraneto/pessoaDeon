@@ -8,9 +8,12 @@ import org.springframework.stereotype.Repository;
 import com.pessoaDeon.domain.model.NaturezaSigma;
 
 @Repository
-public interface NaturezaRepository extends JpaRepository<NaturezaSigma, Integer> {
+public interface NaturezaSigmaRepository extends JpaRepository<NaturezaSigma, Integer> {
 
 	Page<NaturezaSigma> findAll(Pageable pageable);
 	
 	Page<NaturezaSigma> findAllByNomeContains(String nome, Pageable pageable);
+	
+	Page<NaturezaSigma> findAllByGlossarioContains(String glossario, Pageable pageable);
+
 }

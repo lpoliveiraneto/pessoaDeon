@@ -25,7 +25,7 @@ public class NaturezaSigma implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_natureza")
-    private Integer idNatureza;
+    private Integer idNaturezaSigma;
 
     @NotNull
     @Column(name = "codigo")
