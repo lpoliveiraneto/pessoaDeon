@@ -1,8 +1,11 @@
 package com.pessoaDeon.domain.service;
 
+import com.pessoaDeon.domain.model.enumeration.PerfilUsuario;
 import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.security.Perfil;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.UsuarioRepository;
+import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,6 +47,9 @@ public class CadastroService {
 	private ModelMapper modelMapper;
 	@Autowired
 	private UsuarioService usuarioService;
+
+	@Autowired
+	private PerfilRepository perfilRepository;
 
 	@Transactional
 	public Pessoa salvar(CadastroRequestDto cadastroRequestDto){
@@ -114,6 +120,8 @@ public class CadastroService {
 
 	@Transactional
 	private Usuario salvarUsuario(CadastroRequestDto cadastroDto){
+		final long PERFIL_USER = 1;
+
 		Usuario usuario = new Usuario();
 		usuario.setEmail(cadastroDto.getEmail());
 		String senha = gerarSenhaAleatoria(5);
@@ -121,7 +129,7 @@ public class CadastroService {
 		usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
 		usuario.setStatus(Status.PE);
 		usuario.setDataCadastro(LocalDateTime.now());
-		//usuario.setPessoa(pessoa);
+		usuario.adicionarPerfil(perfilRepository.findById(PERFIL_USER).get());
 		var user = usuarioService.salvarUsuario(usuario);
 		return usuario;
 	}

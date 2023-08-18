@@ -1,6 +1,7 @@
 package com.pessoaDeon.domain.model.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.Bairro;
@@ -18,6 +19,7 @@ import com.pessoaDeon.domain.model.Sexo;
 import com.pessoaDeon.domain.model.TipoDocumento;
 import com.pessoaDeon.domain.model.TipoLocal;
 
+import com.pessoaDeon.domain.model.security.Perfil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -77,5 +79,5 @@ public class CadastroRequestDto {
 //email	
 	private String email;
 	private Boolean emailAtual;
-	
+
 }

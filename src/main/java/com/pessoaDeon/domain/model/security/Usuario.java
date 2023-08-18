@@ -47,6 +47,10 @@ public class Usuario implements UserDetails {
     )
     private List<Perfil> perfis = new ArrayList<>();
 
+    public void adicionarPerfil(Perfil perfil){
+        perfis.add(perfil);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.perfis;
