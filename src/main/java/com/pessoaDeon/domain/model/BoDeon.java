@@ -35,7 +35,7 @@ public class BoDeon implements Serializable {
 	private LocalDate dataFato;
 	
 	@NotNull
-	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "HH:mm:ss")
 	private LocalTime horaFato;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "yyyy-MM-dd HH:mm:ss")

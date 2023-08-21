@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class EnderecoLocalFato implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -30,8 +32,7 @@ public class EnderecoLocalFato implements Serializable{
 	
 	private String complemento;
 	
-	@NotEmpty
-	private String numeroLocal;
+	private Integer numeroLocal;
 	
 	@NotEmpty
 	private String logradouro;
