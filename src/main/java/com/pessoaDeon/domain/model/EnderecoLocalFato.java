@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class EnderecoLocalFato implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -25,15 +27,16 @@ public class EnderecoLocalFato implements Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idEnderecoLocal;
-	
+
+	@NotNull
 	private String cep;
 	
 	private String complemento;
 	
-	@NotEmpty
-	private String numeroLocal;
+	private Integer numeroLocal;
 	
-	@NotEmpty
+	private String referencia;
+	
 	private String logradouro;
 
 	@ManyToOne(fetch = FetchType.LAZY)
