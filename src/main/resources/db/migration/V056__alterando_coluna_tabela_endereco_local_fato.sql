@@ -1,1 +1,0 @@
-ALTER TABLE public.endereco_local_fato RENAME CONSTRAINT endereco_local_fato_fk_cidade_fkey TO endereco_local_fato_fk_bairro_fkey;
