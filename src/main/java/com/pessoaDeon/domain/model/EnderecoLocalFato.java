@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,14 +27,16 @@ public class EnderecoLocalFato implements Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idEnderecoLocal;
-	
+
+	@NotNull
 	private String cep;
 	
 	private String complemento;
 	
 	private Integer numeroLocal;
 	
-	@NotEmpty
+	private String referencia;
+	
 	private String logradouro;
 
 	@ManyToOne(fetch = FetchType.LAZY)
