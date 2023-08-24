@@ -22,7 +22,7 @@ public class NaturezaService {
 	@Autowired
 	private NaturezaDeonRepository repository;
 	
-	public Page<?> listNatureza(Pageable pageable) {
+	public Page<NaturezaSigma> listNatureza(Pageable pageable) {
 		return naturezaRepository.findAll(pageable);
 	}
 
@@ -52,8 +52,10 @@ public class NaturezaService {
 	}
 	
 	public NaturezaSigma buscarNaturezaSigma(Integer idNaturezaSigma){
-		NaturezaSigma nat = naturezaRepository.findById(idNaturezaSigma).orElseThrow(() -> 
-			new RuntimeException("Natureza não encontrada = " + idNaturezaSigma));
+	//		NaturezaSigma nat = naturezaRepository.findById(idNaturezaSigma).orElseThrow(() ->
+	//			new RuntimeException("Natureza não encontrada = " + idNaturezaSigma));
+	//		return nat;
+		NaturezaSigma nat = naturezaRepository.findById(idNaturezaSigma).get();
 		return nat;
 	}
 	

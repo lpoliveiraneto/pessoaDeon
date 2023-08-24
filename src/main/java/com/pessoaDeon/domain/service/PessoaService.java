@@ -55,6 +55,10 @@ public class PessoaService {
     }
     
     private List<Pessoa> verificaPessoaTriChave(Pessoa pessoa) {
+
+		System.out.println("Nome"+pessoa.getNome());
+		System.out.println("Mãe"+pessoa.getNomeMae());
+		System.out.println("Data de Nascimento"+ pessoa.getDataNascimento());
     	return pessoaRepository.findByNomeAndNomeMaeAndDataNascimento(pessoa.getNome(), pessoa.getNomeMae(), pessoa.getDataNascimento());
     }
     

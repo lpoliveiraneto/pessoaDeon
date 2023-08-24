@@ -1,5 +1,7 @@
 package com.pessoaDeon.api.controller;
 
+import com.pessoaDeon.domain.model.Pessoa;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,8 @@ public class CadastroController {
 	private CadastroService cadastroService;
 	
 	@PostMapping("/salvar")
-	public ResponseEntity<?> salvarCadastroPessoa(@RequestBody CadastroRequestDto cadastroDto){
+	public ResponseEntity<Pessoa> salvarCadastroPessoa(@RequestBody @Valid CadastroRequestDto cadastroDto){
+		System.out.println("entrei no método de salvar");
 		return ResponseEntity.status(HttpStatus.CREATED).body(cadastroService.salvar(cadastroDto));
 	}
 	
