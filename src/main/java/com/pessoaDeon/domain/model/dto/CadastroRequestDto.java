@@ -116,5 +116,6 @@ public class CadastroRequestDto {
 	private String email;
 	@NotNull
 	private Boolean emailAtual;
-
+	private String senha;
+	
 }

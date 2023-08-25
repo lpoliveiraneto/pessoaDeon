@@ -24,13 +24,20 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(of="idUsuario")
 public class Usuario implements UserDetails {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
+    
     @Column(name = "login")
     private String email;
+    
     private String senha;
+    
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -38,6 +45,10 @@ public class Usuario implements UserDetails {
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime dataCadastro;
+    
+    @Column(name = "conta_ativa")
+    private Boolean contaAtiva = false;
+    
     @OneToOne(mappedBy = "usuario")
     private Pessoa pessoa;
 
