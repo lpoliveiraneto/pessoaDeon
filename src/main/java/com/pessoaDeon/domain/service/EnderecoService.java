@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pessoaDeon.domain.exception.EnderecoNotFoundException;
-import com.pessoaDeon.domain.model.Endereco;
-import com.pessoaDeon.domain.repository.EnderecoRepository;
+import com.pessoaDeon.domain.model.endereco.Endereco;
+import com.pessoaDeon.domain.repository.endereco.EnderecoRepository;
 
 
 @Service

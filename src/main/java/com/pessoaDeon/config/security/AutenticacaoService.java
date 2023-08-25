@@ -1,6 +1,6 @@
 package com.pessoaDeon.config.security;
 
-import com.pessoaDeon.domain.repository.UsuarioRepository;
+import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,6 +1,6 @@
 package com.pessoaDeon.api.controller.listas.profissao;
 
-import com.pessoaDeon.domain.model.Profissao;
+import com.pessoaDeon.domain.model.listas.Profissao;
 import com.pessoaDeon.domain.repository.listas.profissão.ProfissaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

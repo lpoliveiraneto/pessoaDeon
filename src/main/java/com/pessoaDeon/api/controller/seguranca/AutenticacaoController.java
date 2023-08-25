@@ -1,6 +1,5 @@
 package com.pessoaDeon.api.controller.seguranca;
 
-import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
 import com.pessoaDeon.domain.model.security.Usuario;

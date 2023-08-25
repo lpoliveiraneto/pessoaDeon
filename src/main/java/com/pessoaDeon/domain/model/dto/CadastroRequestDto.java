@@ -1,25 +1,23 @@
 package com.pessoaDeon.domain.model.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pessoaDeon.domain.model.Bairro;
-import com.pessoaDeon.domain.model.Cidade;
-import com.pessoaDeon.domain.model.Deficiencia;
-import com.pessoaDeon.domain.model.Escolaridade;
-import com.pessoaDeon.domain.model.Estado;
-import com.pessoaDeon.domain.model.EstadoCivil;
-import com.pessoaDeon.domain.model.IdentidadeGenero;
-import com.pessoaDeon.domain.model.OrientacaoSexual;
-import com.pessoaDeon.domain.model.Pais;
-import com.pessoaDeon.domain.model.Profissao;
-import com.pessoaDeon.domain.model.Raca;
-import com.pessoaDeon.domain.model.Sexo;
-import com.pessoaDeon.domain.model.TipoDocumento;
-import com.pessoaDeon.domain.model.TipoLocal;
+import com.pessoaDeon.domain.model.listas.Bairro;
+import com.pessoaDeon.domain.model.listas.Cidade;
+import com.pessoaDeon.domain.model.listas.Deficiencia;
+import com.pessoaDeon.domain.model.listas.Escolaridade;
+import com.pessoaDeon.domain.model.listas.Estado;
+import com.pessoaDeon.domain.model.listas.EstadoCivil;
+import com.pessoaDeon.domain.model.listas.IdentidadeGenero;
+import com.pessoaDeon.domain.model.listas.OrientacaoSexual;
+import com.pessoaDeon.domain.model.listas.Pais;
+import com.pessoaDeon.domain.model.listas.Profissao;
+import com.pessoaDeon.domain.model.listas.Raca;
+import com.pessoaDeon.domain.model.listas.Sexo;
+import com.pessoaDeon.domain.model.listas.TipoDocumento;
+import com.pessoaDeon.domain.model.listas.TipoLocal;
 
-import com.pessoaDeon.domain.model.security.Perfil;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

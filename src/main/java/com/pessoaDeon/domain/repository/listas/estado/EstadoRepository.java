@@ -1,6 +1,6 @@
 package com.pessoaDeon.domain.repository.listas.estado;
 
-import com.pessoaDeon.domain.model.Estado;
+import com.pessoaDeon.domain.model.listas.Estado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

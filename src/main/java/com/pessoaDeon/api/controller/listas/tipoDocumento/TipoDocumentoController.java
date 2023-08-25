@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pessoaDeon.domain.model.TipoDocumento;
+import com.pessoaDeon.domain.model.listas.TipoDocumento;
 import com.pessoaDeon.domain.repository.listas.tipoDocumento.TipoDocumentoRepository;
 
 @RestController

@@ -1,7 +1,6 @@
 package com.pessoaDeon.api.controller.listas.cidades;
 
-import com.pessoaDeon.domain.model.Cidade;
-import com.pessoaDeon.domain.repository.listas.cidade.CidadeRepository;
+import com.pessoaDeon.domain.model.listas.Cidade;
 import com.pessoaDeon.domain.service.CidadeService;
 
 import org.springframework.beans.factory.annotation.Autowired;

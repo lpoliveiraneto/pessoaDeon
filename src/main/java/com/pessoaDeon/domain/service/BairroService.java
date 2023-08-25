@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.pessoaDeon.domain.model.Bairro;
-import com.pessoaDeon.domain.model.Cidade;
+import com.pessoaDeon.domain.model.listas.Bairro;
+import com.pessoaDeon.domain.model.listas.Cidade;
 import com.pessoaDeon.domain.model.dto.BairroDto;
-import com.pessoaDeon.domain.repository.BairroRepository;
+import com.pessoaDeon.domain.repository.listas.bairro.BairroRepository;
 
 @Service
 public class BairroService {

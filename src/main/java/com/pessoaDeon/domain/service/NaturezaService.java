@@ -7,11 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.model.NaturezaDeon;
-import com.pessoaDeon.domain.model.NaturezaSigma;
+import com.pessoaDeon.domain.model.natureza.NaturezaDeon;
+import com.pessoaDeon.domain.model.natureza.NaturezaSigma;
 import com.pessoaDeon.domain.model.dto.NaturezaRequestDto;
-import com.pessoaDeon.domain.repository.NaturezaDeonRepository;
-import com.pessoaDeon.domain.repository.NaturezaSigmaRepository;
+import com.pessoaDeon.domain.repository.natureza.NaturezaDeonRepository;
+import com.pessoaDeon.domain.repository.natureza.NaturezaSigmaRepository;
 
 @Service
 public class NaturezaService {

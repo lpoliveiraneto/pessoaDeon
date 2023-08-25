@@ -1,10 +1,7 @@
 package com.pessoaDeon.domain.service;
 
-import com.pessoaDeon.domain.model.enumeration.PerfilUsuario;
 import com.pessoaDeon.domain.model.enumeration.Status;
-import com.pessoaDeon.domain.model.security.Perfil;
 import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.domain.repository.UsuarioRepository;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +9,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.model.Email;
-import com.pessoaDeon.domain.model.Endereco;
-import com.pessoaDeon.domain.model.Logradouro;
-import com.pessoaDeon.domain.model.Pessoa;
-import com.pessoaDeon.domain.model.Telefone;
+import com.pessoaDeon.domain.model.pessoa.Email;
+import com.pessoaDeon.domain.model.endereco.Endereco;
+import com.pessoaDeon.domain.model.endereco.Logradouro;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.pessoa.Telefone;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 
 import java.security.SecureRandom;

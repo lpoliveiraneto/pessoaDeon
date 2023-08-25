@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pessoaDeon.domain.model.OrientacaoSexual;
+import com.pessoaDeon.domain.model.listas.OrientacaoSexual;
 import com.pessoaDeon.domain.repository.listas.orientacaoSexual.OrientacaoSexualRepository;
 
 @RestController

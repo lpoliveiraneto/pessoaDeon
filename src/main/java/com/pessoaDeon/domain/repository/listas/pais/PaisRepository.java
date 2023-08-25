@@ -1,6 +1,6 @@
 package com.pessoaDeon.domain.repository.listas.pais;
 
-import com.pessoaDeon.domain.model.Pais;
+import com.pessoaDeon.domain.model.listas.Pais;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
