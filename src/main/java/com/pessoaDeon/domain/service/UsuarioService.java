@@ -5,8 +5,10 @@ import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -14,6 +16,7 @@ public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Transactional
     public Usuario salvarUsuario(Usuario usuario){
 
         if(buscaUsuarioPorEmail(usuario.getEmail()).isEmpty()){
@@ -25,4 +28,8 @@ public class UsuarioService {
     public List<Usuario> buscaUsuarioPorEmail(String email){
         return usuarioRepository.BuscarUsuarioPorEmail(email);
     }
+
+	public Optional<Usuario> findById(Long idUsuario) {
+		return usuarioRepository.findById(idUsuario);
+	}
 }

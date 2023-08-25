@@ -79,5 +79,6 @@ public class CadastroRequestDto {
 //email	
 	private String email;
 	private Boolean emailAtual;
-
+	private String senha;
+	
 }
