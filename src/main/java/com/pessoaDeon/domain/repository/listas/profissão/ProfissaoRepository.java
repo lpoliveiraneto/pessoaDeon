@@ -1,6 +1,6 @@
 package com.pessoaDeon.domain.repository.listas.profissão;
 
-import com.pessoaDeon.domain.model.Profissao;
+import com.pessoaDeon.domain.model.listas.Profissao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

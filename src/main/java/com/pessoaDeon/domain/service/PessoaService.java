@@ -9,9 +9,9 @@ import com.pessoaDeon.domain.exception.PessoaAlreadyRegisteredException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pessoaDeon.domain.model.Pessoa;
-import com.pessoaDeon.domain.model.TipoDocumento;
-import com.pessoaDeon.domain.repository.PessoaRepository;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.listas.TipoDocumento;
+import com.pessoaDeon.domain.repository.pessoa.PessoaRepository;
 
 import jakarta.transaction.Transactional;
 

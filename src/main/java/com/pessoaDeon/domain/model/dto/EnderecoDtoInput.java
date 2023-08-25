@@ -1,7 +1,7 @@
 package com.pessoaDeon.domain.model.dto;
 
-import com.pessoaDeon.domain.model.Logradouro;
-import com.pessoaDeon.domain.model.Pessoa;
+import com.pessoaDeon.domain.model.endereco.Logradouro;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
 
 import lombok.Getter;
 

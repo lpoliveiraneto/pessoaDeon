@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.model.BoDeon;
-import com.pessoaDeon.domain.model.EnderecoLocalFato;
-import com.pessoaDeon.domain.model.Protocolo;
+import com.pessoaDeon.domain.model.bo.BoDeon;
+import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
+import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.dto.BoDto;
-import com.pessoaDeon.domain.repository.BoRepository;
-import com.pessoaDeon.domain.repository.EnderecoLocalFatoRepository;
-import com.pessoaDeon.domain.repository.ProtocoloRepository;
+import com.pessoaDeon.domain.repository.bo.BoRepository;
+import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
+import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 
 
 @Service

@@ -35,6 +35,8 @@ public class SecurityConfigurations {
 //                    req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/verifyAccount").permitAll(); ativar depois
                     req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
+                   //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("ADM");
+                    //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("USER");
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

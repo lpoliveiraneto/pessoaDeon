@@ -7,11 +7,11 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pessoaDeon.domain.model.Bairro;
-import com.pessoaDeon.domain.model.BoDeon;
-import com.pessoaDeon.domain.model.Cidade;
-import com.pessoaDeon.domain.model.Estado;
-import com.pessoaDeon.domain.model.TipoLocal;
+import com.pessoaDeon.domain.model.listas.Bairro;
+import com.pessoaDeon.domain.model.bo.BoDeon;
+import com.pessoaDeon.domain.model.listas.Cidade;
+import com.pessoaDeon.domain.model.listas.Estado;
+import com.pessoaDeon.domain.model.listas.TipoLocal;
 
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;

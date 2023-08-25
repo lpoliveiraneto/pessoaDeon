@@ -1,9 +1,9 @@
 package com.pessoaDeon.domain.service;
 
-import com.pessoaDeon.domain.model.Logradouro;
+import com.pessoaDeon.domain.model.endereco.Logradouro;
 
 import com.pessoaDeon.domain.model.dto.LogradouroDto;
-import com.pessoaDeon.domain.repository.LogradouroRepository;
+import com.pessoaDeon.domain.repository.endereco.LogradouroRepository;
 import com.pessoaDeon.domain.repository.listas.estado.EstadoRepository;
 
 

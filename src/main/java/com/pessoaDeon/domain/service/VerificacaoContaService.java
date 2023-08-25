@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
+import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.VerificacaoConta;
 import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.domain.repository.UsuarioRepository;
 import com.pessoaDeon.domain.repository.VerificacaoContaRepository;
 
 @Service
@@ -27,7 +27,7 @@ public class VerificacaoContaService {
 	private UsuarioService usuarioService;
 	
 	@Autowired
-    UsuarioRepository usuarioRepository;
+	UsuarioRepository usuarioRepository;
 	
 	@Transactional
 	public VerificacaoConta findByCodigo(String codigo) {

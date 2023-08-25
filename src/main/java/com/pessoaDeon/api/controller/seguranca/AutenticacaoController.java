@@ -1,5 +1,12 @@
 package com.pessoaDeon.api.controller.seguranca;
 
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
+import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
+import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.config.security.TokenService;
+import com.pessoaDeon.domain.service.PessoaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.pessoaDeon.config.security.TokenService;
-import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
-import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
-import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.domain.service.PessoaService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/login")
@@ -40,7 +39,8 @@ public class AutenticacaoController {
             if (user.getContaAtiva()) {
             	var tokenJWT = tokenService.gerarToken(user);
             	var pessoa = pessoaService.buscaPessoaEmail(dados.email());
-            	return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT, pessoa.getUsuario().getPerfis()));
+                String primeiroNomeUltimo = primeiroEUltimonome(pessoa.getNome());
+            	return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),primeiroNomeUltimo,tokenJWT, pessoa.getUsuario().getPerfis()));
             } else {
             	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sua conta ainda não esta ativa. Por favor, verifique sua caixa de e-mail.");
             }

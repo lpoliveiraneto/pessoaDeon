@@ -1,16 +1,14 @@
 package com.pessoaDeon.domain.model.security;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pessoaDeon.domain.model.Pessoa;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.enumeration.Status;
-import com.pessoaDeon.domain.model.security.Perfil;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;

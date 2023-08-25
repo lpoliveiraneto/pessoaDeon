@@ -1,7 +1,11 @@
 package com.pessoaDeon.domain.service;
 
+import com.pessoaDeon.domain.model.RemetenteEmail;
+import com.pessoaDeon.domain.model.enumeration.PerfilUsuario;
 import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.security.Perfil;
 import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.model.Email;
-import com.pessoaDeon.domain.model.Endereco;
-import com.pessoaDeon.domain.model.Logradouro;
-import com.pessoaDeon.domain.model.Pessoa;
-import com.pessoaDeon.domain.model.RemetenteEmail;
-import com.pessoaDeon.domain.model.Telefone;
+import com.pessoaDeon.domain.model.pessoa.Email;
+import com.pessoaDeon.domain.model.endereco.Endereco;
+import com.pessoaDeon.domain.model.endereco.Logradouro;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.pessoa.Telefone;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 
 import java.security.SecureRandom;
@@ -46,13 +49,13 @@ public class CadastroService {
 	private ModelMapper modelMapper;
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@Autowired
 	private EnvioEmailService envioEmailService;
 
 	@Autowired
 	private VerificacaoContaService verificacaoContaService;
-	
+
 	@Autowired
 	private PerfilRepository perfilRepository;
 
@@ -126,9 +129,12 @@ public class CadastroService {
 	@Transactional
 	private Usuario salvarUsuario(CadastroRequestDto cadastroDto){
 		final long PERFIL_USER = 1;
+
 		Usuario usuario = new Usuario();
 		usuario.setEmail(cadastroDto.getEmail());
-		usuario.setSenha(new BCryptPasswordEncoder().encode(cadastroDto.getSenha()));
+		String senha = gerarSenhaAleatoria(5);
+		System.out.println(senha);
+		usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
 		usuario.setStatus(Status.PE);
 		usuario.setDataCadastro(LocalDateTime.now());
 		usuario.adicionarPerfil(perfilRepository.findById(PERFIL_USER).get());
@@ -140,16 +146,16 @@ public class CadastroService {
 		return usuario;
 	}
 
-//	private String gerarSenhaAleatoria(int tamanho) {
-//		final String chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//
-//		SecureRandom random = new SecureRandom();
-//		return IntStream.range(0, tamanho)
-//				.map(i -> random.nextInt(chars.length()))
-//				.mapToObj(randomIndex -> String.valueOf(chars.charAt(randomIndex)))
-//				.collect(Collectors.joining());
-//	}
-	
+	private String gerarSenhaAleatoria(int tamanho) {
+		final String chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+		SecureRandom random = new SecureRandom();
+		return IntStream.range(0, tamanho)
+				.map(i -> random.nextInt(chars.length()))
+				.mapToObj(randomIndex -> String.valueOf(chars.charAt(randomIndex)))
+				.collect(Collectors.joining());
+	}
+
 	private void enviaCodigoEmail(String destinatario, String codigo) {
 		Optional<RemetenteEmail> remetente = envioEmailService.getRemetente(1);
 		if (remetente.isPresent()) {
@@ -188,7 +194,7 @@ public class CadastroService {
 			EnvioEmailService.enviarEmail(remetente.get(), destinatario, assunto, corpo2);
 		}
 	}
-	
+
 	public String testeEnvioEmail(String email) {
 		Usuario user = new Usuario();
 		user.setEmail(email);
@@ -196,5 +202,5 @@ public class CadastroService {
 		enviaCodigoEmail(user.getEmail(), codigo);
 		return null;
 	}
-	
+
 }

@@ -1,13 +1,11 @@
 package com.pessoaDeon.domain.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.model.Telefone;
-import com.pessoaDeon.domain.repository.ContatoRepository;
+import com.pessoaDeon.domain.model.pessoa.Telefone;
+import com.pessoaDeon.domain.repository.pessoa.ContatoRepository;
 
 @Service
 public class ContatoService {

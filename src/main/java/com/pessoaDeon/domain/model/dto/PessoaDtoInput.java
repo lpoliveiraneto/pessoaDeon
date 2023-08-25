@@ -3,9 +3,9 @@ package com.pessoaDeon.domain.model.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pessoaDeon.domain.model.Cidade;
-import com.pessoaDeon.domain.model.Estado;
-import com.pessoaDeon.domain.model.Pais;
+import com.pessoaDeon.domain.model.listas.Cidade;
+import com.pessoaDeon.domain.model.listas.Estado;
+import com.pessoaDeon.domain.model.listas.Pais;
 import com.pessoaDeon.domain.model.enumeration.CorPele;
 import com.pessoaDeon.domain.model.enumeration.Deficiencia;
 import com.pessoaDeon.domain.model.enumeration.IdentidadeGenero;

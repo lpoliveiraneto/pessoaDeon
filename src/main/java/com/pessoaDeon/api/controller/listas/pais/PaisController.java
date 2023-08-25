@@ -1,6 +1,6 @@
 package com.pessoaDeon.api.controller.listas.pais;
 
-import com.pessoaDeon.domain.model.Pais;
+import com.pessoaDeon.domain.model.listas.Pais;
 import com.pessoaDeon.domain.repository.listas.pais.PaisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;

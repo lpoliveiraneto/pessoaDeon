@@ -1,6 +1,6 @@
 package com.pessoaDeon.domain.repository.listas.cidade;
 
-import com.pessoaDeon.domain.model.Cidade;
+import com.pessoaDeon.domain.model.listas.Cidade;
 
 import java.util.List;
 
