@@ -38,11 +38,23 @@ public class AutenticacaoController {
 
             var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
             var pessoa = pessoaService.buscaPessoaEmail(dados.email());
-            return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT, pessoa.getUsuario().getPerfis()));
+            String primeiroUltimoNome = primeiroEUltimonome(pessoa.getNome());
+            return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),primeiroUltimoNome,tokenJWT, pessoa.getUsuario().getPerfis()));
 
         }catch (AuthenticationException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
+
+    }
+
+    private String primeiroEUltimonome(String nome){
+        String[] nomeCurto = nome.split(" ");
+        if(nomeCurto.length == 1){
+            return nomeCurto[0];
+        }else{
+            return nomeCurto[0]+" "+nomeCurto[nomeCurto.length-1];
+        }
+
 
     }
 }

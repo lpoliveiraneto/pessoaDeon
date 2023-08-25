@@ -37,10 +37,12 @@ public class SecurityFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }catch(SignatureVerificationException ex){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("Token Inválido");
                 return;
             }catch (TokenExpiredException ex){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("Token Expirado");
                 return;
 
