@@ -1,5 +1,6 @@
 package com.pessoaDeon.api.controller.seguranca;
 
+import com.pessoaDeon.domain.model.Pessoa;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
 import com.pessoaDeon.domain.model.security.Usuario;
@@ -30,15 +31,18 @@ public class AutenticacaoController {
     private PessoaService pessoaService;
 
     @PostMapping
-    public ResponseEntity efetuarLoginCliente(@RequestBody @Valid DadosAutenticacao dados){
+    public ResponseEntity<?> efetuarLoginCliente(@RequestBody @Valid DadosAutenticacao dados){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
         try{
             var authentication = manager.authenticate(authenticationToken);
-
-            var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
-            var pessoa = pessoaService.buscaPessoaEmail(dados.email());
-            String primeiroUltimoNome = primeiroEUltimonome(pessoa.getNome());
-            return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),primeiroUltimoNome,tokenJWT, pessoa.getUsuario().getPerfis()));
+            Usuario user = (Usuario) authentication.getPrincipal();
+            if (user.getContaAtiva()) {
+            	var tokenJWT = tokenService.gerarToken(user);
+            	var pessoa = pessoaService.buscaPessoaEmail(dados.email());
+            	return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),pessoa.getNome(),tokenJWT, pessoa.getUsuario().getPerfis()));
+            } else {
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sua conta ainda não esta ativa. Por favor, verifique sua caixa de e-mail.");
+            }
 
         }catch (AuthenticationException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());

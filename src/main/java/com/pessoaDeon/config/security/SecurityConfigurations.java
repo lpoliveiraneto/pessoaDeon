@@ -32,6 +32,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(req ->{
                     req.requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/cadastro/salvar").permitAll();
+//                    req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/verifyAccount").permitAll(); ativar depois
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
                    //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("ADM");
                     //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("USER");

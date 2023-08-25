@@ -1,7 +1,10 @@
 package com.pessoaDeon.domain.service;
 
+import com.pessoaDeon.domain.model.enumeration.PerfilUsuario;
 import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.security.Perfil;
 import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.repository.UsuarioRepository;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,12 @@ public class CadastroService {
 	private ModelMapper modelMapper;
 	@Autowired
 	private UsuarioService usuarioService;
+
+	@Autowired
+	private EnvioEmailService envioEmailService;
+
+	@Autowired
+	private VerificacaoContaService verificacaoContaService;
 
 	@Autowired
 	private PerfilRepository perfilRepository;
