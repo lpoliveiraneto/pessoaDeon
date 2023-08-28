@@ -4,16 +4,22 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
+
+import org.modelmapper.internal.bytebuddy.asm.Advice.Return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.VerificacaoConta;
+import com.pessoaDeon.domain.model.listas.TipoDocumento;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.VerificacaoContaRepository;
 
@@ -28,6 +34,12 @@ public class VerificacaoContaService {
 	
 	@Autowired
 	UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	PessoaService pessoaService;
+	
+	@Autowired
+	EnvioEmailService envioEmailService;
 	
 	@Transactional
 	public VerificacaoConta findByCodigo(String codigo) {
@@ -82,6 +94,21 @@ public class VerificacaoContaService {
 			}
 		}
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Não foi possível ativar sua conta por esse token no momento! Tente novamente mais tarde");
+	}
+
+	@Transactional
+	public ResponseEntity<?> reenviarCodigoVerificacao(String email, String numeroDocumento) {
+		Optional<Pessoa> pessoa = pessoaService.getPessoaByNumeroDocumento(numeroDocumento);
+		Optional<Usuario> user = usuarioService.findByPessoa(pessoa.get());
+		VerificacaoConta conta = findByUser(user.get());
+		if (user.isPresent() && user.get().getEmail().equalsIgnoreCase(email) && pessoa.isPresent() && conta != null) {
+			conta.setCodigo(gerarCodigoVerificacaoConta());
+			conta.setExpiracaoCodigo(LocalDateTime.now().plusHours(2));
+			contaRepository.save(conta);
+			envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo());
+			return ResponseEntity.status(HttpStatus.OK).body("Codigo reenviado com sucesso!");
+		}
+		return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta não encontrada! Verifique os campos informados.");
 	}
 	
 }

@@ -19,4 +19,6 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
 
 	Optional<Pessoa> findByEmailEmail(String email);
 
+	Optional<Pessoa> findByNumeroDocumento(String numeroDocumento);
+
 }
