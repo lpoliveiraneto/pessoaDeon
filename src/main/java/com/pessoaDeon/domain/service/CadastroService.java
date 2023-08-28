@@ -129,12 +129,9 @@ public class CadastroService {
 	@Transactional
 	private Usuario salvarUsuario(CadastroRequestDto cadastroDto){
 		final long PERFIL_USER = 1;
-
 		Usuario usuario = new Usuario();
 		usuario.setEmail(cadastroDto.getEmail());
-		String senha = gerarSenhaAleatoria(5);
-		System.out.println(senha);
-		usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
+		usuario.setSenha(new BCryptPasswordEncoder().encode(cadastroDto.getSenha()));
 		usuario.setStatus(Status.PE);
 		usuario.setDataCadastro(LocalDateTime.now());
 		usuario.adicionarPerfil(perfilRepository.findById(PERFIL_USER).get());
