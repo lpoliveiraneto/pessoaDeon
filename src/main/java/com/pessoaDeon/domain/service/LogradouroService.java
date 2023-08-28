@@ -69,7 +69,10 @@ public class LogradouroService {
 	    		logradouro.setLogradouro(buscaLogradouro.getLogradouro());
 	    		logradouro.setEstado(estadoRepository.findByUf(buscaLogradouro.getUf()));
 	    		logradouro.setCidade(cidadeService.findByCidadeAndCodigoIbge(Integer.parseInt(buscaLogradouro.getIbge())));
-	    		logradouro.setBairro(bairroService.findByBairroPorIdCidadeNome(logradouro.getCidade().getIdCidade(), buscaLogradouro.getBairro()));
+	    		var bairro = bairroService.findByBairroPorIdCidadeNome(logradouro.getCidade().getIdCidade(), buscaLogradouro.getBairro());
+//	   			no caso da consulta retornar um cep sem bairro, define como Centro.
+	    		var withoutBairro = bairroService.findByBairroPorIdCidadeNome(logradouro.getCidade().getIdCidade(), "Centro");
+    			logradouro.setBairro(bairro != null ? bairro : withoutBairro);
     		}
     		return logradouro;
     	}catch (RuntimeException e){
