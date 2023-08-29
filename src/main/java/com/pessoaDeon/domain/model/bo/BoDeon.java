@@ -3,17 +3,23 @@ package com.pessoaDeon.domain.model.bo;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pessoaDeon.domain.model.natureza.NaturezaBo;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
@@ -51,4 +57,8 @@ public class BoDeon implements Serializable {
 
 	@Column(columnDefinition = "text")
 	private String relatoEditado;
+	
+	@OneToMany(mappedBy = "bo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<NaturezaBo> listaNaturezas = new ArrayList<>();
+	
 }
