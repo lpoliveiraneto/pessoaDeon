@@ -43,4 +43,10 @@ public class CadastroController {
 		return contaService.ativarConta(codigo);
 	}
 	
+	@GetMapping("/resendVerifyToken")
+	public ResponseEntity<?> reenviarCodigoVerificacao(@RequestParam(name = "email", required = true) String email,
+			@RequestParam(name = "numeroDocumento", required = true) String numeroDocumento){
+		return contaService.reenviarCodigoVerificacao(email, numeroDocumento);
+	}
+	
 }

@@ -29,7 +29,7 @@ public class PessoaService {
          Optional<Pessoa> pessoa = pessoaRepository.findById(idPessoa);
          return pessoa;
     }
-
+    
 
     @Transactional
 	public Pessoa salvarPessoaDeon(Pessoa pessoa) {
@@ -89,6 +89,10 @@ public class PessoaService {
 
 	public Pessoa buscaPessoaEmail(String email){
 		return pessoaRepository.findByEmailEmail(email).get();
+	}
+	
+	public Optional<Pessoa> getPessoaByNumeroDocumento(String numeroDocumento) {
+		return pessoaRepository.findByNumeroDocumento(numeroDocumento);
 	}
 	
 }
