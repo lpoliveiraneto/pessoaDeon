@@ -1,7 +1,7 @@
 package com.pessoaDeon.domain.service;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.dto.BoDto;
+import com.pessoaDeon.domain.model.dto.BoDtoResponse;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
@@ -20,7 +21,7 @@ import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 public class BoService {
 
 	@Autowired
-	private BoRepository boRepository;	 
+	private BoRepository boRepository; 
 	
 	@Autowired
 	private EnderecoLocalFatoRepository enderecoLocalFatoRepository;
@@ -69,7 +70,7 @@ public class BoService {
 		Protocolo protocolo = new Protocolo();
 		protocolo.setBo(bo);
 		protocolo.setNumero(gerarProtocolo(bo));
-		protocolo.setDataRegistro(new Date());
+		protocolo.setDataRegistro(LocalDateTime.now());
 		return protocoloRepository.save(protocolo);
 	}
 	
@@ -86,6 +87,31 @@ public class BoService {
 		protocolo.append(calendario.get(Calendar.YEAR));
 		protocolo.append(calendario.get(Calendar.SECOND));
 		return protocolo.toString();
+	}
+	
+	@Transactional
+	public BoDtoResponse buscarBoPorId(Integer idBo) {
+		BoDtoResponse response = new BoDtoResponse();
+		
+		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findById(idBo).get();
+		BoDeon deon = boRepository.findById(idBo).get();
+		Protocolo protocolo = protocoloRepository.findById(idBo).get();
+		
+		response.setDataFato(deon.getDataFato());
+		response.setHoraFato(deon.getHoraFato());
+		response.setRelato(deon.getRelato());
+		response.setLogradouro(endereco.getLogradouro());
+		response.setBairroDescricao(endereco.getBairro().getDescricao());
+		response.setComplemento(endereco.getComplemento());
+		response.setCidadeDescricao(endereco.getCidade().getDescricao());
+		response.setEstadoDescricao(endereco.getEstado().getDescricao());
+		response.setCep(endereco.getCep());
+		response.setNumeroLocal(endereco.getNumeroLocal());
+		response.setTipoLocal(endereco.getTipoLocal().getNome());
+		response.setProtocolo(protocolo.getNumero());
+		response.setListaNaturezaBo(deon.getListaNaturezas());
+		
+		return response;
 	}
 }
 

@@ -1,6 +1,7 @@
 package com.pessoaDeon.domain.model.security;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import jakarta.persistence.*;
@@ -47,6 +48,7 @@ public class Usuario implements UserDetails {
     @Column(name = "conta_ativa")
     private Boolean contaAtiva = false;
     
+    @JsonIgnore
     @OneToOne(mappedBy = "usuario")
     private Pessoa pessoa;
 
