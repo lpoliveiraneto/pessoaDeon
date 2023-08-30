@@ -1,9 +1,8 @@
 package com.pessoaDeon.domain.model.bo;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-import com.pessoaDeon.domain.model.bo.BoDeon;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -39,7 +38,7 @@ public class Protocolo implements Serializable {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date dataRegistro;
+	private LocalDateTime dataRegistro;
 	
 	@OneToOne
 	@JoinColumn(name = "fk_bo")

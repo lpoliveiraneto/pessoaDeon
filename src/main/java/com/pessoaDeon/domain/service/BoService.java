@@ -1,8 +1,11 @@
 package com.pessoaDeon.domain.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +14,8 @@ import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.dto.BoDto;
+import com.pessoaDeon.domain.model.dto.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.NaturezaDto;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
@@ -20,7 +25,7 @@ import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 public class BoService {
 
 	@Autowired
-	private BoRepository boRepository;	 
+	private BoRepository boRepository; 
 	
 	@Autowired
 	private EnderecoLocalFatoRepository enderecoLocalFatoRepository;
@@ -69,7 +74,7 @@ public class BoService {
 		Protocolo protocolo = new Protocolo();
 		protocolo.setBo(bo);
 		protocolo.setNumero(gerarProtocolo(bo));
-		protocolo.setDataRegistro(new Date());
+		protocolo.setDataRegistro(LocalDateTime.now());
 		return protocoloRepository.save(protocolo);
 	}
 	
@@ -86,6 +91,34 @@ public class BoService {
 		protocolo.append(calendario.get(Calendar.YEAR));
 		protocolo.append(calendario.get(Calendar.SECOND));
 		return protocolo.toString();
+	}
+	
+	@Transactional
+	public BoDtoResponse buscarBoPorId(Integer idBo) {
+		BoDtoResponse response = new BoDtoResponse();
+		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findById(idBo).get();
+		BoDeon bo = boRepository.findById(idBo).get();
+		Protocolo protocolo = protocoloRepository.findById(idBo).get();
+		response.setDataFato(bo.getDataFato());
+		response.setHoraFato(bo.getHoraFato());
+		response.setRelato(bo.getRelato());
+		response.setLogradouro(endereco.getLogradouro());
+		response.setBairroDescricao(endereco.getBairro().getDescricao());
+		response.setComplemento(endereco.getComplemento());
+		response.setCidadeDescricao(endereco.getCidade().getDescricao());
+		response.setEstadoDescricao(endereco.getEstado().getDescricao());
+		response.setCep(endereco.getCep());
+		response.setNumeroLocal(endereco.getNumeroLocal());
+		response.setTipoLocal(endereco.getTipoLocal().getNome());
+		response.setProtocolo(protocolo.getNumero());
+		List<NaturezaDto> naturezaDto = new ArrayList<>();
+		bo.getListaNaturezas().forEach(n -> {
+			NaturezaDto nt = new NaturezaDto();
+			BeanUtils.copyProperties(n.getNaturezaDeon(), nt);
+			naturezaDto.add(nt);
+		});
+		response.setListaNatureza(naturezaDto);
+		return response;
 	}
 }
 

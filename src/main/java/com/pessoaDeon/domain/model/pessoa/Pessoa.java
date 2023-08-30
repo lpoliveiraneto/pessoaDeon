@@ -105,9 +105,11 @@ public class Pessoa implements Serializable {
     @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     private Cidade cidadeNaturalidade;
 
+    @JsonIgnoreProperties
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Email> email;
 
+    @JsonIgnoreProperties
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Telefone> telefone;
 
@@ -131,6 +133,7 @@ public class Pessoa implements Serializable {
     @NotNull
     private String numeroDocumento;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id", referencedColumnName = "idUsuario")
     private Usuario usuario;

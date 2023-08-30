@@ -101,12 +101,17 @@ public class VerificacaoContaService {
 		Optional<Pessoa> pessoa = pessoaService.getPessoaByNumeroDocumento(numeroDocumento);
 		Optional<Usuario> user = usuarioService.findByPessoa(pessoa.get());
 		VerificacaoConta conta = findByUser(user.get());
-		if (user.isPresent() && user.get().getEmail().equalsIgnoreCase(email) && pessoa.isPresent() && conta != null) {
-			conta.setCodigo(gerarCodigoVerificacaoConta());
-			conta.setExpiracaoCodigo(LocalDateTime.now().plusHours(2));
-			contaRepository.save(conta);
-			envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo());
-			return ResponseEntity.status(HttpStatus.OK).body("Codigo reenviado com sucesso!");
+		if (user.isPresent() && user.get().getEmail().equalsIgnoreCase(email) 
+				&& pessoa.isPresent() && conta != null) {
+			if (!user.get().getContaAtiva()) {
+				conta.setCodigo(gerarCodigoVerificacaoConta());
+				conta.setExpiracaoCodigo(LocalDateTime.now().plusHours(2));
+				contaRepository.save(conta);
+				envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo());
+				return ResponseEntity.status(HttpStatus.OK).body("Codigo reenviado com sucesso!");
+			} else {
+				return ResponseEntity.status(HttpStatus.CONFLICT).body("Sua conta já foi verificada!");
+			}
 		}
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta não encontrada! Verifique os campos informados.");
 	}

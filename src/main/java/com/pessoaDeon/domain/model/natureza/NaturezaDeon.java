@@ -1,25 +1,29 @@
 package com.pessoaDeon.domain.model.natureza;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity(name = "natureza_deon")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity(name = "natureza_deon")
 public class NaturezaDeon implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8977207890328773578L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,4 +54,8 @@ public class NaturezaDeon implements Serializable{
 
     @Column(name = "fk_natureza_sigma")
     private Integer naturezaSigma;
+    
+    @JsonBackReference
+	@OneToMany(mappedBy="naturezaDeon", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    private List<NaturezaBo> listaNaturezaBo;
 }
