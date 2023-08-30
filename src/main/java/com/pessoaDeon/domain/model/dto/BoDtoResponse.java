@@ -2,8 +2,8 @@ package com.pessoaDeon.domain.model.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.natureza.NaturezaBo;
@@ -45,5 +45,5 @@ public class BoDtoResponse {
     
     private String protocolo;
     
-    private List<NaturezaBo> listaNaturezaBo = new ArrayList<>();
+    private List<NaturezaDto> listaNatureza;
 }

@@ -1,8 +1,11 @@
 package com.pessoaDeon.domain.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,7 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.NaturezaDto;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
@@ -92,14 +96,12 @@ public class BoService {
 	@Transactional
 	public BoDtoResponse buscarBoPorId(Integer idBo) {
 		BoDtoResponse response = new BoDtoResponse();
-		
 		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findById(idBo).get();
-		BoDeon deon = boRepository.findById(idBo).get();
+		BoDeon bo = boRepository.findById(idBo).get();
 		Protocolo protocolo = protocoloRepository.findById(idBo).get();
-		
-		response.setDataFato(deon.getDataFato());
-		response.setHoraFato(deon.getHoraFato());
-		response.setRelato(deon.getRelato());
+		response.setDataFato(bo.getDataFato());
+		response.setHoraFato(bo.getHoraFato());
+		response.setRelato(bo.getRelato());
 		response.setLogradouro(endereco.getLogradouro());
 		response.setBairroDescricao(endereco.getBairro().getDescricao());
 		response.setComplemento(endereco.getComplemento());
@@ -109,8 +111,13 @@ public class BoService {
 		response.setNumeroLocal(endereco.getNumeroLocal());
 		response.setTipoLocal(endereco.getTipoLocal().getNome());
 		response.setProtocolo(protocolo.getNumero());
-		response.setListaNaturezaBo(deon.getListaNaturezas());
-		
+		List<NaturezaDto> naturezaDto = new ArrayList<>();
+		bo.getListaNaturezas().forEach(n -> {
+			NaturezaDto nt = new NaturezaDto();
+			BeanUtils.copyProperties(n.getNaturezaDeon(), nt);
+			naturezaDto.add(nt);
+		});
+		response.setListaNatureza(naturezaDto);
 		return response;
 	}
 }

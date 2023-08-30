@@ -2,7 +2,7 @@ package com.pessoaDeon.domain.model.natureza;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 
 import jakarta.persistence.Entity;
@@ -12,32 +12,28 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class NaturezaBo implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -727340197336367701L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@NotNull
+	@ManyToOne
 	@JoinColumn(name = "fk_bo")
-	@ManyToOne(fetch = FetchType.LAZY)
 	private BoDeon bo;
 	
-	@JsonIgnore
-	@NotNull
-	@JoinColumn(name = "fk_natureza_deon")
+	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fk_natureza_deon")
 	private NaturezaDeon naturezaDeon;
+	
 }
 

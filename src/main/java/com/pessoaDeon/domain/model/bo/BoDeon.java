@@ -3,7 +3,6 @@ package com.pessoaDeon.domain.model.bo;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,17 +22,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
 public class BoDeon implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4270639592291268512L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +56,6 @@ public class BoDeon implements Serializable {
 	private String relatoEditado;
 	
 	@OneToMany(mappedBy = "bo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<NaturezaBo> listaNaturezas = new ArrayList<>();
+	private List<NaturezaBo> listaNaturezas;
 	
 }
