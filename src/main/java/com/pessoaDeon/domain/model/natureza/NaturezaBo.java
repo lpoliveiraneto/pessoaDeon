@@ -1,17 +1,14 @@
 package com.pessoaDeon.domain.model.natureza;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.pessoaDeon.domain.model.envolvido.Envolvimento;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -20,6 +17,7 @@ public class NaturezaBo implements Serializable{
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = -727340197336367701L;
 
 	@Id
@@ -34,6 +32,9 @@ public class NaturezaBo implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_natureza_deon")
 	private NaturezaDeon naturezaDeon;
+
+	@OneToMany(mappedBy = "naturezaBo", cascade = CascadeType.ALL)
+	private List<Envolvimento> envolvimentos;
 	
 }
 
