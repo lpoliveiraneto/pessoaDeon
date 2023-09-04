@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pessoaDeon.domain.model.EnvioEmail;
 import com.pessoaDeon.domain.model.RemetenteEmail;
 import com.pessoaDeon.domain.model.enumeration.StatusEnvio;
+import com.pessoaDeon.domain.model.enumeration.TipoEnvio;
 import com.pessoaDeon.domain.repository.EnvioEmailRepository;
 import com.pessoaDeon.domain.repository.RemetenteEmailRepository;
 
@@ -83,15 +84,21 @@ public class EnvioEmailService {
 		
 	}
 	
-	public void enviarCodigoEmail(String destinatario, String codigo) {
+	public void enviarCodigoEmail(String destinatario, String codigo, TipoEnvio tipo) {
 		Optional<RemetenteEmail> remetente = getRemetente(1);
 		if (remetente.isPresent()) {
-			String assunto = "Cadastro Deon - Confirme seu email";
-			enviarEmail(remetente.get(), destinatario, assunto, emailBody(codigo));
+			String body = null;
+			if(tipo == TipoEnvio.CD) {
+				body = emailBodyConfirmarConta(codigo);
+			}
+			if(tipo == TipoEnvio.RS) {
+				body = emailBodyResetSenha(codigo);
+			}
+			enviarEmail(remetente.get(), destinatario, tipo.getDescricao(), body);
 		}
 	}
 	
-	public String emailBody(String codigo) {
+	public String emailBodyConfirmarConta(String codigo) {
 		String emailBody = "<div style=\"background-color:#ffffff\"><div class=\"adM\">\r\n"
 			+ "    </div><center>\r\n"
 			+ "	<table style=\"width:560px;margin:0;padding:0;font-family:Helvetica,Arial,sans-serif;border-collapse:collapse!important;height:100%!important;background-color:#ffffff\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" height=\"100%\" width=\"100%\" id=\"m_-3052587946865727809bodyTable\">\r\n"
@@ -123,6 +130,41 @@ public class EnvioEmailService {
 			+ "      </tbody></table>\r\n"
 			+ "    </center>\r\n"
 			+ "  </div>";
+		return emailBody;
+	}
+	
+	public String emailBodyResetSenha(String codigo) {
+		String emailBody = "<div style=\"background-color:#ffffff\"><div class=\"adM\">\r\n"
+				+ "    </div><center>\r\n"
+				+ "	<table style=\"width:560px;margin:0;padding:0;font-family:Helvetica,Arial,sans-serif;border-collapse:collapse!important;height:100%!important;background-color:#ffffff\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" height=\"100%\" width=\"100%\" id=\"m_-3052587946865727809bodyTable\">\r\n"
+				+ "		<tbody><tr>\r\n"
+				+ "		<td align=\"center\" valign=\"top\" id=\"m_-3052587946865727809bodyCell\" style=\"margin:0;padding:0;font-family:Helvetica,Arial,sans-serif;height:100%!important\">\r\n"
+				+ "            <div style=\"background-color:#ffffff;color:#202123;padding:27px 20px 0 15px\">\r\n"
+				+ "			</div>\r\n"
+				+ "            <div style=\"background-color:#ffffff;color:#353740;padding:40px 20px;text-align:left;line-height:1.5\">\r\n"
+				+ "              <h1 style=\"color:#202123;font-size:32px;line-height:40px;margin:0 0 20px\">Solicitação de redefinição de senha</h1>\r\n"
+				+ "\r\n"
+				+ "              <p style=\"font-size:16px;line-height:24px\">\r\n"
+				+ "                Uma solicitação para redefinição de senha foi realizada, para redefinir sua senha clique no botão abaixo. \r\n"
+				+ "              </p>\r\n"
+				+ "              \r\n"
+				+ "              <p style=\"margin:24px 0 0;text-align:left\">\r\n"
+				//				+ "                <a href=\"http://10.38.210.18:8080/api/v1/cadastro/verifyAccount?codigo="+codigo+"\" style=\"display:inline-block;text-decoration:none;background:#10a37f;border-radius:3px;color:white;font-family:Helvetica,sans-serif;font-size:16px;line-height:24px;font-weight:400;padding:12px 20px 11px;margin:0px\" target=\"_blank\">\r\n"
+				+ "                <a href=\"http://10.38.210.18:5173/resetSenha/"+codigo+"\" style=\"display:inline-block;text-decoration:none;background:#10a37f;border-radius:3px;color:white;font-family:Helvetica,sans-serif;font-size:16px;line-height:24px;font-weight:400;padding:12px 20px 11px;margin:0px\" target=\"_blank\">\r\n"
+				+ "                    Redefinir senha\r\n"
+				+ "                </a>\r\n"
+				+ "                </p>\r\n"
+				+ "            </div>\r\n"
+				+ "			<div style=\"text-align:left;background:#ffffff;color:#6e6e80;padding:0 20px 20px;font-size:13px;line-height:1.4\">\r\n"
+				+ "				<p style=\"margin:0\">\r\n"
+				+ "                Este link expira em 2 horas. Se você não fez esta solicitação, favor desconsidere este email. Para ajuda, contate nosso suporte através do número (98) 991756242 Whatsapp.\r\n"
+				+ "				</p>\r\n"
+				+ "            </div>\r\n"
+				+ "          </td>\r\n"
+				+ "        </tr>\r\n"
+				+ "      </tbody></table>\r\n"
+				+ "    </center>\r\n"
+				+ "  </div>";
 		return emailBody;
 	}
 

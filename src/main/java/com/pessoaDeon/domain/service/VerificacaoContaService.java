@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.VerificacaoConta;
+import com.pessoaDeon.domain.model.enumeration.TipoEnvio;
 import com.pessoaDeon.domain.model.listas.TipoDocumento;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
@@ -142,7 +143,7 @@ public class VerificacaoContaService {
 	    conta.setCodigo(gerarCodigoVerificacaoConta());
 	    conta.setExpiracaoCodigo(LocalDateTime.now().plusHours(2));
 	    contaRepository.save(conta);
-	    envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo());
+	    envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo(), TipoEnvio.CD);
 	    
 	    return ResponseEntity.status(HttpStatus.OK).body("Código reenviado com sucesso!");
 	}

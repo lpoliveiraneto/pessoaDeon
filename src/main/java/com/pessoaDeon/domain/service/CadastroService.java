@@ -12,6 +12,7 @@ import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 import com.pessoaDeon.domain.model.endereco.Endereco;
 import com.pessoaDeon.domain.model.endereco.Logradouro;
 import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.enumeration.TipoEnvio;
 import com.pessoaDeon.domain.model.pessoa.Email;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.pessoa.Telefone;
@@ -130,7 +131,7 @@ public class CadastroService {
 		var user = usuarioService.salvarUsuario(usuario);
 		if (user != null) {
 			var verify = verificacaoContaService.save(user);
-			envioEmailService.enviarCodigoEmail(user.getEmail(), verify.getCodigo());
+			envioEmailService.enviarCodigoEmail(user.getEmail(), verify.getCodigo(), TipoEnvio.CD);
 		}
 		return usuario;
 	}
@@ -145,12 +146,12 @@ public class CadastroService {
 //				.collect(Collectors.joining());
 //	}
 
-	public String testeEnvioEmail(String email) {
-		Usuario user = new Usuario();
-		user.setEmail(email);
-		var codigo = verificacaoContaService.gerarCodigoVerificacaoConta();
-		envioEmailService.enviarCodigoEmail(user.getEmail(), codigo);
-		return null;
-	}
+//	public String testeEnvioEmail(String email) {
+//		Usuario user = new Usuario();
+//		user.setEmail(email);
+//		var codigo = verificacaoContaService.gerarCodigoVerificacaoConta();
+//		envioEmailService.enviarCodigoEmail(user.getEmail(), codigo);
+//		return null;
+//	}
 
 }

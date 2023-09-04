@@ -1,25 +1,32 @@
 package com.pessoaDeon.api.controller.seguranca;
 
-import com.pessoaDeon.domain.model.pessoa.Pessoa;
-import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
-import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
-import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.config.security.TokenService;
-import com.pessoaDeon.domain.service.PessoaService;
-import jakarta.validation.Valid;
+import java.sql.Date;
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pessoaDeon.config.security.TokenService;
+import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
+import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
+import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.service.PessoaService;
+import com.pessoaDeon.domain.service.SenhaResetService;
+
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/api/v1/login")
+@RequestMapping("/api/v1/")
 public class AutenticacaoController {
 
     @Autowired
@@ -29,8 +36,11 @@ public class AutenticacaoController {
 
     @Autowired
     private PessoaService pessoaService;
+    
+    @Autowired
+    private SenhaResetService senhaResetService;
 
-    @PostMapping
+    @PostMapping("login")
     public ResponseEntity<?> efetuarLoginCliente(@RequestBody @Valid DadosAutenticacao dados){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
         try{
@@ -58,7 +68,25 @@ public class AutenticacaoController {
         }else{
             return nomeCurto[0]+" "+nomeCurto[nomeCurto.length-1];
         }
+    }
+    
+    @GetMapping("/esqueciMinhaSenha")
+    public ResponseEntity<?> EsqueciMinhaSenha(@RequestParam(name = "email", required = true) String email, 
+    		@RequestParam(name = "dataNascimento", required = true) LocalDate dataNascimento,
+    		@RequestParam(name = "cpf", required = true) String cpf){
+    	return senhaResetService.enviarCodigoResetSenha(email, cpf, dataNascimento);	
+    }
+    
+    @PostMapping("/resetSenha")
+    public ResponseEntity<?> resetSenha(@RequestParam(name = "codigo") String codigo,
+    		@RequestParam(name = "novaSenha", required = true) String novaSenha){
+    	return senhaResetService.resetarSenha(codigo, novaSenha);
+    }
 
-
+    @PostMapping("/alterarMinhaSenha")
+    public ResponseEntity<?> alterarMinhaSenha(@RequestParam(name = "idUsuario", required = true) Long idUsuario,
+    		@RequestParam(name = "senhaAntiga", required = true) String senhaAntiga,
+    		@RequestParam(name = "novaSenha", required = true) String novaSenha){
+    	return senhaResetService.alterarMinhaSenha(idUsuario, senhaAntiga, novaSenha);
     }
 }

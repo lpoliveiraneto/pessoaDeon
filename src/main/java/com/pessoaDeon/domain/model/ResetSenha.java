@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class VerificacaoConta implements Serializable{
+public class ResetSenha implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8615566298216589513L;
+	private static final long serialVersionUID = -1308596916886619711L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

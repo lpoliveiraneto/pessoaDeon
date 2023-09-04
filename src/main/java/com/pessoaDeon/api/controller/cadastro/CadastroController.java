@@ -32,11 +32,11 @@ public class CadastroController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(cadastroService.salvar(cadastroDto));
 	}
 	
-	@GetMapping("/testeEnvioEmail")
-	public ResponseEntity<?> testeEnvioEmail(@RequestParam(name = "email") String email){
-		cadastroService.testeEnvioEmail(email); 
-		return ResponseEntity.ok("envio realizado com sucesso!");
-	}
+//	@GetMapping("/testeEnvioEmail")
+//	public ResponseEntity<?> testeEnvioEmail(@RequestParam(name = "email") String email){
+//		cadastroService.testeEnvioEmail(email); 
+//		return ResponseEntity.ok("envio realizado com sucesso!");
+//	}
 	
 	@GetMapping("/verifyAccount")
 	public ResponseEntity<?> ativaConta(@RequestParam(name = "codigo") String codigo){
