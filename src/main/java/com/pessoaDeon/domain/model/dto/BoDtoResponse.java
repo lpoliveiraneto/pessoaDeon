@@ -3,10 +3,8 @@ package com.pessoaDeon.domain.model.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pessoaDeon.domain.model.natureza.NaturezaBo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +26,8 @@ public class BoDtoResponse {
 	private String relatoEditado;
 	
 	private String cep;
+	
+	private String referencia;
 	
 	private String complemento;
 	

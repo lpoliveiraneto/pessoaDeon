@@ -103,6 +103,7 @@ public class BoService {
 		response.setHoraFato(bo.getHoraFato());
 		response.setRelato(bo.getRelato());
 		response.setLogradouro(endereco.getLogradouro());
+		response.setReferencia(endereco.getReferencia());
 		response.setBairroDescricao(endereco.getBairro().getDescricao());
 		response.setComplemento(endereco.getComplemento());
 		response.setCidadeDescricao(endereco.getCidade().getDescricao());
