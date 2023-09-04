@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
+import com.pessoaDeon.domain.model.dto.CadastroResponseDto;
 import com.pessoaDeon.domain.model.endereco.Endereco;
 import com.pessoaDeon.domain.model.endereco.Logradouro;
 import com.pessoaDeon.domain.model.enumeration.Status;
@@ -136,22 +138,49 @@ public class CadastroService {
 		return usuario;
 	}
 
-//	private String gerarSenhaAleatoria(int tamanho) {
-//		final String chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//
-//		SecureRandom random = new SecureRandom();
-//		return IntStream.range(0, tamanho)
-//				.map(i -> random.nextInt(chars.length()))
-//				.mapToObj(randomIndex -> String.valueOf(chars.charAt(randomIndex)))
-//				.collect(Collectors.joining());
-//	}
-
-//	public String testeEnvioEmail(String email) {
-//		Usuario user = new Usuario();
-//		user.setEmail(email);
-//		var codigo = verificacaoContaService.gerarCodigoVerificacaoConta();
-//		envioEmailService.enviarCodigoEmail(user.getEmail(), codigo);
-//		return null;
-//	}
-
+	@ReadOnlyProperty
+	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa) {
+		CadastroResponseDto response = new CadastroResponseDto();
+		
+		Endereco enderecoPessoa = enderecoService.getById(idPessoa).get();
+		Pessoa pessoa = pessoaService.buscarPessoa(idPessoa).get();
+		Telefone contato = contatoService.getById(idPessoa);
+		Email email = emailService.getByIdEmail(idPessoa);
+		//dados referentes a pessoa
+		response.setNome(pessoa.getNome());
+		response.setDataNascimento(pessoa.getDataNascimento());
+		response.setNomeMae(pessoa.getNomeMae());
+		response.setNomePai(pessoa.getNomePai());
+		response.setAlcunha(pessoa.getAlcunha());
+		response.setNomeSocial(pessoa.getNomeSocial());
+		response.setSexo(pessoa.getSexo().getDescricao());
+		response.setEstadoCivil(pessoa.getEstadoCivil().getNome());
+		response.setOrientacaoSexual(pessoa.getOrientacaoSexual().getNome());
+		response.setIdentidadeGenero(pessoa.getIdentidadeGenero().getNome());
+		response.setDeficiencia(pessoa.getDeficiencia().getNome());
+		response.setCorPele(pessoa.getCorPele().getNome());
+		response.setEscolaridade(pessoa.getEscolaridade().getNome());
+		response.setTipoDocumento(pessoa.getTipoDocumento().getDescricao());
+		response.setNumeroDocumento(pessoa.getNumeroDocumento());
+		response.setEstadoNaturalidade(pessoa.getEstadoNaturalidade().getDescricao());
+		response.setCidadeNaturalidade(pessoa.getCidadeNaturalidade().getDescricao());
+		response.setPais(pessoa.getPais().getDescricao());
+		//dados referentes a endereco
+		response.setCep(enderecoPessoa.getLogradouro().getCep());
+		response.setEstado(enderecoPessoa.getLogradouro().getEstado().getDescricao());
+		response.setCidade(enderecoPessoa.getLogradouro().getCidade().getDescricao());
+		response.setBairro(enderecoPessoa.getLogradouro().getBairro().getDescricao());
+		response.setLogradouro(enderecoPessoa.getLogradouro().getLogradouro());
+		response.setNumero(enderecoPessoa.getNumero());
+		response.setTipoLocal(enderecoPessoa.getTipoLocal().getNome());
+		response.setComplemento(enderecoPessoa.getLogradouro().getComplemento());
+		response.setReferencia(enderecoPessoa.getReferencia());
+		//dados referentes
+		response.setTelefone(contato.getTelefone());
+		response.setTipoWhatsapp(contato.getTipowhatsapp());
+		response.setTipoTelegram(contato.getTipotelegram());
+		response.setEmail(email.getEmail());
+		
+		return response;
+	}
 }
