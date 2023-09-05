@@ -15,10 +15,11 @@ public class EmailService {
 	
 	@Transactional
 	public Email salvarEmail(Email email) {
-//		Optional<Email> buscaEmail = emailRepository.findById(email.getId_email());
-//		if(buscaEmail.isPresent()) {
-//			throw new RuntimeException("Email já está cadastrado para uma pessoa");
-//		}
 		return emailRepository.save(email);
+	}
+	
+	public Email getByIdEmail(Integer idEmail) {
+		var email =	emailRepository.findById(idEmail).get();
+		return email;
 	}
 }

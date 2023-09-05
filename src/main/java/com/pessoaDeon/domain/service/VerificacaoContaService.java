@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.VerificacaoConta;
+import com.pessoaDeon.domain.model.enumeration.TipoEnvio;
 import com.pessoaDeon.domain.model.listas.TipoDocumento;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
@@ -96,24 +97,55 @@ public class VerificacaoContaService {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Não foi possível ativar sua conta por esse token no momento! Tente novamente mais tarde");
 	}
 
+//	@Transactional
+//	public ResponseEntity<?> reenviarCodigoVerificacao(String email, String numeroDocumento) {
+//		Optional<Pessoa> pessoa = pessoaService.getPessoaByNumeroDocumento(numeroDocumento);
+//		if (pessoa.isPresent()) {
+//			Optional<Usuario> user = usuarioService.findByPessoa(pessoa.get());
+//			VerificacaoConta conta = findByUser(user.get());
+//			if (user.isPresent() && user.get().getEmail().equalsIgnoreCase(email) 
+//					&& pessoa.isPresent() && conta != null) {
+//				if (!user.get().getContaAtiva()) {
+//					conta.setCodigo(gerarCodigoVerificacaoConta());
+//					conta.setExpiracaoCodigo(LocalDateTime.now().plusHours(2));
+//					contaRepository.save(conta);
+//					envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo());
+//					return ResponseEntity.status(HttpStatus.OK).body("Codigo reenviado com sucesso!");
+//				} else {
+//					return ResponseEntity.status(HttpStatus.CONFLICT).body("Sua conta já foi verificada!");
+//				}
+//			}
+//			return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta não encontrada! Verifique os campos informados.");
+//		}
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma pessoa encontrada com o número do documento ou email informados!");
+//	}
+	
 	@Transactional
 	public ResponseEntity<?> reenviarCodigoVerificacao(String email, String numeroDocumento) {
-		Optional<Pessoa> pessoa = pessoaService.getPessoaByNumeroDocumento(numeroDocumento);
-		Optional<Usuario> user = usuarioService.findByPessoa(pessoa.get());
-		VerificacaoConta conta = findByUser(user.get());
-		if (user.isPresent() && user.get().getEmail().equalsIgnoreCase(email) 
-				&& pessoa.isPresent() && conta != null) {
-			if (!user.get().getContaAtiva()) {
-				conta.setCodigo(gerarCodigoVerificacaoConta());
-				conta.setExpiracaoCodigo(LocalDateTime.now().plusHours(2));
-				contaRepository.save(conta);
-				envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo());
-				return ResponseEntity.status(HttpStatus.OK).body("Codigo reenviado com sucesso!");
-			} else {
-				return ResponseEntity.status(HttpStatus.CONFLICT).body("Sua conta já foi verificada!");
-			}
-		}
-		return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta não encontrada! Verifique os campos informados.");
+	    Optional<Pessoa> pessoa = pessoaService.getPessoaByNumeroDocumento(numeroDocumento);
+	    if (!pessoa.isPresent()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma pessoa encontrada com o número do documento informado!");
+	    }
+	    Optional<Usuario> user = usuarioService.findByPessoa(pessoa.get());
+	    if (!user.isPresent()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conta não encontrada! Verifique os campos informados.");
+	    }
+	    VerificacaoConta conta = findByUser(user.get());
+	    if (conta == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conta não encontrada! Verifique os campos informados.");
+	    }
+	    if (!user.get().getEmail().equalsIgnoreCase(email)) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O email informado não corresponde ao usuário.");
+	    }
+	    if (user.get().getContaAtiva()) {
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body("Sua conta já foi verificada!");
+	    }
+	    conta.setCodigo(gerarCodigoVerificacaoConta());
+	    conta.setExpiracaoCodigo(LocalDateTime.now().plusHours(2));
+	    contaRepository.save(conta);
+	    envioEmailService.enviarCodigoEmail(user.get().getEmail(), conta.getCodigo(), TipoEnvio.CD);
+	    
+	    return ResponseEntity.status(HttpStatus.OK).body("Código reenviado com sucesso!");
 	}
 	
 }

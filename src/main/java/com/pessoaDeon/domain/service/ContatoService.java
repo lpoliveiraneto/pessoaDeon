@@ -16,10 +16,10 @@ public class ContatoService {
 	@Transactional
 	public Telefone saveContato(Telefone telefone) {
 		return contatoRepository.save(telefone);
-		//Optional<Telefone> buscaTelefone = contatoRepository.findById(telefone.getIdTelefone());
-		
-//		if(buscaTelefone.isPresent()) {
-	//		throw new RuntimeException("Telefone já cadastrado!");
-	//	}
+	}
+	
+	public Telefone getById(Integer idTelefone) {
+		Telefone contato = contatoRepository.findById(idTelefone).get();
+		return contato;
 	}
 }

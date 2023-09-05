@@ -1,7 +1,7 @@
 package com.pessoaDeon.domain.service;
 
 import com.pessoaDeon.domain.model.endereco.Logradouro;
-
+import com.pessoaDeon.domain.exception.EnderecoNotFoundException;
 import com.pessoaDeon.domain.model.dto.LogradouroDto;
 import com.pessoaDeon.domain.repository.endereco.LogradouroRepository;
 import com.pessoaDeon.domain.repository.listas.estado.EstadoRepository;
@@ -36,17 +36,21 @@ public class LogradouroService {
 
     @Transactional
     public Logradouro getByCep(String cep){
-        Optional<Logradouro> logradouro =  logradouroRepository.findByCepAndCepDesconhecidoFalse(cep);
+        try {
+        	Optional<Logradouro> logradouro =  logradouroRepository.findByCepAndCepDesconhecidoFalse(cep);
 
-        if(logradouro.isPresent()){
-            return logradouro.get();
-        }else {
-            Logradouro logradouroViaCep = getLogradouroByCep(cep);
-            if(!logradouroViaCep.getErro() && logradouroViaCep.getCep() != null) {
-            	logradouroRepository.save(logradouroViaCep);
-            }
-            return logradouroViaCep;
-        }
+            if(logradouro.isPresent()){
+                return logradouro.get();
+            }else {
+                Logradouro logradouroViaCep = getLogradouroByCep(cep);
+                if(!logradouroViaCep.getErro() && logradouroViaCep.getCep() != null) {
+                	logradouroRepository.save(logradouroViaCep);
+                }
+                return logradouroViaCep;
+            }	
+		} catch (Exception e) {
+			throw new EnderecoNotFoundException(e.getMessage());
+		}
     }
 
 //    private Logradouro getLogradouroByCep(String cep){

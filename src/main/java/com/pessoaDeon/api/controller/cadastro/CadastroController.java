@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,11 +33,11 @@ public class CadastroController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(cadastroService.salvar(cadastroDto));
 	}
 	
-	@GetMapping("/testeEnvioEmail")
-	public ResponseEntity<?> testeEnvioEmail(@RequestParam(name = "email") String email){
-		cadastroService.testeEnvioEmail(email); 
-		return ResponseEntity.ok("envio realizado com sucesso!");
-	}
+//	@GetMapping("/testeEnvioEmail")
+//	public ResponseEntity<?> testeEnvioEmail(@RequestParam(name = "email") String email){
+//		cadastroService.testeEnvioEmail(email); 
+//		return ResponseEntity.ok("envio realizado com sucesso!");
+//	}
 	
 	@GetMapping("/verifyAccount")
 	public ResponseEntity<?> ativaConta(@RequestParam(name = "codigo") String codigo){
@@ -47,6 +48,16 @@ public class CadastroController {
 	public ResponseEntity<?> reenviarCodigoVerificacao(@RequestParam(name = "email", required = true) String email,
 			@RequestParam(name = "numeroDocumento", required = true) String numeroDocumento){
 		return contaService.reenviarCodigoVerificacao(email, numeroDocumento);
+	}
+	
+	/**
+     * @author Hilberto
+     * @param idPessoa
+     * @return retorna os dados de Cadastro para o analista
+     */
+	@GetMapping("/pessoaPorId/{idPessoa}")
+	public ResponseEntity<?> listarPessoaPorId(@PathVariable (value = "idPessoa") Integer idPessoa){
+		return ResponseEntity.ok().body(cadastroService.listarCadastroPessoa(idPessoa));
 	}
 	
 }

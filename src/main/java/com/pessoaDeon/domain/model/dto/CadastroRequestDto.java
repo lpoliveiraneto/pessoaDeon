@@ -113,7 +113,7 @@ public class CadastroRequestDto {
 	@Email
 	private String email;
 	@NotNull
-	private Boolean emailAtual;
+	private Boolean emailAtual = true;
 	private String senha;
 	
 }

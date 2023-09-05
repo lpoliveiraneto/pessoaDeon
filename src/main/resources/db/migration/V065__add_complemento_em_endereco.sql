@@ -1,0 +1,1 @@
+ALTER TABLE public.endereco ADD complemento varchar NULL;
