@@ -20,6 +20,8 @@ public class Endereco {
     private String numero;
 
     private String referencia;
+    
+    private String complemento;
 
     private Boolean atual = false;
 

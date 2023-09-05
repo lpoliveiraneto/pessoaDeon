@@ -85,6 +85,7 @@ public class CadastroService {
 		endereco.setAtual(true);
 		endereco.setNumero(dto.getNumero());
 		endereco.setReferencia(dto.getReferencia());
+		endereco.setComplemento(dto.getComplemento());
 		endereco.setPessoa(pessoa);
 		endereco.setLogradouro(logradouro);
 		endereco.setTipoLocal(dto.getTipoLocal());
@@ -173,7 +174,7 @@ public class CadastroService {
 		response.setLogradouro(enderecoPessoa.getLogradouro().getLogradouro());
 		response.setNumero(enderecoPessoa.getNumero());
 		response.setTipoLocal(enderecoPessoa.getTipoLocal().getNome());
-		response.setComplemento(enderecoPessoa.getLogradouro().getComplemento());
+		response.setComplemento(enderecoPessoa.getComplemento());
 		response.setReferencia(enderecoPessoa.getReferencia());
 		//dados referentes
 		response.setTelefone(contato.getTelefone());
