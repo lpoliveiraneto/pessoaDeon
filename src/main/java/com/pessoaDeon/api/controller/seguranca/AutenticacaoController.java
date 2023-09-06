@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.config.security.TokenService;
+import com.pessoaDeon.domain.model.dto.seguranca.DadosAlterarSenhaDTO;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.service.PessoaService;
 import com.pessoaDeon.domain.service.SenhaResetService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -84,9 +86,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/alterarMinhaSenha")
-    public ResponseEntity<?> alterarMinhaSenha(@RequestParam(name = "idUsuario", required = true) Long idUsuario,
-    		@RequestParam(name = "senhaAntiga", required = true) String senhaAntiga,
-    		@RequestParam(name = "novaSenha", required = true) String novaSenha){
-    	return senhaResetService.alterarMinhaSenha(idUsuario, senhaAntiga, novaSenha);
+    public ResponseEntity<?> alterarMinhaSenha(@RequestBody @Valid DadosAlterarSenhaDTO dados){
+    	return senhaResetService.alterarMinhaSenha(dados.getIdUsuario(), dados.getSenhaAntiga(), dados.getSenhaNova());
     }
 }
