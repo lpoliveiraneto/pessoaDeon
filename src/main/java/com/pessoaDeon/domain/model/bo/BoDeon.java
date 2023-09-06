@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pessoaDeon.domain.model.natureza.NaturezaBo;
 
 import jakarta.persistence.CascadeType;
@@ -55,6 +56,7 @@ public class BoDeon implements Serializable {
 	@Column(columnDefinition = "text")
 	private String relatoEditado;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "bo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<NaturezaBo> listaNaturezas;
 	
