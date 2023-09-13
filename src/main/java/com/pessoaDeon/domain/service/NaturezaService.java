@@ -1,15 +1,18 @@
 package com.pessoaDeon.domain.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pessoaDeon.domain.model.dto.   NaturezaRequestDto;
 import com.pessoaDeon.domain.model.natureza.NaturezaDeon;
 import com.pessoaDeon.domain.model.natureza.NaturezaSigma;
-import com.pessoaDeon.domain.model.dto.NaturezaRequestDto;
 import com.pessoaDeon.domain.repository.natureza.NaturezaDeonRepository;
 import com.pessoaDeon.domain.repository.natureza.NaturezaSigmaRepository;
 
@@ -61,5 +64,14 @@ public class NaturezaService {
 	
 	public Boolean existeNatureza(NaturezaRequestDto dto) {
 		return repository.existsByNaturezaSigma(dto.getIdNaturezaSigma());
+	}
+
+	public ResponseEntity<?> listarNaturezaDeonAtiva() {
+		List<NaturezaDeon> naturezas = repository.findByStatusIsTrue();
+		if (!naturezas.isEmpty()) {
+			return ResponseEntity.ok().body(naturezas);			
+		}else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe naturezas ativas");
+		}
 	}
 }

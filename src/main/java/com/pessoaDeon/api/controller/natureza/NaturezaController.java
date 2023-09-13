@@ -60,4 +60,8 @@ public class NaturezaController {
 		return ResponseEntity.ok(naturezaService.filtroGlossario(glossario, pageable));
 	}
 	
+	@GetMapping("/listarNatDeon")
+	public ResponseEntity<?> listar(){
+		return naturezaService.listarNaturezaDeonAtiva();
+	}
 }
