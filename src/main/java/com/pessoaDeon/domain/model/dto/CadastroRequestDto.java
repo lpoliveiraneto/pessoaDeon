@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CadastroRequestDto {
 	
-//	pessoa
+
 	@NotBlank
 	@NotNull
 	@Size(max=255)

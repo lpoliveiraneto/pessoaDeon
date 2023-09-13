@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.domain.model.dto.NaturezaRequestDto;
-import com.pessoaDeon.domain.service.NaturezaService;
+import com.pessoaDeon.domain.service.natureza.NaturezaService;
 
 import jakarta.validation.Valid;
 

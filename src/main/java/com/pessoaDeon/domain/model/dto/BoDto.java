@@ -54,7 +54,7 @@ public class BoDto {
 	private Estado estado;
 	
     private TipoLocal tipoLocal;
-	
-	private BoDeon bo;
+
+	private Integer fkNaturezaDeon;
 	
 }

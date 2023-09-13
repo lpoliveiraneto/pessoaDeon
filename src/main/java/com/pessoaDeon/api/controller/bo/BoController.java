@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.service.BoService;
+import com.pessoaDeon.domain.service.bo.BoService;
 
 
 @RestController

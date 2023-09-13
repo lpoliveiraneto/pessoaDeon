@@ -18,7 +18,7 @@ public class EnvolvidoService {
         return envolvido;
     }
 
-    public void salvarEnvolvido(Envolvido envolvido){
-        envolvidoRepository.save(envolvido);
+    public Envolvido salvarEnvolvido(Envolvido envolvido){
+        return envolvidoRepository.save(envolvido);
     }
 }

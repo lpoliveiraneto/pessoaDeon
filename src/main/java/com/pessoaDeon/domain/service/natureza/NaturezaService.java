@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.service;
+package com.pessoaDeon.domain.service.natureza;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,7 +37,7 @@ public class NaturezaService {
 	}
 	
 	@Transactional
-	public ResponseEntity<?> salvar(NaturezaRequestDto dto) {
+	public ResponseEntity salvar(NaturezaRequestDto dto) {
 
 		NaturezaDeon deon =  new NaturezaDeon();
 		deon.setNome(!dto.getNome().isEmpty() ? dto.getNome() : null);

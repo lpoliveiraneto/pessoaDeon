@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.service;
+package com.pessoaDeon.domain.service.bo;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

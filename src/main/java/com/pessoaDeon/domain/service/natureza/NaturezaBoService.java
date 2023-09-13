@@ -15,11 +15,11 @@ public class NaturezaBoService {
     @Autowired
     private NaturezaBoRepository naturezaBoRepository;
 
-    public void salvarNaturezaBo(BoDeon bo, NaturezaDeon natureza){
+    public NaturezaBo salvarNaturezaBo(BoDeon bo, NaturezaDeon natureza){
         NaturezaBo naturezaBo = new NaturezaBo();
         naturezaBo.setNaturezaDeon(natureza);
         naturezaBo.setBo(bo);
-        naturezaBoRepository.save(naturezaBo);
+        return naturezaBoRepository.save(naturezaBo);
     }
 
     public Optional<NaturezaBo> buscarNaturezaBo(Integer idNaturezaBo){
