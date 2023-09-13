@@ -1,19 +1,37 @@
 package com.pessoaDeon.domain.model.envolvido;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.pessoaDeon.domain.model.listas.*;
-import com.pessoaDeon.domain.model.pessoa.Email;
+import com.pessoaDeon.domain.model.listas.Cidade;
+import com.pessoaDeon.domain.model.listas.Deficiencia;
+import com.pessoaDeon.domain.model.listas.Escolaridade;
+import com.pessoaDeon.domain.model.listas.Estado;
+import com.pessoaDeon.domain.model.listas.EstadoCivil;
+import com.pessoaDeon.domain.model.listas.IdentidadeGenero;
+import com.pessoaDeon.domain.model.listas.OrientacaoSexual;
+import com.pessoaDeon.domain.model.listas.Pais;
+import com.pessoaDeon.domain.model.listas.Profissao;
+import com.pessoaDeon.domain.model.listas.Raca;
+import com.pessoaDeon.domain.model.listas.Sexo;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
-import com.pessoaDeon.domain.model.pessoa.Telefone;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
 
-import java.time.LocalDate;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -94,4 +112,8 @@ public class Envolvido {
     @ManyToOne
     @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;
+    
+    @OneToOne
+    @JoinColumn(name = "fk_endereco_envolvido")
+    private EnderecoEnvolvido enderecoEnvolvido;
 }

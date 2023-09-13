@@ -34,7 +34,6 @@ public class NaturezaDeon implements Serializable{
     @Column(name = "nome")
     private String nome;
     
-    @NotNull
     @Column(name = "codigo")
     private String codigo;
     
