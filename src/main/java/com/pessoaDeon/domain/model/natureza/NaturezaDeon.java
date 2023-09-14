@@ -57,4 +57,7 @@ public class NaturezaDeon implements Serializable{
     @JsonBackReference
 	@OneToMany(mappedBy="naturezaDeon", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     private List<NaturezaBo> listaNaturezaBo;
+    
+    @Column(name = "autor")
+    private Boolean autor = false;
 }

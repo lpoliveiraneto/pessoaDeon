@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NaturezaRequestDto {
+public class NaturezaDeonRequestDto {
 
 	@NotNull
 	private Integer idNaturezaSigma;

@@ -45,5 +45,5 @@ public class BoDtoResponse {
     
     private String protocolo;
     
-    private List<NaturezaDto> listaNatureza;
+    private List<NaturezaDeonResponseDto> listaNatureza;
 }

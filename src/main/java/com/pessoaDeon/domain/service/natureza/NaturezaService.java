@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.service.natureza;
+package com.pessoaDeon.domain.service;
 
 import java.util.List;
 
@@ -10,7 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.model.dto.   NaturezaRequestDto;
+import com.pessoaDeon.domain.model.dto.   NaturezaDeonRequestDto;
+import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.natureza.NaturezaDeon;
 import com.pessoaDeon.domain.model.natureza.NaturezaSigma;
 import com.pessoaDeon.domain.repository.natureza.NaturezaDeonRepository;
@@ -40,7 +41,7 @@ public class NaturezaService {
 	}
 	
 	@Transactional
-	public ResponseEntity salvar(NaturezaRequestDto dto) {
+	public ResponseEntity<?> salvar(NaturezaDeonRequestDto dto) {
 
 		NaturezaDeon deon =  new NaturezaDeon();
 		deon.setNome(!dto.getNome().isEmpty() ? dto.getNome() : null);
@@ -62,7 +63,7 @@ public class NaturezaService {
 		return nat;
 	}
 	
-	public Boolean existeNatureza(NaturezaRequestDto dto) {
+	public Boolean existeNatureza(NaturezaDeonRequestDto dto) {
 		return repository.existsByNaturezaSigma(dto.getIdNaturezaSigma());
 	}
 
@@ -70,6 +71,21 @@ public class NaturezaService {
 		List<NaturezaDeon> naturezas = repository.findByStatusIsTrue();
 		if (!naturezas.isEmpty()) {
 			return ResponseEntity.ok().body(naturezas);			
+		}else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe naturezas ativas");
+		}
+	}
+
+	public ResponseEntity<?> listaNaturezasFront() {
+		List<NaturezaDeon> naturezas = repository.findByStatusIsTrue();
+		List<NaturezaDeonResponseDto> listResponse = new ArrayList<>();
+		if (!naturezas.isEmpty()) {
+			naturezas.forEach(n -> {
+				NaturezaDeonResponseDto natDto = new NaturezaDeonResponseDto();
+				BeanUtils.copyProperties(n, natDto);
+				listResponse.add(natDto);
+			});
+			return ResponseEntity.ok().body(listResponse);
 		}else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe naturezas ativas");
 		}
