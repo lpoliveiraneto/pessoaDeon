@@ -15,7 +15,7 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.model.dto.NaturezaDto;
+import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
@@ -112,9 +112,9 @@ public class BoService {
 		response.setNumeroLocal(endereco.getNumeroLocal());
 		response.setTipoLocal(endereco.getTipoLocal().getNome());
 		response.setProtocolo(protocolo.getNumero());
-		List<NaturezaDto> naturezaDto = new ArrayList<>();
+		List<NaturezaDeonResponseDto> naturezaDto = new ArrayList<>();
 		bo.getListaNaturezas().forEach(n -> {
-			NaturezaDto nt = new NaturezaDto();
+			NaturezaDeonResponseDto nt = new NaturezaDeonResponseDto();
 			BeanUtils.copyProperties(n.getNaturezaDeon(), nt);
 			naturezaDto.add(nt);
 		});

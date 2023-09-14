@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pessoaDeon.domain.model.dto.NaturezaRequestDto;
+import com.pessoaDeon.domain.model.dto.NaturezaDeonRequestDto;
 import com.pessoaDeon.domain.service.NaturezaService;
 
 import jakarta.validation.Valid;
@@ -42,7 +42,7 @@ public class NaturezaController {
 	}
 	
 	@PostMapping("/salvarNaturezaDeon")
-	public ResponseEntity<?> salvarNaturezaDeon(@RequestBody @Valid NaturezaRequestDto natDto, Errors erros){
+	public ResponseEntity<?> salvarNaturezaDeon(@RequestBody @Valid NaturezaDeonRequestDto natDto, Errors erros){
 		if(erros.hasErrors()) return ResponseEntity.status(HttpStatus.CONFLICT).body(erros.getFieldErrors());
 		if(!naturezaService.existeNatureza(natDto)) {
 			return ResponseEntity.ok(naturezaService.salvar(natDto));			
@@ -63,5 +63,10 @@ public class NaturezaController {
 	@GetMapping("/listarNatDeon")
 	public ResponseEntity<?> listar(){
 		return naturezaService.listarNaturezaDeonAtiva();
+	}
+
+	@GetMapping("/listaNaturezas")
+	public ResponseEntity<?> listaNaturezas(){
+		return naturezaService.listaNaturezasFront();
 	}
 }
