@@ -29,7 +29,7 @@ public class NaturezaController {
 	
 	@GetMapping("/listNaturezaSigma")
 	public ResponseEntity<?> lista(@RequestParam(value = "nome" , required = false) String nome, @PageableDefault(size = 10, page = 0, sort = "nome", direction = Direction.ASC) Pageable pageable){
-		var naturezas = naturezaService.listNatureza(pageable);
+		var naturezas = naturezaService.listNatureza(pageable, nome);
 		if(!naturezas.isEmpty()) {
 			return new ResponseEntity<>(naturezas, HttpStatus.OK);			
 		}

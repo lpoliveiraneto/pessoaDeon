@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,10 @@ import com.pessoaDeon.domain.model.dto.   NaturezaDeonRequestDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.natureza.NaturezaDeon;
 import com.pessoaDeon.domain.model.natureza.NaturezaSigma;
+import com.pessoaDeon.domain.model.natureza.QNaturezaSigma;
 import com.pessoaDeon.domain.repository.natureza.NaturezaDeonRepository;
 import com.pessoaDeon.domain.repository.natureza.NaturezaSigmaRepository;
+import com.querydsl.core.BooleanBuilder;
 
 @Service
 public class NaturezaService {
@@ -28,8 +31,14 @@ public class NaturezaService {
 	@Autowired
 	private NaturezaDeonRepository repository;
 	
-	public Page<NaturezaSigma> listNatureza(Pageable pageable) {
-		return naturezaRepository.findAll(pageable);
+	@ReadOnlyProperty
+	public Page<NaturezaSigma> listNatureza(Pageable pageable, String nome) {
+		QNaturezaSigma naturezaSigma = QNaturezaSigma.naturezaSigma;
+		BooleanBuilder bb = new BooleanBuilder();
+		if (nome != null) {
+			bb.and(naturezaSigma.nome.contains(nome));
+		}
+		return naturezaRepository.findAll(bb, pageable);
 	}
 
 	@Transactional
