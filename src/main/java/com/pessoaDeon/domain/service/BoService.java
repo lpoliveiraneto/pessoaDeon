@@ -7,18 +7,29 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
+import com.pessoaDeon.domain.model.bo.QBoDeon;
+import com.pessoaDeon.domain.model.bo.QProtocolo;
 import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
+import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
+import com.pessoaDeon.domain.model.envolvido.QEnvolvimento;
+import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
+import com.pessoaDeon.domain.model.natureza.QNaturezaDeon;
+import com.pessoaDeon.domain.model.pessoa.QPessoa;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
+import com.querydsl.core.BooleanBuilder;
 
 
 @Service
@@ -33,6 +44,9 @@ public class BoService {
 	@Autowired
 	private ProtocoloRepository protocoloRepository;
 	
+//	@Autowired
+//	private EntityManager entityManager;
+
 	@Transactional
 	public Object salvar(BoDto bo) {
 		BoDeon boletim = new BoDeon();
@@ -121,5 +135,53 @@ public class BoService {
 		response.setListaNatureza(naturezaDto);
 		return response;
 	}
+
+	public Page<BosPessoaResponseDto> buscarPessoa(Integer idPessoa, Pageable pageable){
+		
+		BooleanBuilder booleanBuilder = new BooleanBuilder();
+		
+		QBoDeon qBoDeon = QBoDeon.boDeon;
+		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
+		
+		QProtocolo qProtocolo = QProtocolo.protocolo;
+		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
+		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
+		QPessoa qPessoa = QPessoa.pessoa;
+		
+//		JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon).distinct();
+//		query.join(qBoDeon.listaNaturezas, qNaturezaBo);
+//		query.join(qNaturezaBo.naturezaDeon, qNaturezaDeon);
+//		query.join(qProtocolo).on(qProtocolo.bo.idBo.eq(qBoDeon.idBo));
+//		query.join(qEnvolvimento).on(qEnvolvimento.naturezaBo.id.eq(qNaturezaBo.id));
+//		query.join(qEnvolvimento.envolvido, qEnvolvido);
+//		query.join(qEnvolvido.pessoa, qPessoa);
+//		query.where(qPessoa.id.eq(idPessoa)).fetch();
+		
+		
+		booleanBuilder.and(qBoDeon.listaNaturezas.any().eq(qNaturezaBo));
+		booleanBuilder.and(qNaturezaBo.naturezaDeon.idNatureza.eq(qNaturezaDeon.idNatureza));
+		booleanBuilder.and(qProtocolo.bo.idBo.eq(qBoDeon.idBo));
+		booleanBuilder.and(qEnvolvimento.naturezaBo.id.eq(qNaturezaBo.id));
+		booleanBuilder.and(qEnvolvimento.envolvido.idEnvolvido.eq(qEnvolvido.idEnvolvido));
+		booleanBuilder.and(qEnvolvido.pessoa.id.eq(qPessoa.id));
+		booleanBuilder.and(qPessoa.id.eq(idPessoa));
+		
+//		List<BoDeon> results = query.fetch();
+//		int countResults = query.fetch().size();
+		
+		Page<BoDeon> listaResult = boRepository.findAll(booleanBuilder, pageable);
+		
+		Page<BosPessoaResponseDto> resultsDto = listaResult.map(bo -> {
+			BosPessoaResponseDto dto = new BosPessoaResponseDto();
+			dto.setIdBo(bo.getIdBo());
+			dto.setDataRegistro(bo.getDataRegistro());
+			dto.setProtocolo(protocoloRepository.findByBo(bo).getNumero());
+			dto.setNomeNatureza(bo.getListaNaturezas().get(0).getNaturezaDeon().getNome());
+			dto.setCodigoNatureza(bo.getListaNaturezas().get(0).getNaturezaDeon().getCodigo());
+			return dto;
+		});
+		return resultsDto;
+	}	
 }
 
