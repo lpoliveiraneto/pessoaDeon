@@ -13,4 +13,6 @@ public class NaturezaDeonResponseDto {
 
 	private String pathSvg;
 	
+	private String tipoNatureza;
+	
 }

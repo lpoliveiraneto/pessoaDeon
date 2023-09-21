@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
 import com.pessoaDeon.domain.service.bo.BoService;
+import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
+
 
 
 @RestController
@@ -29,5 +31,11 @@ public class BoController {
 	@GetMapping("/buscarPorId/{idBo}")
 	public BoDtoResponse buscarBoPorId(@PathVariable(value = "idBo" ) Integer idBo){
 		return boService.buscarBoPorId(idBo); 
+	}
+
+	@GetMapping("/buscar")
+	public Page<BosPessoaResponseDto> buscar (@RequestParam(name = "idPessoa") Integer idPessoa,
+			@PageableDefault(size = 10, page = 0, sort = "idBo", direction = Direction.ASC) Pageable pageable){
+		return boService.buscarPessoa(idPessoa, pageable);
 	}
 }

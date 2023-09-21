@@ -3,12 +3,13 @@ package com.pessoaDeon.domain.repository.natureza;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.pessoaDeon.domain.model.natureza.NaturezaSigma;
 
 @Repository
-public interface NaturezaSigmaRepository extends JpaRepository<NaturezaSigma, Integer> {
+public interface NaturezaSigmaRepository extends JpaRepository<NaturezaSigma, Integer>, QuerydslPredicateExecutor<NaturezaSigma> {
 
 	Page<NaturezaSigma> findAll(Pageable pageable);
 	
