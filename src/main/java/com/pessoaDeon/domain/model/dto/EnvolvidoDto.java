@@ -24,7 +24,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class EnvolvidoRequestDto {
+public class EnvolvidoDto {
 
 	@Size(max=255)
 	private String nome;
@@ -65,21 +65,13 @@ public class EnvolvidoRequestDto {
 	private TipoDocumento tipoDocumento;
 	private String numeroDocumento;
 
-	private String cep;
-	private Estado estado;
-	private Cidade cidade;
-	private String logradouro;
-	private Bairro bairro;
-	
-	private String numero;
-	private TipoLocal tipoLocal;
-
-	private String complemento;
-	private String referencia;
 	private String telefone;
 	private String email;
 	
-	private Pessoa pessoa;
+	private Integer fk_pessoa;
 	
 	private TipoParticipacao tipoParticipacao;
+
+	private EnderecoEnvolvidoDto enderecoEnvolvido;
+
 }

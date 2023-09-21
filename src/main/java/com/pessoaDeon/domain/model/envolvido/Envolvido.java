@@ -18,14 +18,7 @@ import com.pessoaDeon.domain.model.listas.Raca;
 import com.pessoaDeon.domain.model.listas.Sexo;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -51,7 +44,7 @@ public class Envolvido {
     private String alcunha;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate datanascimento;
+    private LocalDate dataNascimento;
 
     @ManyToOne
     @JoinColumn(name = "fk_sexo")

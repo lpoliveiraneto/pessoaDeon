@@ -6,6 +6,7 @@ import com.pessoaDeon.domain.model.natureza.NaturezaDeon;
 import com.pessoaDeon.domain.repository.natureza.NaturezaBoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class NaturezaBoService {
     @Autowired
     private NaturezaBoRepository naturezaBoRepository;
 
+    @Transactional
     public NaturezaBo salvarNaturezaBo(BoDeon bo, NaturezaDeon natureza){
         NaturezaBo naturezaBo = new NaturezaBo();
         naturezaBo.setNaturezaDeon(natureza);

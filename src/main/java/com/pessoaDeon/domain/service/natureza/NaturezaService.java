@@ -1,7 +1,9 @@
-package com.pessoaDeon.domain.service;
+package com.pessoaDeon.domain.service.natureza;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.Page;

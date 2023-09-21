@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;

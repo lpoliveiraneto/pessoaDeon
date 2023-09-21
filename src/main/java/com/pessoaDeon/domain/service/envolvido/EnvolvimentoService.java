@@ -8,6 +8,7 @@ import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.repository.envolvido.TipoParticipacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class EnvolvimentoService {
     @Autowired
     private EnvolvimentoRepository envolvimentoRepository;
 
+    @Transactional
     public void salvarEnvolvimento(Envolvido envolvido, NaturezaBo naturezaBo, TipoParticipacao tipoParticipacao){
 
         Envolvimento envolvimento = new Envolvimento();

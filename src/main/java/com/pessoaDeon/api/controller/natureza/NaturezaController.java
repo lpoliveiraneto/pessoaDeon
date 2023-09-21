@@ -43,7 +43,8 @@ public class NaturezaController {
 	
 	@PostMapping("/salvarNaturezaDeon")
 	public ResponseEntity<?> salvarNaturezaDeon(@RequestBody @Valid NaturezaDeonRequestDto natDto, Errors erros){
-		if(erros.hasErrors()) return ResponseEntity.status(HttpStatus.CONFLICT).body(erros.getFieldErrors());
+		if(erros.hasErrors())
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(erros.getFieldErrors());
 		if(!naturezaService.existeNatureza(natDto)) {
 			return ResponseEntity.ok(naturezaService.salvar(natDto));			
 		}

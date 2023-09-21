@@ -52,7 +52,7 @@ public class AutenticacaoController {
             	var tokenJWT = tokenService.gerarToken(user);
             	var pessoa = pessoaService.buscaPessoaEmail(dados.email());
                 String primeiroNomeUltimo = primeiroEUltimonome(pessoa.getNome());
-            	return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),primeiroNomeUltimo,tokenJWT, pessoa.getUsuario().getPerfis()));
+            	return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),primeiroNomeUltimo,tokenJWT, pessoa.getUsuario().getPerfis(), pessoa.getId()));
             } else {
             	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sua conta ainda não esta ativa. Por favor, verifique sua caixa de e-mail.");
             }
