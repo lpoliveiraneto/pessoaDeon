@@ -106,7 +106,7 @@ public class Envolvido {
     @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fk_endereco_envolvido")
     private EnderecoEnvolvido enderecoEnvolvido;
 }

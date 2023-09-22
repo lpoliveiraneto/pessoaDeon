@@ -15,6 +15,7 @@ import java.io.Serializable;
 public class Envolvimento  implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEnvolvimento;
 
     @ManyToOne
