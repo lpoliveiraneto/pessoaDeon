@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.listas.Bairro;
-import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.listas.Cidade;
 import com.pessoaDeon.domain.model.listas.Estado;
 import com.pessoaDeon.domain.model.listas.TipoLocal;

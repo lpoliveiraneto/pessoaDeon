@@ -1,6 +1,5 @@
 package com.pessoaDeon.api.controller.analista;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,17 +8,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnalistaController {
 
     @GetMapping
-    public ResponseEntity listarOcorrenciasParaAnalise(){
+    public ResponseEntity<?> listarOcorrenciasParaAnalise(){
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("analisadas")
-    public ResponseEntity listarOcorrenciasAnalisadas(){
+    public ResponseEntity<?> listarOcorrenciasAnalisadas(){
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("funcionario/analisadas")
-    public ResponseEntity  listarOcorrenciasAnalisadasFuncionario(){
+    public ResponseEntity<?>  listarOcorrenciasAnalisadasFuncionario(){
         return ResponseEntity.ok().build();
     }
 }
