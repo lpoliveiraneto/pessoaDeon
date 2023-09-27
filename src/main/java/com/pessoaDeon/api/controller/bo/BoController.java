@@ -1,20 +1,24 @@
 package com.pessoaDeon.api.controller.bo;
 
-import com.pessoaDeon.domain.model.dto.BoEnvolvidosRequest;
-import com.pessoaDeon.domain.model.dto.EnvolvidosRequestDto;
-import com.pessoaDeon.domain.service.bo.BoDeonFactoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.service.bo.BoService;
+import com.pessoaDeon.domain.model.dto.BoEnvolvidosRequest;
 import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
+import com.pessoaDeon.domain.service.bo.BoDeonFactoryService;
+import com.pessoaDeon.domain.service.bo.BoService;
 
 
 
@@ -34,8 +38,7 @@ public class BoController {
 	//	}
 	//
 	@PostMapping("/salvarBo")
-	public ResponseEntity salvarOcorrencia(@RequestBody BoEnvolvidosRequest boEnvolvidosRequest){
-		System.out.println("passou por aqui");
+	public ResponseEntity<?> salvarOcorrencia(@RequestBody BoEnvolvidosRequest boEnvolvidosRequest){
 		boDeonFactoryService.salvarBo(boEnvolvidosRequest.getBo(), boEnvolvidosRequest.getEnvolvidos());
 		return ResponseEntity.ok().build();
 	}

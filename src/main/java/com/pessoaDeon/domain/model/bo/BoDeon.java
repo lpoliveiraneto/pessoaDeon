@@ -6,11 +6,11 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
-import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.natureza.NaturezaBo;
 
 import jakarta.persistence.CascadeType;
@@ -61,4 +61,7 @@ public class BoDeon implements Serializable {
 	@OneToMany(mappedBy = "bo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<NaturezaBo> listaNaturezas;
 	
+	private String numerobO;
+	
+	private Status statusBo;
 }
