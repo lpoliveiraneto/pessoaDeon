@@ -1,12 +1,14 @@
 package com.pessoaDeon.domain.model.analista;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 @Entity
 @Getter
@@ -15,18 +17,32 @@ import lombok.Setter;
 public class Analista {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAnalista;
 
     @OneToOne
+    @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;
 
-    private String cargo;
+    @ManyToOne
+    @JoinColumn(name = "fk_cargo")
+    private Cargo cargo;
 
-    private String funcao;
+    @ManyToOne
+    @JoinColumn(name = "fk_funcao")
+    private Funcao funcao;
 
     private String matricula;
 
     private Integer fkSigma;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date data_cadastro;
+
+    private Boolean status = false;
+
 
 
 }
