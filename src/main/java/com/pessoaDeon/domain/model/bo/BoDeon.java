@@ -61,7 +61,7 @@ public class BoDeon implements Serializable {
 	@OneToMany(mappedBy = "bo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<NaturezaBo> listaNaturezas;
 	
-	private String numerobO;
+	private String numeroBo;
 	
-	private Status statusBo;
+	private Status status;
 }

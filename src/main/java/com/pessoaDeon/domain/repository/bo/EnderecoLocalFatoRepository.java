@@ -7,5 +7,7 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 
 @Repository
 public interface EnderecoLocalFatoRepository extends JpaRepository<EnderecoLocalFato, Integer> {
+	
+	EnderecoLocalFato findByBoIdBo(Integer idBo);
 
 }
