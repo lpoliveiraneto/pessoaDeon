@@ -37,11 +37,13 @@ public class BoController {
 //		return ResponseEntity.ok().body(boService.salvar(bo));
 	//	}
 	//
+	
 	@PostMapping("/salvarBo")
 	public ResponseEntity<?> salvarOcorrencia(@RequestBody BoEnvolvidosRequest boEnvolvidosRequest){
 		boDeonFactoryService.salvarBo(boEnvolvidosRequest.getBo(), boEnvolvidosRequest.getEnvolvidos());
 		return ResponseEntity.ok().build();
 	}
+	
 	@GetMapping("/buscarPorId/{idBo}")
 	public BoDtoResponse buscarBoPorId(@PathVariable(value = "idBo" ) Integer idBo){
 		return boService.buscarBoPorId(idBo); 
@@ -49,7 +51,7 @@ public class BoController {
 
 	@GetMapping("/buscar")
 	public Page<BosPessoaResponseDto> buscar (@RequestParam(name = "idPessoa") Integer idPessoa,
-											  @PageableDefault(size = 10, page = 0, sort = "idBo", direction = Sort.Direction.ASC) Pageable pageable){
+			@PageableDefault(size = 10, page = 0, sort = "idBo", direction = Sort.Direction.ASC) Pageable pageable){
 		return boService.buscarPessoa(idPessoa, pageable);
 	}
 }

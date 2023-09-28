@@ -1,12 +1,23 @@
 package com.pessoaDeon.domain.service.envolvido;
 
 import com.pessoaDeon.domain.exception.EnvolvidoNotFoundException;
+import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.dto.EnderecoDtoInput;
 import com.pessoaDeon.domain.model.dto.EnvolvidoDto;
 import com.pessoaDeon.domain.model.envolvido.EnderecoEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
+import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
+import com.pessoaDeon.domain.model.envolvido.QEnvolvimento;
+import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvidoRepository;
 import com.pessoaDeon.domain.service.PessoaService;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import jakarta.persistence.EntityManager;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +30,9 @@ public class EnvolvidoService {
 
     @Autowired
     private PessoaService pessoaService;
+    
+    @Autowired
+    private EntityManager entityManager;
 
     public Envolvido buscarEnvolvido(Integer idEnvolvido){
         Envolvido envolvido = envolvidoRepository.findById(idEnvolvido).orElseThrow(() ->
@@ -74,5 +88,20 @@ public class EnvolvidoService {
          }
 
          return envolvido;
+    }
+    
+    public List<Envolvido> getEnvolvidoBo(Integer idBo) {
+    	QEnvolvido envolvido = QEnvolvido.envolvido;
+    	QEnvolvimento envolvimento = QEnvolvimento.envolvimento;
+    	QNaturezaBo naturezaBo = QNaturezaBo.naturezaBo;
+    	QBoDeon bo = QBoDeon.boDeon;
+    	
+    	JPAQuery<Envolvido> query = new JPAQueryFactory(entityManager).selectFrom(envolvido).distinct();
+    	query.join(envolvimento.envolvido, envolvido);
+    	query.join(naturezaBo.bo, bo);
+    	query.where(bo.idBo.eq(idBo));
+    	
+    	List<Envolvido> result = query.fetch();
+    	return result;
     }
 }
