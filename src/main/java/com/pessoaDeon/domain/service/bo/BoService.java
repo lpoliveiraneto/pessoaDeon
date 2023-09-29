@@ -176,7 +176,24 @@ public class BoService {
 		});
 		return new PageImpl<>(resultsDto, pageable, countResults);
 	}
-	
+
+	@ReadOnlyProperty
+	public void getBosPendentes(){
+		QBoDeon qBoDeon = QBoDeon.boDeon;
+		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
+		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
+		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
+		QPessoa qPessoa = QPessoa.pessoa;
+		JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon).distinct();
+		query.join(qBoDeon.listaNaturezas,qNaturezaBo);
+		query.join(qNaturezaBo.naturezaDeon, qNaturezaDeon);
+		query.join(qEnvolvimento).on(qEnvolvimento.naturezaBo.id.eq(qNaturezaBo.id));
+		query.join(qEnvolvimento.envolvido, qEnvolvido);
+		query.join(qEnvolvido.pessoa, qPessoa);
+		query.where(qPessoa.id.isNotNull()).fetch();
+
+	}
 //	public Page<BosPessoaResponseDto> buscarPessoa(Integer idPessoa, Pageable pageable) {
 //		QBoDeon qBoDeon = QBoDeon.boDeon;
 //		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;

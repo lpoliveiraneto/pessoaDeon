@@ -3,6 +3,7 @@ package com.pessoaDeon.domain.service.bo;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.EnvolvidosRequestDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.model.envolvido.TipoParticipacao;
@@ -40,6 +41,7 @@ public class BoDeonFactoryService {
     public void salvarBo(BoDto bo, EnvolvidosRequestDto envolvidos){
 
         var boDeon = (BoDeon)boService.salvar(bo);
+        boDeon.setStatusBo(Status.PE);
         var naturezaDeon = naturezaDeonRepository.findById(bo.getFkNaturezaDeon()).get();
         var naturezaBo = naturezaBoService.salvarNaturezaBo(boDeon, naturezaDeon);
 
