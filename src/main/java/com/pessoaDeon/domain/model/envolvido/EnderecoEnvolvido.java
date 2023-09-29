@@ -27,7 +27,7 @@ public class EnderecoEnvolvido {
 	
 	private String complemento;
 	
-	private Integer numeroLocal;
+	private String numeroLocal;
 	
 	private String referencia;
 	

@@ -42,7 +42,7 @@ public class BoDto {
 	
 	private String complemento;
 	
-	private Integer numeroLocal;
+	private String numeroLocal;
 	
 	private String logradouro;
 	

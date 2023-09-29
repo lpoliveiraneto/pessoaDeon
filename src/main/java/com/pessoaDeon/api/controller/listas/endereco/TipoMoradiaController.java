@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pessoaDeon.domain.model.endereco.ListaEndereco;
-import com.pessoaDeon.domain.repository.listas.ListaEnderecoRepository;
+import com.pessoaDeon.domain.model.endereco.TipoMoradia;
+import com.pessoaDeon.domain.repository.listas.TipoMoradiaRepository;
 
 @RestController
-@RequestMapping("/api/v1/endereco")
-public class ListaEnderecoController {
+@RequestMapping("/api/v1/tipoMoradia")
+public class TipoMoradiaController {
 	
 	@Autowired
-	private ListaEnderecoRepository listRepository;
+	private TipoMoradiaRepository listRepository;
 	
 	/**
 	 * @author Hilberto	
@@ -23,7 +23,7 @@ public class ListaEnderecoController {
 	 * 
 	 * */
 	@GetMapping("/lista")
-	public List<ListaEndereco> list(){
+	public List<TipoMoradia> list(){
 		return listRepository.findAll();
 	}
 	

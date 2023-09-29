@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.envolvido.TipoParticipacao;
-import com.pessoaDeon.domain.model.listas.Bairro;
 import com.pessoaDeon.domain.model.listas.Cidade;
 import com.pessoaDeon.domain.model.listas.Deficiencia;
 import com.pessoaDeon.domain.model.listas.Escolaridade;
@@ -17,8 +16,6 @@ import com.pessoaDeon.domain.model.listas.Profissao;
 import com.pessoaDeon.domain.model.listas.Raca;
 import com.pessoaDeon.domain.model.listas.Sexo;
 import com.pessoaDeon.domain.model.listas.TipoDocumento;
-import com.pessoaDeon.domain.model.listas.TipoLocal;
-import com.pessoaDeon.domain.model.pessoa.Pessoa;
 
 import jakarta.validation.constraints.Size;
 import lombok.Data;
