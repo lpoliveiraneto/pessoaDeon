@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,6 +176,10 @@ public class BoService {
 			resultsDto.add(dto);
 		});
 		return new PageImpl<>(resultsDto, pageable, countResults);
+	}
+
+	public Optional<BoDeon> findById(Integer idBo) {
+		return boRepository.findById(idBo);
 	}
 	
 //	public Page<BosPessoaResponseDto> buscarPessoa(Integer idPessoa, Pageable pageable) {

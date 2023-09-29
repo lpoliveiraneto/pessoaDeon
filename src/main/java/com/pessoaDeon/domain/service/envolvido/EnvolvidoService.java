@@ -8,8 +8,11 @@ import com.pessoaDeon.domain.exception.EnvolvidoNotFoundException;
 import com.pessoaDeon.domain.model.dto.EnvolvidoDto;
 import com.pessoaDeon.domain.model.envolvido.EnderecoEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
+import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvidoRepository;
+import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.service.PessoaService;
+import java.util.List;
 
 @Service
 public class EnvolvidoService {
@@ -19,6 +22,12 @@ public class EnvolvidoService {
 
     @Autowired
     private PessoaService pessoaService;
+    
+    @Autowired
+    private EnvolvimentoRepository envolvimentoRepository;
+    
+//    @Autowired
+//    private EntityManager entityManager;
 
     public Envolvido buscarEnvolvido(Integer idEnvolvido){
         Envolvido envolvido = envolvidoRepository.findById(idEnvolvido).orElseThrow(() ->
@@ -74,5 +83,9 @@ public class EnvolvidoService {
          }
 
          return envolvido;
+    }
+    
+    public List<Envolvimento> getEnvolvimentosBo(Integer idBo) {
+    	return envolvimentoRepository.findByNaturezaBoBoIdBo(idBo);
     }
 }

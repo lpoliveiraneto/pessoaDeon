@@ -1,5 +1,6 @@
 package com.pessoaDeon.domain.model.envolvido;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pessoaDeon.domain.model.natureza.NaturezaBo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +14,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "idEnvolvimento")
 public class Envolvimento  implements Serializable {
+    /**
+	 * 
+	 */
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,6 +25,7 @@ public class Envolvimento  implements Serializable {
     private Integer idEnvolvimento;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "fk_natureza_bo")
     private NaturezaBo naturezaBo;
 

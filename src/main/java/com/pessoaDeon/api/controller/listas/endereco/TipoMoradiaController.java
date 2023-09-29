@@ -11,7 +11,7 @@ import com.pessoaDeon.domain.model.endereco.TipoMoradia;
 import com.pessoaDeon.domain.repository.listas.TipoMoradiaRepository;
 
 @RestController
-@RequestMapping("/api/v1/endereco")
+@RequestMapping("/api/v1/tipoMoradia")
 public class TipoMoradiaController {
 	
 	@Autowired
