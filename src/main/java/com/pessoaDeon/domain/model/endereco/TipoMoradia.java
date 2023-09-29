@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ListaEndereco {
+public class TipoMoradia {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

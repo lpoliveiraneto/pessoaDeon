@@ -1,6 +1,5 @@
 package com.pessoaDeon.api.controller.seguranca;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.service.PessoaService;
 import com.pessoaDeon.domain.service.SenhaResetService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -52,7 +50,7 @@ public class AutenticacaoController {
             	var tokenJWT = tokenService.gerarToken(user);
             	var pessoa = pessoaService.buscaPessoaEmail(dados.email());
                 String primeiroNomeUltimo = primeiroEUltimonome(pessoa.getNome());
-            	return ResponseEntity.ok(new DadosTokenJwt(pessoa.getUsuario().getIdUsuario().toString(),primeiroNomeUltimo,tokenJWT, pessoa.getUsuario().getPerfis(), pessoa.getId()));
+            	return ResponseEntity.ok(new DadosTokenJwt(user.getIdUsuario().toString(),primeiroNomeUltimo,tokenJWT, user.getPerfis(), pessoa.getId()));
             } else {
             	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sua conta ainda não esta ativa. Por favor, verifique sua caixa de e-mail.");
             }

@@ -7,9 +7,19 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.pessoaDeon.domain.model.listas.Cidade;
+import com.pessoaDeon.domain.model.listas.Deficiencia;
+import com.pessoaDeon.domain.model.listas.Escolaridade;
+import com.pessoaDeon.domain.model.listas.Estado;
+import com.pessoaDeon.domain.model.listas.EstadoCivil;
+import com.pessoaDeon.domain.model.listas.IdentidadeGenero;
+import com.pessoaDeon.domain.model.listas.OrientacaoSexual;
+import com.pessoaDeon.domain.model.listas.Pais;
+import com.pessoaDeon.domain.model.listas.Profissao;
+import com.pessoaDeon.domain.model.listas.Raca;
+import com.pessoaDeon.domain.model.listas.Sexo;
+import com.pessoaDeon.domain.model.listas.TipoDocumento;
 
-import com.pessoaDeon.domain.model.listas.*;
-import com.pessoaDeon.domain.model.security.Usuario;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -132,10 +142,4 @@ public class Pessoa implements Serializable {
     
     @NotNull
     private String numeroDocumento;
-
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "idUsuario")
-    private Usuario usuario;
-    
 }

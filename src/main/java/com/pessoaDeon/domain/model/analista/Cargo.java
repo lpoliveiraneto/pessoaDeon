@@ -18,5 +18,5 @@ public class Cargo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCargo;
 
-    private String descrição;
+    private String descricao;
 }

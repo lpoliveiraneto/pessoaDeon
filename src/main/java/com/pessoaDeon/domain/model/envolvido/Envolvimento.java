@@ -14,7 +14,9 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = "idEnvolvimento")
 public class Envolvimento  implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEnvolvimento;
 
