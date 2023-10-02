@@ -34,7 +34,8 @@ public class Analista {
 
     private String matricula;
 
-    private Integer fkSigma;
+    @Column(name = "fk_func_sigma")
+    private Integer funcionarioSigma;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")

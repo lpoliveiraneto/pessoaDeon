@@ -8,4 +8,6 @@ import com.pessoaDeon.domain.model.pessoa.Telefone;
 @Repository
 public interface ContatoRepository extends JpaRepository<Telefone, Integer> {
 
+	Telefone findByPessoaId(Integer idPessoa);
+
 }

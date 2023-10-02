@@ -71,7 +71,7 @@ public class BoRequestDto {
 	
 	private String	referencia;
 	
-	private TipoLocal tipoLocal;
+	private String tipoLocal;
 	
 	private String	complemento;
 	
