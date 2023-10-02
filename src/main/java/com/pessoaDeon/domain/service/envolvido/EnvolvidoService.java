@@ -1,7 +1,5 @@
 package com.pessoaDeon.domain.service.envolvido;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +12,7 @@ import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvidoRepository;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.service.PessoaService;
-
-import jakarta.persistence.EntityManager;
+import java.util.List;
 
 @Service
 public class EnvolvidoService {
@@ -29,8 +26,8 @@ public class EnvolvidoService {
     @Autowired
     private EnvolvimentoRepository envolvimentoRepository;
     
-    @Autowired
-    private EntityManager entityManager;
+//    @Autowired
+//    private EntityManager entityManager;
 
     public Envolvido buscarEnvolvido(Integer idEnvolvido){
         Envolvido envolvido = envolvidoRepository.findById(idEnvolvido).orElseThrow(() ->
@@ -76,7 +73,7 @@ public class EnvolvidoService {
              EnderecoEnvolvido endereco = new EnderecoEnvolvido();
              endereco.setCep(envolvidoDto.getEnderecoEnvolvido().getCep() != null ? envolvidoDto.getEnderecoEnvolvido().getCep() : null);
              endereco.setComplemento(envolvidoDto.getEnderecoEnvolvido().getComplemento() != null ? envolvidoDto.getEnderecoEnvolvido().getComplemento() : null);
-             endereco.setNumeroLocal(envolvidoDto.getEnderecoEnvolvido().getNumero()!= null ? Integer.parseInt(envolvidoDto.getEnderecoEnvolvido().getNumero()) : null);
+             endereco.setNumeroLocal(envolvidoDto.getEnderecoEnvolvido().getNumero()!= null ? envolvidoDto.getEnderecoEnvolvido().getNumero() : null);
              endereco.setReferencia(envolvidoDto.getEnderecoEnvolvido().getReferencia() != null ? envolvidoDto.getEnderecoEnvolvido().getReferencia() : null);
              endereco.setBairro(envolvidoDto.getEnderecoEnvolvido().getBairro() != null ? envolvidoDto.getEnderecoEnvolvido().getBairro() : null);
              endereco.setCidade(envolvidoDto.getEnderecoEnvolvido().getCidade() != null ? envolvidoDto.getEnderecoEnvolvido().getCidade() : null);

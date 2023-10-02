@@ -1,12 +1,16 @@
 package com.pessoaDeon.domain.model.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pessoaDeon.domain.model.enumeration.*;
+import com.pessoaDeon.domain.model.enumeration.CorPele;
+import com.pessoaDeon.domain.model.enumeration.Deficiencia;
+import com.pessoaDeon.domain.model.enumeration.IdentidadeGenero;
+import com.pessoaDeon.domain.model.enumeration.OrientacaoSexual;
+import com.pessoaDeon.domain.model.enumeration.Sexo;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Setter
 @Getter

@@ -17,7 +17,8 @@ public class Envolvimento  implements Serializable {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1832653400611660518L;
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

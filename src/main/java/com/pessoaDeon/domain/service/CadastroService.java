@@ -57,8 +57,8 @@ public class CadastroService {
 	@Transactional
 	public Pessoa salvar(CadastroRequestDto cadastroRequestDto){
 		Pessoa pessoa = modelMapper.map(cadastroRequestDto, Pessoa.class);
-		var user = salvarUsuario(cadastroRequestDto);
-		pessoa.setUsuario(user);
+//		var user = salvarUsuario(cadastroRequestDto);
+//		pessoa.setUsuario(user);
 		var pessoaSave = pessoaService.salvarPessoaDeon(pessoa);
 		
 		if(pessoaSave != null) {
@@ -76,6 +76,9 @@ public class CadastroService {
 			this.salvarTelefone(cadastroRequestDto, pessoaSave);
 			this.salvarEmail(cadastroRequestDto, pessoaSave);
 		}
+		
+		var user = salvarUsuario(cadastroRequestDto);
+		user.setPessoa(pessoaSave);
 		return pessoaSave;
 	}
 	

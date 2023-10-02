@@ -35,7 +35,7 @@ public class BoDtoResponse {
 	
 	private String complemento;
 	
-	private Integer numeroLocal;
+	private String numeroLocal;
 	
 	private String logradouro;
 	

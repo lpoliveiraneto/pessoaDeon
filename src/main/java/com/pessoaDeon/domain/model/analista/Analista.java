@@ -43,7 +43,4 @@ public class Analista {
     private Date data_cadastro;
 
     private Boolean status = false;
-
-
-
 }

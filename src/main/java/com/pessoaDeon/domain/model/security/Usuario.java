@@ -49,9 +49,10 @@ public class Usuario implements UserDetails {
     private Boolean contaAtiva = false;
     
     @JsonIgnore
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_pessoa")
     private Pessoa pessoa;
-
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuarios_perfis"

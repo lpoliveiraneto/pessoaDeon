@@ -37,7 +37,7 @@ public class EnderecoLocalFato implements Serializable{
 	
 	private String complemento;
 	
-	private Integer numeroLocal;
+	private String numeroLocal;
 	
 	private String referencia;
 	
