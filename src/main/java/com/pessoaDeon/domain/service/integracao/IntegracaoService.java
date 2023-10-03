@@ -32,11 +32,13 @@ import com.pessoaDeon.domain.model.dto.integracao.EquipeRequestDto;
 import com.pessoaDeon.domain.model.dto.integracao.RequestDto;
 import com.pessoaDeon.domain.model.endereco.Endereco;
 import com.pessoaDeon.domain.model.endereco.Logradouro;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.EnderecoEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.model.listas.UnidadeDestino;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.service.ContatoService;
 import com.pessoaDeon.domain.service.DelegadoResponsavelService;
 import com.pessoaDeon.domain.service.EnderecoService;
@@ -68,6 +70,9 @@ public class IntegracaoService {
 	
 	@Autowired
 	private BoService boService;
+	
+	@Autowired
+	private BoRepository boRepository;
 	
 //	monta o RequestDTO que vai ser enviado p/ API de integracao com SIGMA
 	public RequestDto dadosBoToDto(BoDeon bo, List<Envolvimento> envolvimentos, Integer idAnalista) {
@@ -303,14 +308,12 @@ public class IntegracaoService {
 		}
 	}
 	
-	private BoDeon atualizaNumeroStatusBo(BoResponseDto responseDto) {
-		Optional<BoDeon> bo = boService.findById(responseDto.getIdBoDeon());
-		if (bo.isPresent()) {
-			bo.get().setNumeroBo(responseDto.getNumeroBo().toString());
-			bo.get().setStatus(null);
-			return bo.get();
-			}
-		return null;
+	public BoDeon atualizaNumeroStatusBo(BoResponseDto responseDto) {
+		return boService.atualizarNumeroStatus(responseDto);
 	}
+	
+	
+	
+	
 	
 }

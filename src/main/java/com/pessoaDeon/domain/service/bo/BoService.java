@@ -24,6 +24,8 @@ import com.pessoaDeon.domain.model.dto.BoDto;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
 import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
+import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvimento;
 import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
@@ -54,18 +56,16 @@ public class BoService {
 	private EntityManager entityManager;
 
 	@Transactional
-	public Object salvar(BoDto bo) {
+	public BoDeon salvar(BoDto bo) {
 		BoDeon boletim = new BoDeon();
 		var dataRegistro = Calendar.getInstance().getTime();
-		
 		boletim.setDataFato(bo.getDataFato());
 		boletim.setHoraFato(bo.getHoraFato());
 		boletim.setDataRegistro(dataRegistro); 
 		boletim.setRelato(bo.getRelato());
 		boletim.setRelatoEditado(bo.getRelatoEditado());
-		
+		boletim.setStatus(Status.PE);
 		var boSave = boRepository.saveAndFlush(boletim);
-		
 		if(boSave != null) {
 			this.salvarEnd(bo, boSave);
 			this.salvarProtocolo(boSave);
@@ -75,8 +75,7 @@ public class BoService {
 	
 	@Transactional
 	private EnderecoLocalFato salvarEnd(BoDto bo, BoDeon deon) {
-		EnderecoLocalFato end = new EnderecoLocalFato();
-		end.setCep(bo.getCep());
+		EnderecoLocalFato end = new EnderecoLocalFato();		end.setCep(bo.getCep());
 		end.setComplemento(bo.getComplemento());
 		end.setLogradouro(bo.getLogradouro());
 		end.setNumeroLocal(bo.getNumeroLocal());
@@ -84,13 +83,13 @@ public class BoService {
 		end.setCidade(bo.getCidade());
 		end.setEstado(bo.getEstado());
 		end.setTipoLocal(bo.getTipoLocal());
+		end.setReferencia(bo.getReferencia());
 		end.setBo(deon);
 		return enderecoLocalFatoRepository.save(end);
 	}
 	
 	@Transactional
 	private Protocolo salvarProtocolo(BoDeon bo) {
-		
 		Protocolo protocolo = new Protocolo();
 		protocolo.setBo(bo);
 		protocolo.setNumero(gerarProtocolo(bo));
@@ -99,12 +98,9 @@ public class BoService {
 	}
 	
 	private String gerarProtocolo(BoDeon ocorrencia) {
-
 		StringBuilder protocolo = new StringBuilder();
-		
 		Calendar calendario = Calendar.getInstance();
 		calendario.setTime(ocorrencia.getDataRegistro());		
-		
 		protocolo.append(ocorrencia.getIdBo());
 		protocolo.append(calendario.get(Calendar.HOUR));
 		protocolo.append(calendario.get(Calendar.MONTH));
@@ -122,6 +118,7 @@ public class BoService {
 		response.setDataFato(bo.getDataFato());
 		response.setHoraFato(bo.getHoraFato());
 		response.setRelato(bo.getRelato());
+		response.setRelatoEditado(bo.getRelatoEditado());
 		response.setLogradouro(endereco.getLogradouro());
 		response.setReferencia(endereco.getReferencia());
 		response.setBairroDescricao(endereco.getBairro().getDescricao());
@@ -182,27 +179,16 @@ public class BoService {
 		return boRepository.findById(idBo);
 	}
 	
-//	public Page<BosPessoaResponseDto> buscarPessoa(Integer idPessoa, Pageable pageable) {
-//		QBoDeon qBoDeon = QBoDeon.boDeon;
-//		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
-//		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
-//		QProtocolo qProtocolo = QProtocolo.protocolo;
-//		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
-//		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
-//		QPessoa qPessoa = QPessoa.pessoa;
-//
-//		JPAQuery<BosPessoaResponseDto> query = new JPAQueryFactory(entityManager)
-//				.select(Projections.bean(BosPessoaResponseDto.class, qBoDeon.idBo, qBoDeon.dataRegistro,
-//						qProtocolo.numero, qNaturezaDeon.nome, qNaturezaDeon.codigo))
-//				.from(qBoDeon).join(qBoDeon.listaNaturezas, qNaturezaBo).join(qNaturezaBo.naturezaDeon, qNaturezaDeon)
-//				.join(qProtocolo).on(qProtocolo.bo.idBo.eq(qBoDeon.idBo)).join(qEnvolvimento)
-//				.on(qEnvolvimento.naturezaBo.id.eq(qNaturezaBo.id)).join(qEnvolvimento.envolvido, qEnvolvido)
-//				.join(qEnvolvido.pessoa, qPessoa).where(qPessoa.id.eq(idPessoa));
-//
-//		QueryResults<BosPessoaResponseDto> results = query.offset(pageable.getOffset()).limit(pageable.getPageSize())
-//				.orderBy(qBoDeon.idBo.desc()).fetchResults();
-//
-//		return new PageImpl<>(results.getResults(), pageable, results.getTotal());
-//	}
+	@Transactional
+	public BoDeon atualizarNumeroStatus(BoResponseDto response) {
+		BoDeon bo = findById(response.getIdBoDeon()).orElse(null);
+		if (bo != null) {
+			bo.setNumeroBo(response.getNumeroBo());
+			bo.setStatus(Status.VA);
+			return boRepository.saveAndFlush(bo);
+		}
+		return null;
+	}
+
 }
 

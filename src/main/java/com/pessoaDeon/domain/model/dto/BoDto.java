@@ -56,4 +56,6 @@ public class BoDto {
 
 	private Integer fkNaturezaDeon;
 	
+	private String referencia;
+	
 }
