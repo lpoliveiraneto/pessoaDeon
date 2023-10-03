@@ -1,11 +1,16 @@
 package com.pessoaDeon.domain.service.bo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import com.pessoaDeon.domain.model.dto.*;
+import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
+import com.pessoaDeon.domain.repository.natureza.NaturezaBoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -20,10 +25,6 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
-import com.pessoaDeon.domain.model.dto.BoDto;
-import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
-import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;

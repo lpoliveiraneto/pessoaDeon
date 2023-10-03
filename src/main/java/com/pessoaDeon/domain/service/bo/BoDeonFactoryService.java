@@ -34,8 +34,7 @@ public class BoDeonFactoryService {
     @Transactional
     public void salvarBo(BoDto bo, EnvolvidosRequestDto envolvidos){
 
-        var boDeon = (BoDeon)boService.salvar(bo);
-        boDeon.setStatus(Status.PE);
+        var boDeon = boService.salvar(bo);
         var naturezaDeon = naturezaDeonRepository.findById(bo.getFkNaturezaDeon()).get();
         var naturezaBo = naturezaBoService.salvarNaturezaBo(boDeon, naturezaDeon);
 
