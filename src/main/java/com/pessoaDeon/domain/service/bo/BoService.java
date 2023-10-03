@@ -202,7 +202,7 @@ public class BoService {
 	}
 
 
-	public List<BosPendentesResponseDto> getBosPendentes(){
+	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable){
 
 		List<BoDeon> bosPendentes = boRepository.findBoDeonStatusEquals(Status.PE);
 		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
@@ -216,7 +216,7 @@ public class BoService {
 			bos.add(bo);
 				}
 		);
-		return bos;
+		return new PageImpl<>(bos, pageable, bos.size());
 	}
 }
 
