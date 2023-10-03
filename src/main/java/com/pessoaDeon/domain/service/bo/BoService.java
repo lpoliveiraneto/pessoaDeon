@@ -204,7 +204,7 @@ public class BoService {
 
 	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable){
 
-		List<BoDeon> bosPendentes = boRepository.findBoDeonStatusEquals(Status.PE);
+		List<BoDeon> bosPendentes = boRepository.findByStatusEquals(Status.PE);
 		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
 		bosPendentes.forEach( b-> {
 			BosPendentesResponseDto bo = new BosPendentesResponseDto();

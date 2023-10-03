@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface BoRepository extends JpaRepository<BoDeon, Integer>, QuerydslPredicateExecutor<BoDeon>, BoQueryDSLRepository {
 
-    List<BoDeon> findBoDeonStatusEquals(Status status);
+    List<BoDeon> findByStatusEquals(Status status);
 
 }
