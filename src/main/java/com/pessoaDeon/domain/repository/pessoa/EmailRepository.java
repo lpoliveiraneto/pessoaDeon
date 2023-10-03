@@ -8,4 +8,6 @@ import com.pessoaDeon.domain.model.pessoa.Email;
 @Repository
 public interface EmailRepository extends JpaRepository<Email, Integer> {
 
+	Email findByPessoaId(Integer idPessoa);
+
 }

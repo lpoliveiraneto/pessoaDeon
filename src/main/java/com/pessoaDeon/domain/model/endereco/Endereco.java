@@ -34,6 +34,6 @@ public class Endereco {
     private Logradouro logradouro;
     
     @ManyToOne
-    @JoinColumn(name = "fk_tipo_local")
-    private TipoLocal tipoLocal;
+    @JoinColumn(name = "fk_tipo_moradia")
+    private TipoMoradia tipoMoradia;
 }

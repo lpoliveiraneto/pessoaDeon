@@ -1,17 +1,11 @@
 package com.pessoaDeon.domain.service.bo;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
-import com.pessoaDeon.domain.model.dto.*;
-import com.pessoaDeon.domain.model.enumeration.Status;
-import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
-import com.pessoaDeon.domain.repository.natureza.NaturezaBoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -26,6 +20,12 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
+import com.pessoaDeon.domain.model.dto.BoDto;
+import com.pessoaDeon.domain.model.dto.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
+import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
+import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvimento;
 import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
@@ -56,12 +56,12 @@ public class BoService {
 
 	@Autowired
 	private NaturezaBoRepository naturezaBoRepository;
-	
+
 	@Autowired
 	private EntityManager entityManager;
 
 	@Transactional
-	public Object salvar(BoDto bo) {
+	public BoDeon salvar(BoDto bo) {
 		BoDeon boletim = new BoDeon();
 		var dataRegistro = Calendar.getInstance().getTime();
 		
@@ -70,9 +70,8 @@ public class BoService {
 		boletim.setDataRegistro(dataRegistro); 
 		boletim.setRelato(bo.getRelato());
 		boletim.setRelatoEditado(bo.getRelatoEditado());
-		
+		boletim.setStatus(Status.PE);
 		var boSave = boRepository.saveAndFlush(boletim);
-		
 		if(boSave != null) {
 			this.salvarEnd(bo, boSave);
 			this.salvarProtocolo(boSave);
@@ -91,13 +90,13 @@ public class BoService {
 		end.setCidade(bo.getCidade());
 		end.setEstado(bo.getEstado());
 		end.setTipoLocal(bo.getTipoLocal());
+		end.setReferencia(bo.getReferencia());
 		end.setBo(deon);
 		return enderecoLocalFatoRepository.save(end);
 	}
 	
 	@Transactional
 	private Protocolo salvarProtocolo(BoDeon bo) {
-		
 		Protocolo protocolo = new Protocolo();
 		protocolo.setBo(bo);
 		protocolo.setNumero(gerarProtocolo(bo));
@@ -129,6 +128,7 @@ public class BoService {
 		response.setDataFato(bo.getDataFato());
 		response.setHoraFato(bo.getHoraFato());
 		response.setRelato(bo.getRelato());
+		response.setRelatoEditado(bo.getRelatoEditado());
 		response.setLogradouro(endereco.getLogradouro());
 		response.setReferencia(endereco.getReferencia());
 		response.setBairroDescricao(endereco.getBairro().getDescricao());
@@ -188,6 +188,18 @@ public class BoService {
 	public Optional<BoDeon> findById(Integer idBo) {
 		return boRepository.findById(idBo);
 	}
+	
+	@Transactional
+	public BoDeon atualizarNumeroStatus(BoResponseDto response) {
+		BoDeon bo = findById(response.getIdBoDeon()).orElse(null);
+		if (bo != null) {
+			bo.setNumeroBo(response.getNumeroBo());
+			bo.setStatus(Status.VA);
+			return boRepository.saveAndFlush(bo);
+		}
+		return null;
+	}
+
 
 	public List<BosPendentesResponseDto> getBosPendentes(){
 

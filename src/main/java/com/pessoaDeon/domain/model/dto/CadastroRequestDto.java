@@ -3,6 +3,7 @@ package com.pessoaDeon.domain.model.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pessoaDeon.domain.model.endereco.TipoMoradia;
 import com.pessoaDeon.domain.model.listas.Bairro;
 import com.pessoaDeon.domain.model.listas.Cidade;
 import com.pessoaDeon.domain.model.listas.Deficiencia;
@@ -96,7 +97,7 @@ public class CadastroRequestDto {
 //	endereco
 	private String numero;
 	private Boolean enderecoAtual;
-	private TipoLocal tipoLocal;
+	private TipoMoradia tipoMoradia;
 
 	private String complemento;
 	private String referencia;

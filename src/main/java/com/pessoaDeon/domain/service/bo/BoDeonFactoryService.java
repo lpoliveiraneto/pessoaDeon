@@ -1,6 +1,5 @@
 package com.pessoaDeon.domain.service.bo;
 
-import com.pessoaDeon.domain.model.enumeration.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

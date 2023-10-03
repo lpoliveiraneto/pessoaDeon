@@ -11,7 +11,7 @@ import com.pessoaDeon.domain.model.endereco.TipoMoradia;
 import com.pessoaDeon.domain.repository.listas.TipoMoradiaRepository;
 
 @RestController
-@RequestMapping("/api/v1/tipoMoradia")
+@RequestMapping("/api/v1/lista/tipoMoradia")
 public class TipoMoradiaController {
 	
 	@Autowired
@@ -22,7 +22,7 @@ public class TipoMoradiaController {
 	 * @return retorna lista de enderecos(residencial, comercial e residencial/ comercial) para ser usado no front
 	 * 
 	 * */
-	@GetMapping("/lista")
+	@GetMapping
 	public List<TipoMoradia> list(){
 		return listRepository.findAll();
 	}

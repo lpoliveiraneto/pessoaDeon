@@ -40,7 +40,7 @@ public class CadastroResponseDto {
 	//	endereco
 	private String numero;
 	private Boolean enderecoAtual;
-	private String tipoLocal;
+	private String tipoMoradia;
 
 	private String complemento;
 	private String referencia;

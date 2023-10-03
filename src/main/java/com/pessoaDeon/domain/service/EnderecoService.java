@@ -47,5 +47,9 @@ public class EnderecoService {
     		throw new EnderecoNotFoundException("Endereço não encontrado na base de dados");
     	}
 	}
+	
+	public Endereco getEnderecoByIdPessoa(Integer idPessoa) {
+		return enderecoRepository.findByPessoaId(idPessoa);
+	}
 
 }

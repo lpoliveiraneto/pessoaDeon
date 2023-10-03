@@ -18,4 +18,7 @@ public class TipoParticipacao {
     private Integer idTipoParticipacao;
 
     private String descricao;
+    
+    private String valor;
+    
 }

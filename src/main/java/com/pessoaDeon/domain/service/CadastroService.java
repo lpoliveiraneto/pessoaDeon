@@ -77,8 +77,8 @@ public class CadastroService {
 			this.salvarEmail(cadastroRequestDto, pessoaSave);
 		}
 		
-		var user = salvarUsuario(cadastroRequestDto);
-		user.setPessoa(pessoaSave);
+		salvarUsuario(cadastroRequestDto, pessoaSave);
+//		user.setPessoa(pessoaSave);
 		return pessoaSave;
 	}
 	
@@ -91,7 +91,7 @@ public class CadastroService {
 		endereco.setComplemento(dto.getComplemento());
 		endereco.setPessoa(pessoa);
 		endereco.setLogradouro(logradouro);
-		endereco.setTipoLocal(dto.getTipoLocal());
+		endereco.setTipoMoradia(dto.getTipoMoradia());
 		return enderecoService.salvarEndereco(endereco);
 	}
 	
@@ -126,13 +126,14 @@ public class CadastroService {
 	}
 
 	@Transactional
-	private Usuario salvarUsuario(CadastroRequestDto cadastroDto){
+	private Usuario salvarUsuario(CadastroRequestDto cadastroDto, Pessoa pessoa){
 		final long PERFIL_USER = 1;
 		Usuario usuario = new Usuario();
 		usuario.setEmail(cadastroDto.getEmail());
 		usuario.setSenha(new BCryptPasswordEncoder().encode(cadastroDto.getSenha()));
 		usuario.setStatus(Status.PE);
 		usuario.setDataCadastro(LocalDateTime.now());
+		usuario.setPessoa(pessoa);
 		usuario.adicionarPerfil(perfilRepository.findById(PERFIL_USER).get());
 		var user = usuarioService.salvarUsuario(usuario);
 		if (user != null) {
@@ -176,7 +177,7 @@ public class CadastroService {
 		response.setBairro(enderecoPessoa.getLogradouro().getBairro().getDescricao());
 		response.setLogradouro(enderecoPessoa.getLogradouro().getLogradouro());
 		response.setNumero(enderecoPessoa.getNumero());
-		response.setTipoLocal(enderecoPessoa.getTipoLocal().getNome());
+		response.setTipoMoradia(enderecoPessoa.getTipoMoradia().getDescricao());
 		response.setComplemento(enderecoPessoa.getComplemento());
 		response.setReferencia(enderecoPessoa.getReferencia());
 		//dados referentes

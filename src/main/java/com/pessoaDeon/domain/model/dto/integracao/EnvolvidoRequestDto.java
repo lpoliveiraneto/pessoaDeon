@@ -27,9 +27,9 @@ public class EnvolvidoRequestDto {
 	private Boolean desconhecido;
 	private String 	nomeSocial;
 	private String	orientacaoSexual;
-	private Integer identidadeGenero;
-	private Integer deficiencia;
-	private Integer racaCor;
+	private String identidadeGenero;
+	private String deficiencia;
+	private String racaCor;
 	private Integer pais;
 	private Integer estado;
 	private Integer cidade;
@@ -42,6 +42,6 @@ public class EnvolvidoRequestDto {
 	private ContatoRequestDto contato;
 	
 //	tipo participacao natureza; comunicante, vitima, infrator.
-	private TipoParticipacaoNatureza tipoParticipacao;
+	private String tipoParticipacao;
 
 }
