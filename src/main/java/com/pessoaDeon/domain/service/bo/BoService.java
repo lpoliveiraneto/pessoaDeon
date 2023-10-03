@@ -1,11 +1,17 @@
 package com.pessoaDeon.domain.service.bo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import com.pessoaDeon.domain.model.dto.*;
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
+import com.pessoaDeon.domain.repository.natureza.NaturezaBoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -20,10 +26,6 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
-import com.pessoaDeon.domain.model.dto.BoDto;
-import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
-import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvimento;
 import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
@@ -49,6 +51,11 @@ public class BoService {
 	
 	@Autowired
 	private ProtocoloRepository protocoloRepository;
+	@Autowired
+	private EnvolvimentoRepository envolvimentoRepository;
+
+	@Autowired
+	private NaturezaBoRepository naturezaBoRepository;
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -182,45 +189,21 @@ public class BoService {
 		return boRepository.findById(idBo);
 	}
 
+	public List<BosPendentesResponseDto> getBosPendentes(){
 
-	@ReadOnlyProperty
-	public void getBosPendentes(){
-		QBoDeon qBoDeon = QBoDeon.boDeon;
-		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
-		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
-		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
-		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
-		QPessoa qPessoa = QPessoa.pessoa;
-		JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon).distinct();
-		query.join(qBoDeon.listaNaturezas,qNaturezaBo);
-		query.join(qNaturezaBo.naturezaDeon, qNaturezaDeon);
-		query.join(qEnvolvimento).on(qEnvolvimento.naturezaBo.id.eq(qNaturezaBo.id));
-		query.join(qEnvolvimento.envolvido, qEnvolvido);
-		query.join(qEnvolvido.pessoa, qPessoa);
-		query.where(qPessoa.id.isNotNull()).fetch();
-
+		List<BoDeon> bosPendentes = boRepository.findBoDeonStatusEquals(Status.PE);
+		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
+		bosPendentes.forEach( b-> {
+			BosPendentesResponseDto bo = new BosPendentesResponseDto();
+			bo.setNome(b.getListaNaturezas().get(0).getNaturezaDeon().getNome());
+			bo.setDataDoRegistro(LocalDate.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
+			bo.setNome(envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM")
+					.getEnvolvido().getPessoa().getNome());
+			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
+			bos.add(bo);
+				}
+		);
+		return bos;
 	}
-//	public Page<BosPessoaResponseDto> buscarPessoa(Integer idPessoa, Pageable pageable) {
-//		QBoDeon qBoDeon = QBoDeon.boDeon;
-//		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
-//		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
-//		QProtocolo qProtocolo = QProtocolo.protocolo;
-//		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
-//		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
-//		QPessoa qPessoa = QPessoa.pessoa;
-//
-//		JPAQuery<BosPessoaResponseDto> query = new JPAQueryFactory(entityManager)
-//				.select(Projections.bean(BosPessoaResponseDto.class, qBoDeon.idBo, qBoDeon.dataRegistro,
-//						qProtocolo.numero, qNaturezaDeon.nome, qNaturezaDeon.codigo))
-//				.from(qBoDeon).join(qBoDeon.listaNaturezas, qNaturezaBo).join(qNaturezaBo.naturezaDeon, qNaturezaDeon)
-//				.join(qProtocolo).on(qProtocolo.bo.idBo.eq(qBoDeon.idBo)).join(qEnvolvimento)
-//				.on(qEnvolvimento.naturezaBo.id.eq(qNaturezaBo.id)).join(qEnvolvimento.envolvido, qEnvolvido)
-//				.join(qEnvolvido.pessoa, qPessoa).where(qPessoa.id.eq(idPessoa));
-//
-//		QueryResults<BosPessoaResponseDto> results = query.offset(pageable.getOffset()).limit(pageable.getPageSize())
-//				.orderBy(qBoDeon.idBo.desc()).fetchResults();
-//
-//		return new PageImpl<>(results.getResults(), pageable, results.getTotal());
-//	}
 }
 

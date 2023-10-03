@@ -36,7 +36,7 @@ public class BoDeonFactoryService {
     public void salvarBo(BoDto bo, EnvolvidosRequestDto envolvidos){
 
         var boDeon = (BoDeon)boService.salvar(bo);
-        boDeon.setStatusBo(Status.PE);
+        boDeon.setStatus(Status.PE);
         var naturezaDeon = naturezaDeonRepository.findById(bo.getFkNaturezaDeon()).get();
         var naturezaBo = naturezaBoService.salvarNaturezaBo(boDeon, naturezaDeon);
 
