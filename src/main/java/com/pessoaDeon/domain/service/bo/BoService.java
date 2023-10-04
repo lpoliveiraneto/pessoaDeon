@@ -1,11 +1,16 @@
 package com.pessoaDeon.domain.service.bo;
 
+
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import com.pessoaDeon.domain.model.dto.*;
+import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
+import com.pessoaDeon.domain.repository.natureza.NaturezaBoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -20,10 +25,6 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
-import com.pessoaDeon.domain.model.dto.BoDto;
-import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
-import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
@@ -51,7 +52,12 @@ public class BoService {
 	
 	@Autowired
 	private ProtocoloRepository protocoloRepository;
-	
+	@Autowired
+	private EnvolvimentoRepository envolvimentoRepository;
+
+	@Autowired
+	private NaturezaBoRepository naturezaBoRepository;
+
 	@Autowired
 	private EntityManager entityManager;
 
@@ -59,6 +65,7 @@ public class BoService {
 	public BoDeon salvar(BoDto bo) {
 		BoDeon boletim = new BoDeon();
 		var dataRegistro = Calendar.getInstance().getTime();
+		
 		boletim.setDataFato(bo.getDataFato());
 		boletim.setHoraFato(bo.getHoraFato());
 		boletim.setDataRegistro(dataRegistro); 
@@ -75,7 +82,8 @@ public class BoService {
 	
 	@Transactional
 	private EnderecoLocalFato salvarEnd(BoDto bo, BoDeon deon) {
-		EnderecoLocalFato end = new EnderecoLocalFato();		end.setCep(bo.getCep());
+		EnderecoLocalFato end = new EnderecoLocalFato();
+		end.setCep(bo.getCep());
 		end.setComplemento(bo.getComplemento());
 		end.setLogradouro(bo.getLogradouro());
 		end.setNumeroLocal(bo.getNumeroLocal());
@@ -98,9 +106,12 @@ public class BoService {
 	}
 	
 	private String gerarProtocolo(BoDeon ocorrencia) {
+
 		StringBuilder protocolo = new StringBuilder();
+		
 		Calendar calendario = Calendar.getInstance();
 		calendario.setTime(ocorrencia.getDataRegistro());		
+		
 		protocolo.append(ocorrencia.getIdBo());
 		protocolo.append(calendario.get(Calendar.HOUR));
 		protocolo.append(calendario.get(Calendar.MONTH));
@@ -190,5 +201,25 @@ public class BoService {
 		return null;
 	}
 
+
+	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable){
+
+		List<BoDeon> bosPendentes = boRepository.findByStatusEquals(Status.PE);
+		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
+		bosPendentes.forEach( b-> {
+			BosPendentesResponseDto bo = new BosPendentesResponseDto();
+			bo.setIdBo(b.getIdBo());
+			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
+			var codigo = natureza.getCodigo() != null ? " - " + natureza.getCodigo() : " ";
+			bo.setNatureza(natureza.getNome() +codigo);
+			bo.setDataDoRegistro(LocalDateTime.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
+			bo.setNome(envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM")
+					.getEnvolvido().getPessoa().getNome());
+			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
+			bos.add(bo);
+				}
+		);
+		return new PageImpl<>(bos, pageable, bos.size());
+	}
 }
 

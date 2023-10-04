@@ -39,6 +39,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.GET, "/api/v1/natureza/listaNaturezas").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/ocorrencia").hasRole("ADM");
                    //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("ADM");
                     //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("USER");
                     req.anyRequest().authenticated();
