@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 public class BosPendentesResponseDto {
 
+    private Integer idBo;
     private String natureza;
     private String nome;
     private String protocolo;

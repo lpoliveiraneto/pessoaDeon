@@ -1,6 +1,6 @@
 package com.pessoaDeon.domain.service.bo;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -208,6 +208,7 @@ public class BoService {
 		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
 		bosPendentes.forEach( b-> {
 			BosPendentesResponseDto bo = new BosPendentesResponseDto();
+			bo.setIdBo(b.getIdBo());
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
 			var codigo = natureza.getCodigo() != null ? " - " + natureza.getCodigo() : " ";
 			bo.setNatureza(natureza.getNome() +codigo);
