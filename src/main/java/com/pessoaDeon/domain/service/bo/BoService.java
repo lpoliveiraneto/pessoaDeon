@@ -208,8 +208,10 @@ public class BoService {
 		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
 		bosPendentes.forEach( b-> {
 			BosPendentesResponseDto bo = new BosPendentesResponseDto();
-			bo.setNome(b.getListaNaturezas().get(0).getNaturezaDeon().getNome());
-			bo.setDataDoRegistro(LocalDate.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
+			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
+			var codigo = natureza.getCodigo() != null ? " - " + natureza.getCodigo() : " ";
+			bo.setNatureza(natureza.getNome() +codigo);
+			bo.setDataDoRegistro(LocalDateTime.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
 			bo.setNome(envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM")
 					.getEnvolvido().getPessoa().getNome());
 			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
