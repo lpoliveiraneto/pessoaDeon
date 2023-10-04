@@ -1,5 +1,7 @@
 package com.pessoaDeon.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ public class DelegadoResponsavelService {
 	@Autowired
 	private DelegadoResponsavelRepository delegadoRepository;
 	
-	public DelegadoResponsavel getDelegadoResponsavel() {
+	public Optional<DelegadoResponsavel> getDelegadoResponsavel() {
 		return delegadoRepository.findByStatusIsTrue();
 	}
 }

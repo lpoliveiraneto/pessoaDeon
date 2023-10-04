@@ -1,5 +1,7 @@
 package com.pessoaDeon.domain.service.analista;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ public class AnalistaService {
 	@Autowired
 	private AnalistaRepository analistaRepository;
 	
-	public Analista findById(Integer id) {
-		return analistaRepository.findById(id).get();
+	public Optional<Analista> findById(Integer id) {
+		return analistaRepository.findById(id);
 	}
 }

@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.pessoaDeon.domain.exception.EnviaBoSigmaException;
 import com.pessoaDeon.domain.model.DelegadoResponsavel;
 import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.bo.BoDeon;
@@ -32,7 +33,6 @@ import com.pessoaDeon.domain.model.dto.integracao.EquipeRequestDto;
 import com.pessoaDeon.domain.model.dto.integracao.RequestDto;
 import com.pessoaDeon.domain.model.endereco.Endereco;
 import com.pessoaDeon.domain.model.endereco.Logradouro;
-import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.EnderecoEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvimento;
@@ -71,17 +71,36 @@ public class IntegracaoService {
 	@Autowired
 	private BoService boService;
 	
-	@Autowired
-	private BoRepository boRepository;
+	@Value("${url.api-integracao}")
+	private String URL;
 	
 //	monta o RequestDTO que vai ser enviado p/ API de integracao com SIGMA
 	public RequestDto dadosBoToDto(BoDeon bo, List<Envolvimento> envolvimentos, Integer idAnalista) {
 		RequestDto request = new RequestDto();
-		request.setBoDto(boToDto(bo));
-		request.setListaEnvolvidos(listaEnvolvidos(envolvimentos));
-		request.setListaEquipe(listaEquipeBOtoDto(idAnalista));
-		request.setListaFkNatureza(listaFkNaturezaBo(bo));
+		
+		var listaEnvolvidos = listaEnvolvidos(envolvimentos);
+		var listaEquipeBO = listaEquipeBOtoDto(idAnalista);
+		var listaNatureza = listaFkNaturezaBo(bo);
+		var boDto = boToDto(bo);
+		
+//		se a verificacao retorna false, as listas não estão vazias e o método continua
+		if (verificaListasNulasVazia(listaEnvolvidos, listaEquipeBO, listaNatureza, boDto)) {
+	        return null;
+	    }
+		
+		request.setBoDto(boDto);
+		request.setListaEnvolvidos(listaEnvolvidos);
+		request.setListaEquipe(listaEquipeBO);
+		request.setListaFkNatureza(listaNatureza);
 		return request;
+	}
+
+//	verifica se alguma das lista do DTO está nula ou vazia, em caso positivo retorna TRUE, caso não retorna FALSE
+	private Boolean verificaListasNulasVazia(List<EnvolvidoRequestDto> listaEnvolvidos, 
+            List<EquipeRequestDto> listaEquipeBO,
+            List<Integer> listaNatureza, 
+            BoRequestDto boDto) {
+		return listaEnvolvidos.isEmpty() || listaEquipeBO.isEmpty() || listaNatureza.isEmpty() || boDto == null;
 	}
 	
 //	monta o BoRequestDto com base no BO da DEON
@@ -89,32 +108,35 @@ public class IntegracaoService {
 //		seta a unidade de destino, no caso (Delegacia Online)
 		UnidadeDestino unidade = unidadeDestinoService.getUnidadeDestino();
 		
-//		seta o endereco do local do fato do BO pelo idBo
-		EnderecoLocalFato endLocal = elfService.findByIdBo(bo.getIdBo());
-		BoRequestDto boDto = new BoRequestDto();
-		boDto.setBairro(endLocal.getBairro().getDescricao());
-		boDto.setCep(endLocal.getCep());
-		boDto.setCidade(endLocal.getCidade().getDescricao());
-		boDto.setComplemento(endLocal.getComplemento());
-		boDto.setDataFato(bo.getDataFato());
-		boDto.setDataRegistro(bo.getDataRegistro());
-		boDto.setDataRegistroRascunho(bo.getDataRegistro());
-		boDto.setFkBairro(endLocal.getBairro().getIdBairro());
-		boDto.setFkCidade(endLocal.getCidade().getIdCidade());
-		boDto.setFkEstado(endLocal.getEstado().getIdEstado());
-		boDto.setFkPais(null);
-		boDto.setHoraFato(localTimeToDate(bo.getHoraFato()));
-		boDto.setIdBoDeon(bo.getIdBo());
-		boDto.setLatLong(null);
-		boDto.setLogradouro(endLocal.getLogradouro());
-		boDto.setNumeroLocal(endLocal.getNumeroLocal().toString());
-		boDto.setPais(null);
-		boDto.setReferencia(endLocal.getReferencia());
-		boDto.setRelato(bo.getRelato());
-		boDto.setTipoLocal(endLocal.getTipoLocal().getValor());
-		boDto.setUf(endLocal.getEstado().getUf());
-		boDto.setUnidade(unidade.getFkUnidadeSigma());
-		return boDto;
+		if (unidade != null) {
+//			seta o endereco do local do fato do BO pelo idBo
+			EnderecoLocalFato endLocal = elfService.findByIdBo(bo.getIdBo());
+			BoRequestDto boDto = new BoRequestDto();
+			boDto.setBairro(endLocal.getBairro().getDescricao());
+			boDto.setCep(endLocal.getCep());
+			boDto.setCidade(endLocal.getCidade().getDescricao());
+			boDto.setComplemento(endLocal.getComplemento());
+			boDto.setDataFato(bo.getDataFato());
+			boDto.setDataRegistro(bo.getDataRegistro());
+			boDto.setDataRegistroRascunho(bo.getDataRegistro());
+			boDto.setFkBairro(endLocal.getBairro().getIdBairro());
+			boDto.setFkCidade(endLocal.getCidade().getIdCidade());
+			boDto.setFkEstado(endLocal.getEstado().getIdEstado());
+			boDto.setFkPais(1);
+			boDto.setHoraFato(localTimeToDate(bo.getHoraFato()));
+			boDto.setIdBoDeon(bo.getIdBo());
+			boDto.setLatLong(null);
+			boDto.setLogradouro(endLocal.getLogradouro());
+			boDto.setNumeroLocal(endLocal.getNumeroLocal().toString());
+			boDto.setPais("Brasil");
+			boDto.setReferencia(endLocal.getReferencia());
+			boDto.setRelato(bo.getRelato());
+			boDto.setTipoLocal(endLocal.getTipoLocal().getValor());
+			boDto.setUf(endLocal.getEstado().getUf());
+			boDto.setUnidade(unidade.getFkUnidadeSigma());
+			return boDto;
+		}
+		return null;
 	}
 	
 //	converte a hora do fato de LocalTime do BO da DEON p/ Date, como esperado pelo SIGMA
@@ -264,11 +286,17 @@ public class IntegracaoService {
 //	monta o DTO com a lista da equipe do BO composta pelo Analista/Registrante e o Delegado responsavel pela DEON p/ SIGMA 
 	private List<EquipeRequestDto> listaEquipeBOtoDto(Integer idAnalista) {
 //		seta o analista/registrante do BO da DEON
-		Analista analista = analistaService.findById(idAnalista);
-
+		Analista analista = analistaService.findById(idAnalista).orElse(null);
+		
 //		seta o delegado responsavel pela DEON, definido automaticamente pelo status ativo.
-		DelegadoResponsavel delegado = delegadoService.getDelegadoResponsavel();
+		DelegadoResponsavel delegado = delegadoService.getDelegadoResponsavel().orElse(null);
+		
 		List<EquipeRequestDto> listaEquipe = new ArrayList<>();
+
+		if ((analista == null) || (delegado == null)) {
+			return listaEquipe;
+		}
+		
 		if (analista != null) {
 			EquipeRequestDto analistaDto = new EquipeRequestDto();
 			analistaDto.setAutoridade(false);
@@ -294,17 +322,17 @@ public class IntegracaoService {
 		return listaFkNatureza;
 	}
 	
-	public BoResponseDto enviaBoSigma(RequestDto request, String token) throws IllegalAccessException{
+	public BoResponseDto enviaBoSigma(RequestDto request, String token) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 			headers.set("Authorization", token);
 			RestTemplate template = new RestTemplate();
 			HttpEntity<RequestDto> requestEntity = new HttpEntity<RequestDto>(request, headers);
-			ResponseEntity<BoResponseDto> response = template.exchange( "http://localhost:8095/api/v1/salvarBoSigma", HttpMethod.POST, requestEntity, BoResponseDto.class);
-			return response.getBody();
+			ResponseEntity<BoResponseDto> response = template.exchange( URL + "salvarBoSigma", HttpMethod.POST, requestEntity, BoResponseDto.class);
+			return response.getStatusCode().value() == 200 ? response.getBody() : null;					
 		} catch (Exception e) {
-			throw new IllegalAccessException(e.getMessage());
+			throw new EnviaBoSigmaException(e.getMessage());
 		}
 	}
 	

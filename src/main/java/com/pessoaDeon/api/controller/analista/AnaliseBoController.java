@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,6 @@ import com.pessoaDeon.domain.service.integracao.IntegracaoService;
 @RequestMapping("/api/v1/analiseBo")
 public class AnaliseBoController {
 
-	@Value("${url.api-integracao}")
-	private String URL;
-	
 	@Autowired
 	private BoService boService;
 	
@@ -38,14 +36,25 @@ public class AnaliseBoController {
 	public ResponseEntity<?> enviarBoSigma(@RequestParam("idBo") Integer idBo, 
 			@RequestParam("idAnalista") Integer idAnalista,
 			@RequestParam(value = "token") String token) throws IllegalAccessException{
+		
 		Optional<BoDeon> bo = boService.findById(idBo);
 		var envolvimentos = envolvidoService.getEnvolvimentosBo(idBo);
+		
 		RequestDto request = integracaoService.dadosBoToDto(bo.get(), envolvimentos, idAnalista);
+		if (request == null) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao recuperar dados do Boletim de Ocorrência!"); 
+		}
+		
 		BoResponseDto response = integracaoService.enviaBoSigma(request, token);
+		if (response == null) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao salvar Boletim de Ocorrência no SIGMA!");
+		}
+		
 		var atualizaBo = integracaoService.atualizaNumeroStatusBo(response);
 		if (atualizaBo != null) {
 			return ResponseEntity.status(HttpStatus.OK).body("BO enviado com sucesso!");
 		}
+		
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Não foi possivel concluir a operação!");
 	}
 	

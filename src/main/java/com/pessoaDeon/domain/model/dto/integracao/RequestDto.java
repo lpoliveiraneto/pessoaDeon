@@ -20,7 +20,7 @@ public class RequestDto {
 	@NotNull(message = "Lista de naturezas não está presente!")
 	private List<Integer> listaFkNatureza;
 	
-	@NotNull(message = "Lista de equipe do BO não está presente!")
+	@NotNull(message = "Lista de equipe do Boletim de Ocorrência não está presente!")
 	private List<EquipeRequestDto> listaEquipe;
 
 }
