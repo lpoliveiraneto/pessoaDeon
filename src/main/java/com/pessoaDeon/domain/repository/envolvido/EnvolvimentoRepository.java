@@ -11,4 +11,6 @@ import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 public interface EnvolvimentoRepository extends JpaRepository<Envolvimento, Integer> {
 	
 	List<Envolvimento> findByNaturezaBoBoIdBo(Integer idBo);
+
+	Envolvimento findByNaturezaBoBoIdBoAndTipoParticipacaoValor(Integer idBo, String tipoParticipacao);
 }
