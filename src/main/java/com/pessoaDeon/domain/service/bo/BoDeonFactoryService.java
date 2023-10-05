@@ -39,17 +39,17 @@ public class BoDeonFactoryService {
         var naturezaBo = naturezaBoService.salvarNaturezaBo(boDeon, naturezaDeon);
 
         var comunicante = envolvidoService.salvarEnvolvido(envolvidos.getComunicante());
-        TipoParticipacao participacaoComunicante = tipoParticipacaoRepository.findByDescricao(envolvidos.getComunicante().getTipoParticipacao().getDescricao()).get();
+        TipoParticipacao participacaoComunicante = tipoParticipacaoRepository.findByValor(envolvidos.getComunicante().getTipoParticipacao().getValor()).get();
         envolvimentoService.salvarEnvolvimento(comunicante, naturezaBo, participacaoComunicante);
 
         if(envolvidos.getAutor() != null){
             var autor = envolvidoService.salvarEnvolvido(envolvidos.getAutor());
-            TipoParticipacao participacaoAutor = tipoParticipacaoRepository.findByDescricao(envolvidos.getAutor().getTipoParticipacao().getDescricao()).get();
+            TipoParticipacao participacaoAutor = tipoParticipacaoRepository.findByValor(envolvidos.getAutor().getTipoParticipacao().getValor()).get();
             envolvimentoService.salvarEnvolvimento(autor, naturezaBo, participacaoAutor);
         }
         if(envolvidos.getVitima() != null){
             var vitima = envolvidoService.salvarEnvolvido(envolvidos.getVitima());
-            TipoParticipacao paticipacaoVitima = tipoParticipacaoRepository.findByDescricao(envolvidos.getVitima().getTipoParticipacao().getDescricao()).get();
+            TipoParticipacao paticipacaoVitima = tipoParticipacaoRepository.findByValor(envolvidos.getVitima().getTipoParticipacao().getValor()).get();
             envolvimentoService.salvarEnvolvimento(vitima, naturezaBo, paticipacaoVitima);
         }
     }

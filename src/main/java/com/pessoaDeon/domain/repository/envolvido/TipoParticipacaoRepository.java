@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface TipoParticipacaoRepository extends JpaRepository<TipoParticipacao, Integer> {
 
     Optional<TipoParticipacao> findByDescricao(String descricao);
+
+    Optional<TipoParticipacao>findByValor(String valor);
 }

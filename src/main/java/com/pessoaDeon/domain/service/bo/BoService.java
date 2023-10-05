@@ -201,7 +201,6 @@ public class BoService {
 		return null;
 	}
 
-
 	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable){
 
 		List<BoDeon> bosPendentes = boRepository.findByStatusEquals(Status.PE);
