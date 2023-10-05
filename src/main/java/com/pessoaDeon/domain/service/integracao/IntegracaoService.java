@@ -130,7 +130,7 @@ public class IntegracaoService {
 			boDto.setNumeroLocal(endLocal.getNumeroLocal().toString());
 			boDto.setPais("Brasil");
 			boDto.setReferencia(endLocal.getReferencia());
-			boDto.setRelato(bo.getRelato());
+			boDto.setRelato(bo.getRelatoEditado() != null && bo.getRelatoEditado() != "" ? bo.getRelatoEditado() : bo.getRelato());
 			boDto.setTipoLocal(endLocal.getTipoLocal().getValor());
 			boDto.setUf(endLocal.getEstado().getUf());
 			boDto.setUnidade(unidade.getFkUnidadeSigma());
@@ -167,41 +167,47 @@ public class IntegracaoService {
 	
 //	monta o DTO de endereco do envolvido caso nao seja o comunicante/usuario
 	private EnderecoRequestDto enderecoEnvolvidoToDto(EnderecoEnvolvido endereco) {
-		EnderecoRequestDto enderecoDto = new EnderecoRequestDto();
-		enderecoDto.setBairro(endereco.getBairro().getDescricao());
-		enderecoDto.setCep(endereco.getCep());
-		enderecoDto.setCidadeEndereco(endereco.getCidade().getDescricao());
-		enderecoDto.setComplemento(endereco.getComplemento());
-		enderecoDto.setEstadoEndereco(endereco.getEstado().getDescricao());
-		enderecoDto.setIdBairro(endereco.getBairro().getIdBairro());
-		enderecoDto.setIdCidadeEndereco(endereco.getCidade().getIdCidade());
-		enderecoDto.setIdEstadoEndereco(endereco.getEstado().getIdEstado());
-		enderecoDto.setLogradouro(endereco.getLogradouro());
-		enderecoDto.setNumero(endereco.getNumeroLocal().toString());
-		enderecoDto.setPaisEndereco(null);
-		enderecoDto.setReferencia(endereco.getReferencia());
-		enderecoDto.setUfEndereco(endereco.getEstado().getUf());
-		return enderecoDto;
+		if (endereco != null) {
+			EnderecoRequestDto enderecoDto = new EnderecoRequestDto();
+			enderecoDto.setBairro(endereco.getBairro() != null ? endereco.getBairro().getDescricao() : null);
+			enderecoDto.setCep(endereco.getCep());
+			enderecoDto.setCidadeEndereco(endereco.getCidade() != null ? endereco.getCidade().getDescricao() : null);
+			enderecoDto.setComplemento(endereco.getComplemento());
+			enderecoDto.setEstadoEndereco(endereco.getEstado() != null ? endereco.getEstado().getDescricao() : null);
+			enderecoDto.setIdBairro(endereco.getBairro() != null ? endereco.getBairro().getIdBairro() : null);
+			enderecoDto.setIdCidadeEndereco(endereco.getCidade() != null ? endereco.getCidade().getIdCidade() : null);
+			enderecoDto.setIdEstadoEndereco(endereco.getEstado() != null ? endereco.getEstado().getIdEstado() : null);
+			enderecoDto.setLogradouro(endereco.getLogradouro());
+			enderecoDto.setNumero(endereco.getNumeroLocal());
+			enderecoDto.setPaisEndereco(null);
+			enderecoDto.setReferencia(endereco.getReferencia());
+			enderecoDto.setUfEndereco(endereco.getEstado() != null ? endereco.getEstado().getUf() : null);
+			return enderecoDto;
+		}
+		return null;
 	}
 	
 //	monta o DTO de endereco da pessoa, no caso COMUNICANTE
 	private EnderecoRequestDto enderecoPessoaToDto(Endereco endereco) {
-		Logradouro logradouro = endereco.getLogradouro();
-		EnderecoRequestDto enderecoDto = new EnderecoRequestDto();
-		enderecoDto.setBairro(logradouro.getBairro().getDescricao());
-		enderecoDto.setCep(logradouro.getCep());
-		enderecoDto.setCidadeEndereco(logradouro.getCidade().getDescricao());
-		enderecoDto.setComplemento(endereco.getComplemento());
-		enderecoDto.setEstadoEndereco(logradouro.getEstado().getDescricao());
-		enderecoDto.setIdBairro(logradouro.getBairro().getIdBairro());
-		enderecoDto.setIdCidadeEndereco(logradouro.getCidade().getIdCidade());
-		enderecoDto.setIdEstadoEndereco(logradouro.getEstado().getIdEstado());
-		enderecoDto.setLogradouro(endereco.getLogradouro().getLogradouro());
-		enderecoDto.setNumero(endereco.getNumero());
-		enderecoDto.setPaisEndereco(null);
-		enderecoDto.setReferencia(endereco.getReferencia());
-		enderecoDto.setUfEndereco(logradouro.getEstado().getUf());
-		return enderecoDto;
+		if (endereco != null) {
+			Logradouro logradouro = endereco.getLogradouro();
+			EnderecoRequestDto enderecoDto = new EnderecoRequestDto();
+			enderecoDto.setBairro(logradouro.getBairro() != null ? logradouro.getBairro().getDescricao() : null);
+			enderecoDto.setCep(logradouro.getCep());
+			enderecoDto.setCidadeEndereco(logradouro.getCidade() != null ? logradouro.getCidade().getDescricao() : null);
+			enderecoDto.setComplemento(endereco.getComplemento());
+			enderecoDto.setEstadoEndereco(logradouro.getEstado() != null ? logradouro.getEstado().getDescricao() : null);
+			enderecoDto.setIdBairro(logradouro.getBairro() != null ? logradouro.getBairro().getIdBairro() : null);
+			enderecoDto.setIdCidadeEndereco(logradouro.getCidade() != null ? logradouro.getCidade().getIdCidade() : null);
+			enderecoDto.setIdEstadoEndereco(logradouro.getEstado() != null ? logradouro.getEstado().getIdEstado() : null);
+			enderecoDto.setLogradouro(endereco.getLogradouro() != null ? endereco.getLogradouro().getLogradouro() : null);
+			enderecoDto.setNumero(endereco.getNumero());
+			enderecoDto.setPaisEndereco(null);
+			enderecoDto.setReferencia(endereco.getReferencia());
+			enderecoDto.setUfEndereco(logradouro.getEstado() != null ? logradouro.getEstado().getUf() : null);
+			return enderecoDto;
+		}
+		return null;
 	}
 	
 //	monta o DTO de envolvido caso nao seja o comunicante
@@ -213,7 +219,7 @@ public class IntegracaoService {
 			envDto.setCidade(envolvido.getCidadeNaturalidade() != null ? envolvido.getCidadeNaturalidade().getIdCidade() : null);
 			envDto.setContato(contatoEnvolvidoToDto(envolvido));
 			envDto.setCpf(envolvido.getNumeroDocumento());
-			envDto.setDataNascimento(localDateToDate(envolvido.getDataNascimento()));
+			envDto.setDataNascimento(envolvido.getDataNascimento() != null ? localDateToDate(envolvido.getDataNascimento()) : null);
 			envDto.setDeficiencia(envolvido.getDeficiencia() != null ? envolvido.getDeficiencia().getValor() : null);
 			envDto.setDesconhecido(tipoParticipacao.equals("II") ? true : false);
 			envDto.setEndereco(enderecoEnvolvidoToDto(enderecoEnvolvido));

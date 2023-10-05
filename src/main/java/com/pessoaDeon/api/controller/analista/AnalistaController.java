@@ -22,8 +22,9 @@ public class AnalistaController {
     private BoService boService;
 
     @GetMapping
-    public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(@PageableDefault(size = 10, page = 0, sort = "idBo", direction = Sort.Direction.ASC)Pageable pageable){
-        System.out.println("cheguei aqui");
+    public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
+    		@PageableDefault(size = 10, page = 0, sort = "idBo", 
+    		direction = Sort.Direction.ASC)Pageable pageable){
         return boService.getBosPendentes(pageable);
     }
 
