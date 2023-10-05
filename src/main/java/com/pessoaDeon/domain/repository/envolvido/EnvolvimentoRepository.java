@@ -13,5 +13,5 @@ public interface EnvolvimentoRepository extends JpaRepository<Envolvimento, Inte
 	
 	List<Envolvimento> findByNaturezaBoBoIdBo(Integer idBo);
 
-	Envolvimento findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrTipoParticipacaoValor(Integer idBo, String tipoParticipacao, String tipoParticipacao2);
+	Envolvimento findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(Integer idBo, String tipoParticipacao, Integer idBo2, String tipoParticipacao2);
 }

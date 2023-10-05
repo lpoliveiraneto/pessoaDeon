@@ -210,14 +210,13 @@ public class BoService {
 			bo.setIdBo(b.getIdBo());
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
 			var codigo = natureza.getCodigo() != null ? " - " + natureza.getCodigo() : " ";
-			bo.setNatureza(natureza.getNome() +codigo);
+			bo.setNatureza(natureza.getNome() + codigo);
 			bo.setDataDoRegistro(LocalDateTime.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
-			bo.setNome(envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrTipoParticipacaoValor(b.getIdBo(),"CM", "CV")
-					.getEnvolvido().getPessoa().getNome());
+			var envolvimento = envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM", b.getIdBo(), "CV");
+			bo.setNome(envolvimento.getEnvolvido() != null ? envolvimento.getEnvolvido().getPessoa().getNome() : "NÃO CONSEGUI ENCONTRAR");
 			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
 			bos.add(bo);
-				}
-		);
+		});
 		return new PageImpl<>(bos, pageable, bos.size());
 	}
 }
