@@ -212,7 +212,7 @@ public class BoService {
 			var codigo = natureza.getCodigo() != null ? " - " + natureza.getCodigo() : " ";
 			bo.setNatureza(natureza.getNome() +codigo);
 			bo.setDataDoRegistro(LocalDateTime.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
-			bo.setNome(envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM")
+			bo.setNome(envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrTipoParticipacaoValor(b.getIdBo(),"CM", "CV")
 					.getEnvolvido().getPessoa().getNome());
 			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
 			bos.add(bo);
