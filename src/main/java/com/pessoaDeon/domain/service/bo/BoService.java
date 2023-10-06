@@ -11,6 +11,7 @@ import java.util.Optional;
 import com.pessoaDeon.domain.model.dto.*;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.repository.natureza.NaturezaBoRepository;
+import com.pessoaDeon.domain.service.envolvido.EnvolvimentoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
