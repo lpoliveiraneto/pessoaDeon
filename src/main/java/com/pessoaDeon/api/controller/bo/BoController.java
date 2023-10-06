@@ -49,6 +49,10 @@ public class BoController {
 		return boService.buscarBoPorId(idBo); 
 	}
 
+	/**
+	 * @return busca bos que o usuario criou
+	 * 
+	 * */
 	@GetMapping("/buscar")
 	public Page<BosPessoaResponseDto> buscar (@RequestParam(name = "idPessoa") Integer idPessoa,
 			@PageableDefault(size = 10, page = 0, sort = "idBo", direction = Sort.Direction.ASC) Pageable pageable){

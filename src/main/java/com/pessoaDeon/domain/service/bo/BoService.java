@@ -27,10 +27,13 @@ import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.envolvido.Envolvido;
+import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvimento;
 import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
 import com.pessoaDeon.domain.model.natureza.QNaturezaDeon;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.pessoa.QPessoa;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
@@ -57,6 +60,9 @@ public class BoService {
 
 	@Autowired
 	private NaturezaBoRepository naturezaBoRepository;
+
+	@Autowired
+	private EnvolvimentoService envolvimentoService;
 
 	@Autowired
 	private EntityManager entityManager;
@@ -147,7 +153,38 @@ public class BoService {
 			naturezaDto.add(nt);
 		});
 		response.setListaNatureza(naturezaDto);
+		var listaEnvolvimento = envolvimentoService.getListaEnvolvimentoBo(idBo);
+		List<EnvolvidoBoDto> listaEnvolvidosBo = new ArrayList<>();
+		listaEnvolvimento.forEach(e -> {
+			listaEnvolvidosBo.add(montaDtoTipoEnvolvido(e));
+		});
+		response.setListaEnvolvidos(listaEnvolvidosBo);
 		return response;
+	}
+
+	private EnvolvidoBoDto montaDtoTipoEnvolvido(Envolvimento envolvimento) {
+		if (envolvimento.getEnvolvido().getPessoa() != null) {
+			Pessoa comunicante = envolvimento.getEnvolvido().getPessoa();
+			EnvolvidoBoDto env = new EnvolvidoBoDto();
+			env.setDataNascimento(comunicante.getDataNascimento());
+			env.setIdEnvolvido(envolvimento.getEnvolvido().getIdEnvolvido());
+			env.setNome(comunicante.getNome());
+			env.setNomeMae(comunicante.getNomeMae());
+			env.setTipoParticipacao(envolvimento.getTipoParticipacao().getDescricao());
+			return env;
+		}
+
+		if (envolvimento.getEnvolvido() != null) {
+			Envolvido envolvido = envolvimento.getEnvolvido();
+			EnvolvidoBoDto env = new EnvolvidoBoDto();
+			env.setDataNascimento(envolvido.getDataNascimento() != null ? envolvido.getDataNascimento() : null);
+			env.setIdEnvolvido(envolvido.getIdEnvolvido());
+			env.setNome(envolvido.getNome() != null ? envolvido.getNome() : "NÃO INFORMADO");
+			env.setNomeMae(envolvido.getNomeMae() != null ? envolvido.getNomeMae() : "NÃO INFORMADO");
+			env.setTipoParticipacao(envolvimento.getTipoParticipacao() != null ? envolvimento.getTipoParticipacao().getDescricao() : "NÃO ENCONTREI");
+			return env;
+		}
+		return null;
 	}
 
 	@ReadOnlyProperty
@@ -202,22 +239,23 @@ public class BoService {
 	}
 
 	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable){
-
 		List<BoDeon> bosPendentes = boRepository.findByStatusEquals(Status.PE);
+
+
+
 		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
 		bosPendentes.forEach( b-> {
 			BosPendentesResponseDto bo = new BosPendentesResponseDto();
 			bo.setIdBo(b.getIdBo());
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
 			var codigo = natureza.getCodigo() != null ? " - " + natureza.getCodigo() : " ";
-			bo.setNatureza(natureza.getNome() +codigo);
+			bo.setNatureza(natureza.getNome() + codigo);
 			bo.setDataDoRegistro(LocalDateTime.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
-			bo.setNome(envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM", b.getIdBo(), "CV")
-					.getEnvolvido().getPessoa().getNome());
+			var envolvimento = envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM", b.getIdBo(), "CV");
+			bo.setNome(envolvimento.getEnvolvido() != null ? envolvimento.getEnvolvido().getPessoa().getNome() : "NÃO CONSEGUI ENCONTRAR");
 			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
 			bos.add(bo);
-				}
-		);
+		});
 		return new PageImpl<>(bos, pageable, bos.size());
 	}
 }

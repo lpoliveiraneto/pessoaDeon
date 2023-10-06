@@ -1,6 +1,7 @@
 package com.pessoaDeon.domain.model.envolvido;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.pessoaDeon.domain.model.endereco.TipoMoradia;
 import com.pessoaDeon.domain.model.listas.Bairro;
 import com.pessoaDeon.domain.model.listas.Cidade;
 import com.pessoaDeon.domain.model.listas.Estado;
@@ -49,6 +50,6 @@ public class EnderecoEnvolvido {
 	private Estado estado;
 	
 	@ManyToOne
-    @JoinColumn(name = "fk_tipo_local")
-    private TipoLocal tipoLocal;
+    @JoinColumn(name = "fk_tipo_moradia")
+    private TipoMoradia tipoMoradia;
 }

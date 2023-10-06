@@ -50,4 +50,7 @@ public class BoDtoResponse {
     private String protocolo;
     
     private List<NaturezaDeonResponseDto> listaNatureza;
+    
+    private List<EnvolvidoBoDto> listaEnvolvidos;
+    
 }

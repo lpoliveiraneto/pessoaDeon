@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,9 @@ public class EnvolvimentoService {
         return envolvimentoRepository.findById(idEnvolvimento);
     }
 
+    public List<Envolvimento> getListaEnvolvimentoBo(Integer idBo){
+    	return envolvimentoRepository.findByNaturezaBoBoIdBo(idBo);
+    }
 
 
 }

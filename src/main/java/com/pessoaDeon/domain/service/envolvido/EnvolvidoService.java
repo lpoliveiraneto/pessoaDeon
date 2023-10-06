@@ -78,7 +78,7 @@ public class EnvolvidoService {
              endereco.setBairro(envolvidoDto.getEnderecoEnvolvido().getBairro() != null ? envolvidoDto.getEnderecoEnvolvido().getBairro() : null);
              endereco.setCidade(envolvidoDto.getEnderecoEnvolvido().getCidade() != null ? envolvidoDto.getEnderecoEnvolvido().getCidade() : null);
              endereco.setEstado(envolvidoDto.getEnderecoEnvolvido().getEstado() != null ? envolvidoDto.getEnderecoEnvolvido().getEstado() : null);
-             endereco.setTipoLocal(envolvidoDto.getEnderecoEnvolvido().getTipoLocal() != null ? envolvidoDto.getEnderecoEnvolvido().getTipoLocal() : null);
+             endereco.setTipoMoradia(envolvidoDto.getEnderecoEnvolvido().getTipoMoradia() != null ? envolvidoDto.getEnderecoEnvolvido().getTipoMoradia() : null);
              envolvido.setEnderecoEnvolvido(endereco);
          }
 
