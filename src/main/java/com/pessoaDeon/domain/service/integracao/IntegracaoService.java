@@ -47,6 +47,8 @@ import com.pessoaDeon.domain.service.analista.AnalistaService;
 import com.pessoaDeon.domain.service.bo.BoService;
 import com.pessoaDeon.domain.service.bo.EnderecoLocalFatoService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class IntegracaoService {
 	
@@ -112,6 +114,7 @@ public class IntegracaoService {
 //			seta o endereco do local do fato do BO pelo idBo
 			EnderecoLocalFato endLocal = elfService.findByIdBo(bo.getIdBo());
 			BoRequestDto boDto = new BoRequestDto();
+			boDto.setAno(bo.getDataRegistro());			
 			boDto.setBairro(endLocal.getBairro().getDescricao());
 			boDto.setCep(endLocal.getCep());
 			boDto.setCidade(endLocal.getCidade().getDescricao());
@@ -328,25 +331,35 @@ public class IntegracaoService {
 		return listaFkNatureza;
 	}
 	
-	public BoResponseDto enviaBoSigma(RequestDto request, String token) {
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-			headers.set("Authorization", token);
-			RestTemplate template = new RestTemplate();
-			HttpEntity<RequestDto> requestEntity = new HttpEntity<RequestDto>(request, headers);
-			ResponseEntity<BoResponseDto> response = template.exchange( URL + "salvarBoSigma", HttpMethod.POST, requestEntity, BoResponseDto.class);
-			return response.getStatusCode().value() == 200 ? response.getBody() : null;					
-		} catch (Exception e) {
-			throw new EnviaBoSigmaException(e.getMessage());
+	public BoResponseDto enviaBoSigma(RequestDto request, HttpServletRequest http) {
+		var tokenJWT = recuperarToken(http);
+		if (tokenJWT != null) {
+			try {
+				HttpHeaders headers = new HttpHeaders();
+				headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				headers.set("Authorization", tokenJWT);
+				RestTemplate template = new RestTemplate();
+				HttpEntity<RequestDto> requestEntity = new HttpEntity<RequestDto>(request, headers);
+				ResponseEntity<BoResponseDto> response = template.exchange( URL + "salvarBoSigma", HttpMethod.POST, requestEntity, BoResponseDto.class);
+				return response.getStatusCode().value() == 200 ? response.getBody() : null;					
+			} catch (Exception e) {
+				throw new EnviaBoSigmaException(e.getMessage());
+			}
 		}
+		return null;
 	}
 	
 	public BoDeon atualizaNumeroStatusBo(BoResponseDto responseDto) {
 		return boService.atualizarNumeroStatus(responseDto);
 	}
 	
-	
+	private String recuperarToken(HttpServletRequest request) {
+        var authorizationHeader = request.getHeader("Authorization");
+        if(authorizationHeader != null){
+            return authorizationHeader.replace("Bearer ","");
+        }
+        return null;
+    }
 	
 	
 	

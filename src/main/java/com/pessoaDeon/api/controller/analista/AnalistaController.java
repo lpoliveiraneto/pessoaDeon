@@ -1,7 +1,5 @@
 package com.pessoaDeon.api.controller.analista;
 
-import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
-import com.pessoaDeon.domain.service.bo.BoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
+import com.pessoaDeon.domain.service.bo.BoService;
 
 @RestController
 @RequestMapping("/api/v1/ocorrencia")

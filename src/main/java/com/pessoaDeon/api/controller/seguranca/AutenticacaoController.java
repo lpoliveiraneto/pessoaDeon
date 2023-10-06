@@ -56,6 +56,7 @@ public class AutenticacaoController {
             }
 
         }catch (AuthenticationException e){
+//        	String msg = "Usuario ou senha invalidos!";
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
 
