@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,15 @@ public class BoController {
 	@GetMapping("/buscarPorId/{idBo}")
 	public BoDtoResponse buscarBoPorId(@PathVariable(value = "idBo" ) Integer idBo){
 		return boService.buscarBoPorId(idBo); 
+	}
+	
+	@GetMapping("/verificaBoEmAnalise")
+	public ResponseEntity<?> verificaBoEmAnalise(@RequestParam(name = "idBo") Integer idBo){
+		var boEmAnalise = boService.verificaBoEmAnalise(idBo);
+		if (boEmAnalise) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Boletim de Ocorrência já está em analise por outro analista!");
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(boEmAnalise);
 	}
 
 	/**

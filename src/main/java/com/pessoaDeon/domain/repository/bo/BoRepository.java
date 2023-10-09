@@ -14,4 +14,6 @@ public interface BoRepository extends JpaRepository<BoDeon, Integer>, QuerydslPr
 
     List<BoDeon> findByStatusEquals(Status status);
 
+	Boolean existsByIdBoAndStatus(Integer idBo, Status ea);
+
 }

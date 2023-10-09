@@ -8,6 +8,7 @@ public enum Status {
 
     VA("VALIDO"),
     IV("INVALIDO"),
+    EA("EM_ANALISE"),
     PE("PENDENTE");
 
     private String descricao;
