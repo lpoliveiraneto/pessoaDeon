@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -20,29 +21,24 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurations {
-
+	
     @Autowired
     private SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req ->{
+                .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/resetSenha").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/cadastro/salvar").permitAll();
-                    //req.requestMatchers(HttpMethod.POST, "/api/v1/bo/**").permitAll();
-//                    req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/verifyAccount").permitAll(); ativar depois
                     req.requestMatchers(HttpMethod.GET, "/api/v1/esqueciMinhaSenha").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/natureza/listaNaturezas").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/ocorrencia").hasRole("ADM");
-                   //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("ADM");
-                    //req.requestMatchers(HttpMethod.GET, "api/v1/natureza/**").hasRole("USER");
-                    req.anyRequest().authenticated();
+                    req.anyRequest().authenticated(); 
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors( c -> {
@@ -52,7 +48,7 @@ public class SecurityConfigurations {
                     })
                 .build();
     }
-
+    
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws  Exception{
         return configuration.getAuthenticationManager();

@@ -24,16 +24,12 @@ public class SecurityFilter extends OncePerRequestFilter {
     private UsuarioRepository usuarioRepository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //System.out.println("Entrando no Filter");
         var tokenJWT = recuperarToken(request);
-
-
         if(tokenJWT != null){
             try{
                 var subject = tokenService.getSubject(tokenJWT);
-                var usuario = usuarioRepository.findByEmail(subject);
-
-                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities() );
+                var usuario = usuarioRepository.findByEmail(subject).get();
+                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }catch(SignatureVerificationException ex){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -45,10 +41,8 @@ public class SecurityFilter extends OncePerRequestFilter {
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("Token Expirado");
                 return;
-
             }
         }
-
         filterChain.doFilter(request, response);
     }
 
