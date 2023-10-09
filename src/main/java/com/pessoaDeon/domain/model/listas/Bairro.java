@@ -23,7 +23,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name="bairro", schema="listas")
-public class Bairro implements Serializable {/**
+public class Bairro implements Serializable {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -38,7 +39,6 @@ public class Bairro implements Serializable {/**
 	private String descricao;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-//	@JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
 	@JsonIgnore
 	@JoinColumn(name = "fk_cidade")
 	private Cidade cidade;

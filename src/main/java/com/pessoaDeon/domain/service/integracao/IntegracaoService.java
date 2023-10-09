@@ -122,7 +122,7 @@ public class IntegracaoService {
 			boDto.setDataFato(bo.getDataFato());
 			boDto.setDataRegistro(bo.getDataRegistro());
 			boDto.setDataRegistroRascunho(bo.getDataRegistro());
-			boDto.setFkBairro(endLocal.getBairro().getIdBairro());
+			boDto.setFkBairro(endLocal.getBairro().getIdBairroApi());
 			boDto.setFkCidade(endLocal.getCidade().getIdCidade());
 			boDto.setFkEstado(endLocal.getEstado().getIdEstado());
 			boDto.setFkPais(1);
