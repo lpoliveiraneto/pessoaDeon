@@ -1,5 +1,7 @@
 package com.pessoaDeon.api.controller.bo;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.dto.BoDtoResponse;
 import com.pessoaDeon.domain.model.dto.BoEnvolvidosRequest;
 import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.service.bo.BoDeonFactoryService;
 import com.pessoaDeon.domain.service.bo.BoService;
 
@@ -33,11 +39,8 @@ public class BoController {
 	@Autowired
 	private BoDeonFactoryService boDeonFactoryService;
 	
-//	@PostMapping("/salvarBo")
-//	public ResponseEntity<Object> salvarOcorrencia(@RequestBody BoDto bo){
-//		return ResponseEntity.ok().body(boService.salvar(bo));
-	//	}
-	//
+	@Autowired
+	private BoRepository boRepository;
 	
 	@PostMapping("/salvarBo")
 	public ResponseEntity<?> salvarOcorrencia(@RequestBody BoEnvolvidosRequest boEnvolvidosRequest){
@@ -47,7 +50,20 @@ public class BoController {
 	
 	@GetMapping("/buscarPorId/{idBo}")
 	public BoDtoResponse buscarBoPorId(@PathVariable(value = "idBo" ) Integer idBo){
-		return boService.buscarBoPorId(idBo); 
+		Optional<BoDeon> bo = boService.findById(idBo);
+		return boService.buscarBoPorId(bo.get()); 
+	}
+
+	@GetMapping("/analisarBoPorId/{idBo}")
+	public ResponseEntity<?> analiseBoPorId(@PathVariable(value = "idBo" ) Integer idBo, 
+			@RequestParam(value = "status") Status status){
+		Optional<BoDeon> bo = boService.findById(idBo); 
+		if (bo.isPresent()) {
+			boService.mudaStatusBoEmAnalise(bo.get(), status);
+			BoDtoResponse boFound = boService.buscarBoPorId(bo.get()); 
+			return ResponseEntity.status(HttpStatus.OK).body(boFound);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum boletim de ocorrência encontrado com o ID informado!");
 	}
 	
 	@GetMapping("/verificaBoEmAnalise")
@@ -57,6 +73,16 @@ public class BoController {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Boletim de Ocorrência já está em analise por outro analista!");
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(boEmAnalise);
+	}
+	
+	@PatchMapping("/cancelarAnalise/{idBo}")
+	public ResponseEntity<?> mudaStatusBo(@PathVariable(value = "idBo") Integer idBo,
+			@RequestBody BoDeon boRequest){
+		Optional<BoDeon> bo = boRepository.findById(idBo);
+		if (bo.isPresent()) {
+			boService.mudaStatusBoEmAnalise(bo.get(), boRequest.getStatus());
+		}
+		return ResponseEntity.ok("Analise cancelada!");
 	}
 
 	/**

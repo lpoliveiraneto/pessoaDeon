@@ -128,11 +128,10 @@ public class BoService {
 	}
 	
 	@Transactional
-	public BoDtoResponse buscarBoPorId(Integer idBo) {
+	public BoDtoResponse buscarBoPorId(BoDeon bo) {
 		BoDtoResponse response = new BoDtoResponse();
-		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findById(idBo).get();
-		BoDeon bo = boRepository.findById(idBo).get();
-		Protocolo protocolo = protocoloRepository.findById(idBo).get();
+		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findById(bo.getIdBo()).get();
+		Protocolo protocolo = protocoloRepository.findById(bo.getIdBo()).get();
 		response.setDataFato(bo.getDataFato());
 		response.setHoraFato(bo.getHoraFato());
 		response.setRelato(bo.getRelato());
@@ -147,6 +146,7 @@ public class BoService {
 		response.setNumeroLocal(endereco.getNumeroLocal());
 		response.setTipoLocal(endereco.getTipoLocal().getNome());
 		response.setProtocolo(protocolo.getNumero());
+		response.setStatus(bo.getStatus().getDescricao());
 		List<NaturezaDeonResponseDto> naturezaDto = new ArrayList<>();
 		bo.getListaNaturezas().forEach(n -> {
 			NaturezaDeonResponseDto nt = new NaturezaDeonResponseDto();
@@ -154,7 +154,7 @@ public class BoService {
 			naturezaDto.add(nt);
 		});
 		response.setListaNatureza(naturezaDto);
-		var listaEnvolvimento = envolvimentoService.getListaEnvolvimentoBo(idBo);
+		var listaEnvolvimento = envolvimentoService.getListaEnvolvimentoBo(bo.getIdBo());
 		List<EnvolvidoBoDto> listaEnvolvidosBo = new ArrayList<>();
 		listaEnvolvimento.forEach(e -> {
 			listaEnvolvidosBo.add(montaDtoTipoEnvolvido(e));
@@ -260,6 +260,13 @@ public class BoService {
 	@ReadOnlyProperty
 	public Boolean verificaBoEmAnalise(Integer idBo) {
 		return boRepository.existsByIdBoAndStatus(idBo, Status.EA);
+	}
+
+	public void mudaStatusBoEmAnalise(BoDeon bo, Status status) {
+		if (bo != null) {
+			bo.setStatus(status);
+			boRepository.saveAndFlush(bo);
+		}
 	}
 }
 

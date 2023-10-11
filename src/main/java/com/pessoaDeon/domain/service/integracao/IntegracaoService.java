@@ -248,7 +248,7 @@ public class IntegracaoService {
 //	monta o DTO de envolvido p/ pessoa COMUNICANTE
 	private EnvolvidoRequestDto pessoaToEnvolvidoDto(Pessoa pessoa, String tipoParticipacao) {
 		EnvolvidoRequestDto envDto = new EnvolvidoRequestDto();
-		Endereco endereco = enderecoService.getEnderecoByIdPessoa(pessoa.getId());
+		Endereco endereco = enderecoService.getEnderecoByIdPessoa(pessoa.getId()).orElse(null);
 		envDto.setApelido(pessoa.getAlcunha());
 		envDto.setCidade(pessoa.getCidadeNaturalidade() != null ? pessoa.getCidadeNaturalidade().getIdCidade() : null);
 		envDto.setContato(contatoPessoaToDto(pessoa.getId()));

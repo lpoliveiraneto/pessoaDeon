@@ -40,7 +40,7 @@ public class TratadorDeErros {
     
     @ExceptionHandler(EnderecoNotFoundException.class)
     public ResponseEntity<?> tratarError409(EnderecoNotFoundException ex){
-    	return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosErroStatus(HttpStatus.CONFLICT.toString(), "CEP duplicado!")); 
+    	return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosErroStatus(HttpStatus.CONFLICT.toString(), ex.getMessage())); 
     }
 
     @ExceptionHandler(EnviaBoSigmaException.class)

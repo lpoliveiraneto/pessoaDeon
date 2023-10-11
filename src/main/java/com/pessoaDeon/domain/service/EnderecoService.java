@@ -48,7 +48,7 @@ public class EnderecoService {
     	}
 	}
 	
-	public Endereco getEnderecoByIdPessoa(Integer idPessoa) {
+	public Optional<Endereco> getEnderecoByIdPessoa(Integer idPessoa) {
 		return enderecoRepository.findByPessoaId(idPessoa);
 	}
 

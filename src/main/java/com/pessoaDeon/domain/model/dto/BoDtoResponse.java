@@ -53,4 +53,6 @@ public class BoDtoResponse {
     
     private List<EnvolvidoBoDto> listaEnvolvidos;
     
+    private String status;
+    
 }

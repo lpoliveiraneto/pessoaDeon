@@ -147,7 +147,7 @@ public class CadastroService {
 	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa) {
 		CadastroResponseDto response = new CadastroResponseDto();
 		
-		Endereco enderecoPessoa = enderecoService.getById(idPessoa).get();
+		Endereco enderecoPessoa = enderecoService.getEnderecoByIdPessoa(idPessoa).get();
 		Pessoa pessoa = pessoaService.buscarPessoa(idPessoa).get();
 		Telefone contato = contatoService.getById(idPessoa);
 		Email email = emailService.getByIdEmail(idPessoa);
