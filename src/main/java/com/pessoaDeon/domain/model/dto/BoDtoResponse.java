@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.util.EnumToObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,6 +55,6 @@ public class BoDtoResponse {
     
     private List<EnvolvidoBoDto> listaEnvolvidos;
     
-    private String status;
+    private EnumToObject status;
     
 }

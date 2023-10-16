@@ -92,6 +92,6 @@ public class BoController {
 	@GetMapping("/buscar")
 	public Page<BosPessoaResponseDto> buscar (@RequestParam(name = "idPessoa") Integer idPessoa,
 			@PageableDefault(size = 10, page = 0, sort = "idBo", direction = Sort.Direction.ASC) Pageable pageable){
-		return boService.buscarPessoa(idPessoa, pageable);
+		return boService.buscarBosPessoa(idPessoa, pageable);
 	}
 }

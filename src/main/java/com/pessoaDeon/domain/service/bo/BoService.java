@@ -8,18 +8,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
-import com.pessoaDeon.domain.model.dto.*;
-import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
-import com.pessoaDeon.domain.repository.natureza.NaturezaBoRepository;
-import com.pessoaDeon.domain.service.envolvido.EnvolvimentoService;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +22,12 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
+import com.pessoaDeon.domain.model.dto.BoDto;
+import com.pessoaDeon.domain.model.dto.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
+import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
+import com.pessoaDeon.domain.model.dto.EnvolvidoBoDto;
+import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
@@ -38,9 +38,12 @@ import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
 import com.pessoaDeon.domain.model.natureza.QNaturezaDeon;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.pessoa.QPessoa;
+import com.pessoaDeon.domain.model.util.EnumToObject;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
+import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
+import com.pessoaDeon.domain.service.envolvido.EnvolvimentoService;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -146,7 +149,7 @@ public class BoService {
 		response.setNumeroLocal(endereco.getNumeroLocal());
 		response.setTipoLocal(endereco.getTipoLocal().getNome());
 		response.setProtocolo(protocolo.getNumero());
-		response.setStatus(bo.getStatus().getDescricao());
+		response.setStatus(new EnumToObject(bo.getStatus().name(), bo.getStatus().getDescricao()));
 		List<NaturezaDeonResponseDto> naturezaDto = new ArrayList<>();
 		bo.getListaNaturezas().forEach(n -> {
 			NaturezaDeonResponseDto nt = new NaturezaDeonResponseDto();
@@ -189,7 +192,7 @@ public class BoService {
 	}
 
 	@ReadOnlyProperty
-	public Page<BosPessoaResponseDto> buscarPessoa(Integer idPessoa, Pageable pageable) {
+	public Page<BosPessoaResponseDto> buscarBosPessoa(Integer idPessoa, Pageable pageable) {
 		QBoDeon qBoDeon = QBoDeon.boDeon;
 		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
 		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
@@ -219,6 +222,7 @@ public class BoService {
 			dto.setProtocolo(protocoloRepository.findByBo(bo).getNumero());
 			dto.setNomeNatureza(bo.getListaNaturezas().get(0).getNaturezaDeon().getNome());
 			dto.setCodigoNatureza(bo.getListaNaturezas().get(0).getNaturezaDeon().getCodigo());
+			dto.setStatus(new EnumToObject(bo.getStatus().name(), bo.getStatus().getDescricao()));
 			resultsDto.add(dto);
 		});
 		return new PageImpl<>(resultsDto, pageable, countResults);
@@ -246,7 +250,7 @@ public class BoService {
 			BosPendentesResponseDto bo = new BosPendentesResponseDto();
 			bo.setIdBo(b.getIdBo());
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
-			var codigo = natureza.getCodigo() != null ? " - " + natureza.getCodigo() : " ";
+			var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
 			bo.setNatureza(natureza.getNome() + codigo);
 			bo.setDataDoRegistro(LocalDateTime.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
 			var envolvimento = envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM", b.getIdBo(), "CV");

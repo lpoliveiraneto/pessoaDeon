@@ -3,6 +3,7 @@ package com.pessoaDeon.domain.model.dto;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pessoaDeon.domain.model.util.EnumToObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,8 @@ public class BosPessoaResponseDto {
 	
 	private String codigoNatureza;
 	
-	private String statusAnalise;
+	private EnumToObject status;
+	
+	private String respostaAnalise;
 	
 }
