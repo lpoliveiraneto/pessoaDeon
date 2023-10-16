@@ -162,7 +162,7 @@ public class BoService {
 		listaEnvolvimento.forEach(e -> {
 			listaEnvolvidosBo.add(montaDtoTipoEnvolvido(e));
 		});
-		response.setListaEnvolvidos(listaEnvolvidosBo);		
+		response.setListaEnvolvidos(listaEnvolvidosBo);
 		return response;
 	}
 
@@ -177,7 +177,7 @@ public class BoService {
 			env.setTipoParticipacao(envolvimento.getTipoParticipacao().getDescricao());
 			return env;
 		}
-		
+
 		if (envolvimento.getEnvolvido() != null) {
 			Envolvido envolvido = envolvimento.getEnvolvido();
 			EnvolvidoBoDto env = new EnvolvidoBoDto();
@@ -272,5 +272,6 @@ public class BoService {
 			boRepository.saveAndFlush(bo);
 		}
 	}
+	
 }
 

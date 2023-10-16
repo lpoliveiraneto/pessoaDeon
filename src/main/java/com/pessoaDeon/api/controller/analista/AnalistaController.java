@@ -28,7 +28,11 @@ public class AnalistaController {
     }
 
     @GetMapping("analisadas")
-    public ResponseEntity<?> listarOcorrenciasAnalisadas(){
+    public ResponseEntity<?> listarOcorrenciasAnalisadas(
+            @PageableDefault(size = 10, page = 0, sort = "idBo",
+                    direction = Sort.Direction.ASC)Pageable pageable){
+
+        System.out.println("testando rota");
         return ResponseEntity.ok().build();
     }
 
