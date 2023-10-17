@@ -48,11 +48,10 @@ public class AutenticacaoAnalistaController {
         try{
             var authentication = manager.authenticate(authenticationToken);
             Analista user = (Analista) authentication.getPrincipal();
-            	var tokenJWT = tokenService.gerarTokenAnalista(user);
-            	var pessoa = pessoaService.buscaPessoaCpf(dados.cpf());
-                String primeiroNomeUltimo = primeiroEUltimonome(pessoa.getNome());
-            	return ResponseEntity.ok(new DadosTokenAnalistaJwt(user.getIdAnalista().toString(),primeiroNomeUltimo,tokenJWT, user.getPerfis(), pessoa.getId()));
-            
+            var tokenJWT = tokenService.gerarTokenAnalista(user);
+            var pessoa = pessoaService.buscaPessoaCpf(dados.cpf());
+            String primeiroNomeUltimo = primeiroEUltimonome(pessoa.getNome());
+            return ResponseEntity.ok(new DadosTokenAnalistaJwt(user.getIdAnalista().toString(),primeiroNomeUltimo,tokenJWT, user.getPerfis(), pessoa.getId()));
 
         }catch (AuthenticationException e){
 //        	String msg = "Usuario ou senha invalidos!";

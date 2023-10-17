@@ -20,17 +20,17 @@ public class AutenticacaoService implements UserDetailsService {
     private AnalistaRepository analistaRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        if (email.contains(":")){
-            int colonIndex = email.lastIndexOf(":");
-            String userNamePart = email.substring(0, colonIndex);
-            Analista funcionario = analistaRepository.findByLogin(userNamePart)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if (username.contains(":")){
+            int colonIndex = username.lastIndexOf(":");
+            String userNamePart = username.substring(0, colonIndex);
+            Analista analista = analistaRepository.findByLogin(userNamePart)
             .orElseThrow(() -> new UsernameNotFoundException("Dados Inválidos"));
-            return funcionario;
+            return analista;
         
         } else {
         
-        return usuarioRepository.findByEmail(email)
+        return usuarioRepository.findByEmail(username)
         		.orElseThrow(() -> new UsernameNotFoundException("Usuario inexistente!"));
         }
     }
