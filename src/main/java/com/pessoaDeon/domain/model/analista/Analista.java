@@ -9,16 +9,19 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name="analista")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Analista {
+public class Analista implements UserDetails{
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = -4575354473625350361L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAnalista;
 
@@ -40,12 +43,61 @@ public class Analista {
     private Integer funcionarioSigma;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date data_cadastro;
+//    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime data_cadastro;
 
     private Boolean status = false;
 
-    @OneToMany(mappedBy = "analista")
-    private List<BoAnalise> bosAnalises;
+    private String login;
+
+    private String senha;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime data_alteracao;
+
+    private String assinatura;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "analista_perfis")
+    private List<Perfil> perfis = new ArrayList<>();
+
+    public void adicionarPerfil(Perfil perfil){
+        perfis.add(perfil);
+    }
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.perfis;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.login;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
 }

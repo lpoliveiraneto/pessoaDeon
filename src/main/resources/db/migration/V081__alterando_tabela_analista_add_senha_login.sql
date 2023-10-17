@@ -1,0 +1,5 @@
+ALTER TABLE public.analista ADD login varchar(255) NOT NULL;
+ALTER TABLE public.analista ADD senha varchar(255) NOT NULL;
+ALTER TABLE public.analista ADD assinatura varchar(255) NOT NULL;
+ALTER TABLE public.analista ADD data_alteracao timestamp;
+ALTER TABLE public.analista ADD CONSTRAINT analista_fk_pessoa_fkey FOREIGN KEY (fk_pessoa) REFERENCES public.pessoa(id_pessoa);
