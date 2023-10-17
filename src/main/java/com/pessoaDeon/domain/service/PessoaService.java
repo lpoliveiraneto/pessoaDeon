@@ -91,6 +91,10 @@ public class PessoaService {
 		return pessoaRepository.findByEmailEmail(email).get();
 	}
 	
+	public Pessoa buscaPessoaCpf(String Cpf){
+		return pessoaRepository.findByNumeroDocumento(Cpf).get();
+	}
+	
 	public Optional<Pessoa> getPessoaByNumeroDocumento(String numeroDocumento) {
 		return pessoaRepository.findByNumeroDocumento(numeroDocumento);
 	}

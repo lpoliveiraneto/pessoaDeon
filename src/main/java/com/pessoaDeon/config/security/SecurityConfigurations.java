@@ -31,6 +31,7 @@ public class SecurityConfigurations {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/analista/**").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/resetSenha").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/cadastro/salvar").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/esqueciMinhaSenha").permitAll();

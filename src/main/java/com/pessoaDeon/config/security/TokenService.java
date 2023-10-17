@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.pessoaDeon.config.validacao.TratadorDeErros;
+import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.security.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,25 @@ public class TokenService {
                     //.withPayload(informacaoToken)
                     //.withKeyId(usuario.getIdUsuario().toString())
                     .withSubject(usuario.getEmail())
+                    .withExpiresAt(dataExpiracao())
+                    .sign(algoritmo);
+        }catch (JWTCreationException exception){
+            throw  new JWTCreationException("Erro ao Gerar Token", exception);
+        }
+    }
+
+    public String gerarTokenAnalista(Analista analista){
+        try{
+            var algoritmo = Algorithm.HMAC256(secret);
+            Map informacaoToken = new HashMap<String, Object>();
+            informacaoToken.put("id", analista.getIdAnalista());
+            informacaoToken.put("cpf", analista.getLogin());
+
+            return JWT.create()
+                    .withIssuer("Api NovaDeon")
+                    //.withPayload(informacaoToken)
+                    //.withKeyId(analista.getIdanalista().toString())
+                    .withSubject(analista.getLogin())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         }catch (JWTCreationException exception){
