@@ -1,39 +1,30 @@
 package com.pessoaDeon.domain.model.analista;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Perfil;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Entity
+@Table(name="analista")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Analista implements UserDetails{
+public class Analista implements UserDetails {
     /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4575354473625350361L;
 
@@ -63,16 +54,16 @@ public class Analista implements UserDetails{
     private LocalDateTime data_cadastro;
 
     private Boolean status = false;
-    
+
     private String login;
-    
+
     private String senha;
-    
+
     @JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East", pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime data_alteracao;
-    
+
     private String assinatura;
-    
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "analista_perfis")
     private List<Perfil> perfis = new ArrayList<>();
@@ -115,5 +106,5 @@ public class Analista implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
 }
