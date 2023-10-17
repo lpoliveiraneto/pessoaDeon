@@ -9,8 +9,10 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
+@Table(name="analista")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,4 +45,7 @@ public class Analista {
     private Date data_cadastro;
 
     private Boolean status = false;
+
+    @OneToMany(mappedBy = "analista")
+    private List<BoAnalise> bosAnalises;
 }

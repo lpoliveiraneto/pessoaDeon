@@ -1,5 +1,6 @@
 package com.pessoaDeon.api.controller.analista;
 
+import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ public class AnalistaController {
     }
 
     @GetMapping("analisadas")
-    public ResponseEntity<?> listarOcorrenciasAnalisadas(
+    public ResponseEntity<BosAnalisadosResponseDto> listarOcorrenciasAnalisadas(
             @PageableDefault(size = 10, page = 0, sort = "idBo",
                     direction = Sort.Direction.ASC)Pageable pageable){
 
