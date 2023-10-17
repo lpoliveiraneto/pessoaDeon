@@ -2,20 +2,27 @@ package com.pessoaDeon.domain.model.analista;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.security.Perfil;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="analista")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Analista implements UserDetails{
+public class Analista implements UserDetails {
     /**
 	 *
 	 */
