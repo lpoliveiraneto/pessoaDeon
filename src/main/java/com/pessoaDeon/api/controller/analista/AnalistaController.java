@@ -1,6 +1,8 @@
 package com.pessoaDeon.api.controller.analista;
 
+import com.pessoaDeon.domain.model.analista.BoAnalise;
 import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
+import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,12 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
 import com.pessoaDeon.domain.service.bo.BoService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/ocorrencia")
 public class AnalistaController {
 
     @Autowired
     private BoService boService;
+
+    @Autowired
+    private BoAnaliseService boAnaliseService;
 
     @GetMapping
     public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
@@ -28,13 +35,20 @@ public class AnalistaController {
         return boService.getBosPendentes(pageable);
     }
 
-    @GetMapping("analisadas")
-    public ResponseEntity<BosAnalisadosResponseDto> listarOcorrenciasAnalisadas(
+    @GetMapping("/todos")
+    public Page<BosAnalisadosResponseDto> listarBosAnaliseTodos(
             @PageableDefault(size = 10, page = 0, sort = "idBo",
                     direction = Sort.Direction.ASC)Pageable pageable){
 
-        System.out.println("testando rota");
-        return ResponseEntity.ok().build();
+        return boAnaliseService.getBoAnalise(pageable);
+    }
+
+    @GetMapping("/analisadas")
+    public Page<BosAnalisadosResponseDto> listarBosAnalisados(
+            @PageableDefault(size = 10, page = 0, sort = "idBo",
+                    direction = Sort.Direction.ASC)Pageable pageable){
+
+        return boAnaliseService.getBoAnalisados(pageable);
     }
 
     @GetMapping("funcionario/analisadas")
