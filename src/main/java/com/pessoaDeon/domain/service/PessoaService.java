@@ -98,5 +98,9 @@ public class PessoaService {
 	public Optional<Pessoa> getPessoaByNumeroDocumento(String numeroDocumento) {
 		return pessoaRepository.findByNumeroDocumento(numeroDocumento);
 	}
+
+	public boolean existsPessoaNumeroDocumento(String numeroDocumento){
+		return pessoaRepository.existsByNumeroDocumento(numeroDocumento);
+	}
 	
 }
