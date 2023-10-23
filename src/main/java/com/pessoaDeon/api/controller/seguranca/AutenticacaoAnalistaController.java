@@ -44,7 +44,7 @@ public class AutenticacaoAnalistaController {
 
     @PostMapping("login")
     public ResponseEntity<?> efetuarLoginCliente(@RequestBody @Valid DadosAutenticacaoAnalista dados){
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.cpf() + ":analista", dados.senha());
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.cpf() , dados.senha());
         try{
             var authentication = manager.authenticate(authenticationToken);
             Analista user = (Analista) authentication.getPrincipal();
