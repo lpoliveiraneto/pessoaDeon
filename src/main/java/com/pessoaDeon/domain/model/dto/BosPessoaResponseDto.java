@@ -1,5 +1,6 @@
 package com.pessoaDeon.domain.model.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,8 +17,8 @@ public class BosPessoaResponseDto {
 
 	private Integer idBo;
 	
-	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East" , pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date dataRegistro;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East" , pattern = "dd/MM/yyyy HH:mm:ss")
+	private LocalDateTime dataRegistro;
 	
 	private String protocolo;
 	

@@ -27,6 +27,7 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.listas.UnidadeDestino;
+import com.pessoaDeon.domain.service.UnidadeDestinoService;
 import com.pessoaDeon.domain.service.impressao.DataService;
 
 public class CabecalhoRodape extends PdfPageEventHelper {
@@ -38,11 +39,8 @@ public class CabecalhoRodape extends PdfPageEventHelper {
 	private BoDeon bo;
 
 	@Autowired
-	private UnidadeDestino unidade;
+	private UnidadeDestinoService unidadeService;
 	
-	@Autowired
-	private DataService dataService;
-
 	@Value("${spring.profiles.active}")
 	private String modoSistema;
 
@@ -74,6 +72,7 @@ public class CabecalhoRodape extends PdfPageEventHelper {
 	}
 
 	private void addHeader(PdfWriter writer) {
+		UnidadeDestino unidade = unidadeService.getUnidadeDestino();
 		PdfPTable header = new PdfPTable(2);
 		try {
 			// formatação
@@ -103,70 +102,69 @@ public class CabecalhoRodape extends PdfPageEventHelper {
 			text.addElement(new Phrase("SECRETARIA DE SEGURANÇA PÚBLICA", new Font(Font.FontFamily.HELVETICA, 8)));
 			text.addElement(new Phrase("POLÍCIA CIVIL DO ESTADO DO MARANHÃO", new Font(Font.FontFamily.HELVETICA, 8)));
 
-//			if (bo.getUnidade() != null) {
-//				text.addElement(new Phrase(bo.getUnidade().getDescricao().toUpperCase(),
-//						new Font(Font.FontFamily.HELVETICA, 8)));
-//				String logradouro = bo.getUnidade() != null ? bo.getUnidade().getLogradouro().toUpperCase() : "";
-//				String numeroLocal = bo.getUnidade() != null ? bo.getUnidade().getNumeroLocal() : "";
-//				String bairro = bo.getUnidade() != null ? bo.getUnidade().getBairro().toUpperCase() : "";
-//				String cidade = bo.getUnidade() != null ? bo.getUnidade().getCidade().toUpperCase() : "";
-//				String telefone1 = bo.getUnidade() != null ? bo.getUnidade().getTelefone1() : "";
-//				String telefone2 = bo.getUnidade() != null ? bo.getUnidade().getTelefone2() : "";
-//
-//				String telefones = "";
-//				if (!telefone1.isEmpty() && !telefone2.isEmpty()) {
-//					telefones = ", " + telefone1 + " / " + telefone2;
-//				} else if (!telefone1.isEmpty() && telefone2.isEmpty()) {
-//					telefones = ", " + telefone1;
-//				} else if (telefone1.isEmpty() && !telefone2.isEmpty()) {
-//					telefones = ", " + telefone1;
-//				} else if (telefone1.isEmpty() && telefone2.isEmpty()) {
-//					telefones = "";
-//				}
-//				if (!bairro.isEmpty()) {
-//					bairro = ", " + bairro;
-//				} else {
-//					bairro = "";
-//				}
-//				if (!numeroLocal.isEmpty()) {
-//					numeroLocal = ", Nº " + numeroLocal;
-//				} else {
-//					numeroLocal = "";
-//				}
-//				if (!logradouro.isEmpty()) {
-//					logradouro = " " + logradouro;
-//				} else {
-//					logradouro = "";
-//				}
-//				if (!cidade.isEmpty()) {
-//					cidade = ", " + cidade;
-//				} else {
-//					cidade = "";
-//				}
-//
-//				String endereco = "ENDEREÇO: " + logradouro + numeroLocal + bairro + cidade + telefones;
-//				text.addElement(new Phrase(endereco, new Font(Font.FontFamily.HELVETICA, 8)));
-//				text.addElement(new Phrase("EMAIL: " + bo.getUnidade().getEmail().toUpperCase(),
-//						new Font(Font.FontFamily.HELVETICA, 8)));
-//			} else {
-//				Font font = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-//				font.setColor(BaseColor.RED);
-//				text.addElement(new Phrase("UNIDADE AUSENTE! Por favor, entre em contato com o suporte.", font));
-//				Font fMarca = new Font(Font.FontFamily.HELVETICA, 70);
-//				fMarca.setColor(BaseColor.LIGHT_GRAY);
-//				Phrase phrase = new Phrase(" Sem validade  Sem validade ", fMarca);
-//				ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, phrase, 300, 400, 60);
-//			}
+			if (unidade != null) {
+				text.addElement(new Phrase(unidade.getDescricao().toUpperCase(),
+						new Font(Font.FontFamily.HELVETICA, 8)));
+				String logradouro = unidade != null ? unidade.getLogradouro().toUpperCase() : "";
+				String numeroLocal = unidade != null ? unidade.getNumeroLocal() : "";
+				String bairro = unidade != null ? unidade.getBairro().toUpperCase() : "";
+				String cidade = unidade != null ? unidade.getCidade().toUpperCase() : "";
+				String telefone1 = unidade != null ? unidade.getTelefone1() : "";
+				String telefone2 = unidade != null ? unidade.getTelefone2() : "";
+
+				String telefones = "";
+				if (!telefone1.isEmpty() && !telefone2.isEmpty()) {
+					telefones = ", " + telefone1 + " / " + telefone2;
+				} else if (!telefone1.isEmpty() && telefone2.isEmpty()) {
+					telefones = ", " + telefone1;
+				} else if (telefone1.isEmpty() && !telefone2.isEmpty()) {
+					telefones = ", " + telefone1;
+				} else if (telefone1.isEmpty() && telefone2.isEmpty()) {
+					telefones = "";
+				}
+				if (!bairro.isEmpty()) {
+					bairro = ", " + bairro;
+				} else {
+					bairro = "";
+				}
+				if (!numeroLocal.isEmpty()) {
+					numeroLocal = ", Nº " + numeroLocal;
+				} else {
+					numeroLocal = "";
+				}
+				if (!logradouro.isEmpty()) {
+					logradouro = " " + logradouro;
+				} else {
+					logradouro = "";
+				}
+				if (!cidade.isEmpty()) {
+					cidade = ", " + cidade;
+				} else {
+					cidade = "";
+				}
+
+				String endereco = "ENDEREÇO: " + logradouro + numeroLocal + bairro + cidade + telefones;
+				text.addElement(new Phrase(endereco, new Font(Font.FontFamily.HELVETICA, 8)));
+				text.addElement(new Phrase("EMAIL: " + unidade.getEmail().toUpperCase(),
+						new Font(Font.FontFamily.HELVETICA, 8)));
+			} else {
+				Font font = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+				font.setColor(BaseColor.RED);
+				text.addElement(new Phrase("UNIDADE AUSENTE! Por favor, entre em contato com o suporte.", font));
+				Font fMarca = new Font(Font.FontFamily.HELVETICA, 70);
+				fMarca.setColor(BaseColor.LIGHT_GRAY);
+				Phrase phrase = new Phrase(" Sem validade  Sem validade ", fMarca);
+				ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, phrase, 300, 400, 60);
+			}
 
 			// formata data do registro do bo para exibição
-//			dataService = new DataService();
-//			String registro = dataService.formatarDataHora(bo.getDataRegistro());
-//			String anoBo = dataService.formatarAnoBo(bo.getAno());
-//			text.addElement(
-//					new Phrase("Ocorrência Nº: " + bo.getNumeroBo() + "/" + anoBo + " - Registrado em: " + registro,
-//							new Font(Font.FontFamily.HELVETICA, 12)));
-//			header.addCell(text);
-//			header.writeSelectedRows(0, -1, 80, 810, writer.getDirectContent());
+			String registro = bo.getDataRegistro().toString();
+			String anoBo = bo.getDataRegistro().toString();
+			text.addElement(
+					new Phrase("Ocorrência Nº: " + bo.getNumeroBo() + "/" + anoBo + " - Registrado em: " + registro,
+							new Font(Font.FontFamily.HELVETICA, 12)));
+			header.addCell(text);
+			header.writeSelectedRows(0, -1, 80, 810, writer.getDirectContent());
 
 		} catch (DocumentException de) {
 			throw new ExceptionConverter(de);

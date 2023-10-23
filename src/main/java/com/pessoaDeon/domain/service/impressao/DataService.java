@@ -2,6 +2,8 @@ package com.pessoaDeon.domain.service.impressao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,34 +13,43 @@ import org.springframework.stereotype.Service;
 public class DataService {
 
 	private final SimpleDateFormat FORMATANO = new SimpleDateFormat("yyyy");
+	
+	public int getIdade(LocalDate dataNascimento, LocalDateTime dataRegistro) {
+        if (dataNascimento == null) {
+            return 0;
+        }
 
-	public int getIdade(Date dataNascimento, Date dataRegistro) {
-		if (dataNascimento != null) {
-			int anoFato = Integer.parseInt(FORMATANO.format(dataRegistro));
-			int anoNascimento = Integer.parseInt(FORMATANO.format(dataNascimento));
-			int idadeAtual = (anoFato - anoNascimento);
-			if (idadeAtual > 0) {
-				Calendar cNascimento = Calendar.getInstance();
-				cNascimento.setTime(dataNascimento);
-				Calendar cBo = Calendar.getInstance();
-				cBo.setTime(dataRegistro);
+//      idade que o cara tinha quando ocorreu o fato
+        int idadeFato = dataRegistro.getYear() - dataNascimento.getYear();
+        if (dataNascimento.getMonthValue() > dataRegistro.getMonthValue()
+                || (dataNascimento.getMonthValue() == dataRegistro.getMonthValue()
+                    && dataNascimento.getDayOfMonth() > dataRegistro.getDayOfMonth())) {
+        	idadeFato--;
+        }
+        return idadeFato;
+    }
 
-				if (cNascimento.get(Calendar.MONTH) < cBo.get(Calendar.MONTH)) {
-					return idadeAtual;
-				} else if (cNascimento.get(Calendar.MONTH) > cBo.get(Calendar.MONTH)) {
-					return idadeAtual - 1;
-				} else if (cNascimento.get(Calendar.MONTH) == cBo.get(Calendar.MONTH)) {
-					if (cNascimento.get(Calendar.DAY_OF_MONTH) <= cBo.get(Calendar.DAY_OF_MONTH)) {
-						return idadeAtual - 1;
-					} else {
-						return idadeAtual;
-					}
-				}
-			}
-			return idadeAtual;
-		}
-		return 0;
-	}
+//	public int getIdade(LocalDate dataNascimento, LocalDateTime dataRegistro) {
+//		if (dataNascimento != null) {
+//			int anoFato = dataRegistro.getYear();
+//			int anoNascimento = dataNascimento.getYear();
+//			int idadeAtual = (anoFato - anoNascimento);
+//			if (idadeAtual > 0) {
+//				
+//				if (dataNascimento.getMonthValue() > dataRegistro.getMonthValue()) {
+//					return idadeAtual - 1;
+//				} else {
+//					if (dataNascimento.getDayOfMonth() < dataRegistro.getDayOfMonth()) {
+//						return idadeAtual - 1;
+//					} else {
+//						return idadeAtual;
+//					}
+//				}
+//			}
+//			return idadeAtual;
+//		}
+//		return 0;
+//	}
 
 	public Boolean anosIguais(Date dataSalva) {
 		Date dataAtual = new Date();
