@@ -57,4 +57,8 @@ public class BoDtoResponse {
     
     private EnumToObject status;
     
+    private Integer idBoSigma;
+    
+    private String numeroBo;
+    
 }

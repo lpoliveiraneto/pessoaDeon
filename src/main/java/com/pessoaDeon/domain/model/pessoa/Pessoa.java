@@ -68,7 +68,7 @@ public class Pessoa implements Serializable {
     private String alcunha;
 
     @NotNull
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
 
     @NotNull

@@ -29,6 +29,19 @@ public class UnidadeDestino implements Serializable{
 	private Integer fkUnidadeSigma;
 	
 	private String sigla;
-
 	
+	private String logradouro;
+	
+	private String numeroLocal;
+	
+	private String bairro;
+	
+	private String cidade;
+	
+	private String telefone1;
+	
+	private String telefone2;
+	
+	private String email;
+
 }

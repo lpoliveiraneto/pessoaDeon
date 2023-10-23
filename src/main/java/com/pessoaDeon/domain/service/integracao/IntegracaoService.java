@@ -1,6 +1,8 @@
 package com.pessoaDeon.domain.service.integracao;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -114,14 +116,14 @@ public class IntegracaoService {
 //			seta o endereco do local do fato do BO pelo idBo
 			EnderecoLocalFato endLocal = elfService.findByIdBo(bo.getIdBo());
 			BoRequestDto boDto = new BoRequestDto();
-			boDto.setAno(bo.getDataRegistro());			
+			boDto.setAno(localDateTimeToDate(bo.getDataRegistro()));			
 			boDto.setBairro(endLocal.getBairro().getDescricao());
 			boDto.setCep(endLocal.getCep());
 			boDto.setCidade(endLocal.getCidade().getDescricao());
 			boDto.setComplemento(endLocal.getComplemento());
 			boDto.setDataFato(bo.getDataFato());
-			boDto.setDataRegistro(bo.getDataRegistro());
-			boDto.setDataRegistroRascunho(bo.getDataRegistro());
+			boDto.setDataRegistro(localDateTimeToDate(bo.getDataRegistro()));
+			boDto.setDataRegistroRascunho(localDateTimeToDate(bo.getDataRegistro()));
 			boDto.setFkBairro(endLocal.getBairro().getIdBairroApi());
 			boDto.setFkCidade(endLocal.getCidade().getIdCidade());
 			boDto.setFkEstado(endLocal.getEstado().getIdEstado());
@@ -142,6 +144,14 @@ public class IntegracaoService {
 		return null;
 	}
 	
+//	converte de LocalTime p/ Date, como esperado pelo SIGMA
+	private Date localDateTimeToDate(LocalDateTime localDate) {
+		LocalDateTime localDateTime = LocalDateTime.now();
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+		return date;
+	}
+
 //	converte a hora do fato de LocalTime do BO da DEON p/ Date, como esperado pelo SIGMA
 	private Date localTimeToDate(LocalTime horaFato) {
 		ZonedDateTime zonedDateTime = ZonedDateTime.now();
