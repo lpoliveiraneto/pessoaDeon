@@ -1,10 +1,7 @@
 package com.pessoaDeon.domain.service.bo;
 
-
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +46,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
 
-
 @Service
 public class BoService {
 
@@ -74,11 +70,9 @@ public class BoService {
 	@Transactional
 	public BoDeon salvar(BoDto bo) {
 		BoDeon boletim = new BoDeon();
-		var dataRegistro = Calendar.getInstance().getTime();
-		
 		boletim.setDataFato(bo.getDataFato());
 		boletim.setHoraFato(bo.getHoraFato());
-		boletim.setDataRegistro(dataRegistro); 
+		boletim.setDataRegistro(LocalDateTime.now()); 
 		boletim.setRelato(bo.getRelato());
 		boletim.setRelatoEditado(bo.getRelatoEditado());
 		boletim.setStatus(Status.PE);
@@ -116,17 +110,12 @@ public class BoService {
 	}
 	
 	private String gerarProtocolo(BoDeon ocorrencia) {
-
 		StringBuilder protocolo = new StringBuilder();
-		
-		Calendar calendario = Calendar.getInstance();
-		calendario.setTime(ocorrencia.getDataRegistro());		
-		
 		protocolo.append(ocorrencia.getIdBo());
-		protocolo.append(calendario.get(Calendar.HOUR));
-		protocolo.append(calendario.get(Calendar.MONTH));
-		protocolo.append(calendario.get(Calendar.YEAR));
-		protocolo.append(calendario.get(Calendar.SECOND));
+		protocolo.append(ocorrencia.getDataRegistro().getHour());
+		protocolo.append(ocorrencia.getDataRegistro().getMonthValue());
+		protocolo.append(ocorrencia.getDataRegistro().getYear());
+		protocolo.append(ocorrencia.getDataRegistro().getSecond());
 		return protocolo.toString();
 	}
 	
@@ -137,6 +126,7 @@ public class BoService {
 		Protocolo protocolo = protocoloRepository.findById(bo.getIdBo()).get();
 		response.setDataFato(bo.getDataFato());
 		response.setHoraFato(bo.getHoraFato());
+		response.setIdBoSigma(bo.getIdBoSigma());
 		response.setRelato(bo.getRelato());
 		response.setRelatoEditado(bo.getRelatoEditado());
 		response.setLogradouro(endereco.getLogradouro());
@@ -146,6 +136,7 @@ public class BoService {
 		response.setCidadeDescricao(endereco.getCidade().getDescricao());
 		response.setEstadoDescricao(endereco.getEstado().getDescricao());
 		response.setCep(endereco.getCep());
+		response.setNumeroBo((bo.getNumeroBo() != null && bo.getAno() != null) ? bo.getNumeroBo() + "/" + bo.getAno() : null);
 		response.setNumeroLocal(endereco.getNumeroLocal());
 		response.setTipoLocal(endereco.getTipoLocal().getNome());
 		response.setProtocolo(protocolo.getNumero());
@@ -238,6 +229,8 @@ public class BoService {
 		if (bo != null) {
 			bo.setNumeroBo(response.getNumeroBo());
 			bo.setStatus(Status.VA);
+			bo.setIdBoSigma(response.getIdBoSigma());
+			bo.setAno(response.getAno().toString());
 			return boRepository.saveAndFlush(bo);
 		}
 		return null;
@@ -252,7 +245,7 @@ public class BoService {
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
 			var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
 			bo.setNatureza(natureza.getNome() + codigo);
-			bo.setDataDoRegistro(LocalDateTime.ofInstant(b.getDataRegistro().toInstant(), ZoneId.systemDefault()));
+			bo.setDataDoRegistro(b.getDataRegistro());
 			var envolvimento = envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM", b.getIdBo(), "CV");
 			bo.setNome(envolvimento.getEnvolvido() != null ? envolvimento.getEnvolvido().getPessoa().getNome() : "NÃO CONSEGUI ENCONTRAR");
 			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
