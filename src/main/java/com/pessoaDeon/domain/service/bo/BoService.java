@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pessoaDeon.config.security.TokenService;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
@@ -63,6 +64,9 @@ public class BoService {
 
 	@Autowired
 	private EnvolvimentoService envolvimentoService;
+	
+	@Autowired
+	private TokenService tokenService;
 
 	@Autowired
 	private EntityManager entityManager;
@@ -126,7 +130,6 @@ public class BoService {
 		Protocolo protocolo = protocoloRepository.findById(bo.getIdBo()).get();
 		response.setDataFato(bo.getDataFato());
 		response.setHoraFato(bo.getHoraFato());
-		response.setIdBoSigma(bo.getIdBoSigma());
 		response.setRelato(bo.getRelato());
 		response.setRelatoEditado(bo.getRelatoEditado());
 		response.setLogradouro(endereco.getLogradouro());
@@ -139,6 +142,7 @@ public class BoService {
 		response.setNumeroBo((bo.getNumeroBo() != null && bo.getAno() != null) ? bo.getNumeroBo() + "/" + bo.getAno() : null);
 		response.setNumeroLocal(endereco.getNumeroLocal());
 		response.setTipoLocal(endereco.getTipoLocal().getNome());
+		response.setTokenBoSigma(gerarTokenBoSigma(bo.getIdBoSigma() != null ? bo.getIdBoSigma() : null));
 		response.setProtocolo(protocolo.getNumero());
 		response.setStatus(new EnumToObject(bo.getStatus().name(), bo.getStatus().getDescricao()));
 		List<NaturezaDeonResponseDto> naturezaDto = new ArrayList<>();
@@ -264,6 +268,13 @@ public class BoService {
 			bo.setStatus(status);
 			boRepository.saveAndFlush(bo);
 		}
+	}
+	
+	private String gerarTokenBoSigma(Integer idBoSigma) {
+		if (idBoSigma != null) {
+			return tokenService.gerarTokenBo(idBoSigma);
+		}
+		return null;
 	}
 	
 }

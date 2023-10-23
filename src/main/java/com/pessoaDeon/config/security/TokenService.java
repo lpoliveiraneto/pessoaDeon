@@ -61,17 +61,21 @@ public class TokenService {
         }
     }
 
+//    gerar token para criptografar o idBoSigma
+    public String gerarTokenBo(Integer idBoSigma){
+        try{
+            var algoritmo = Algorithm.HMAC256(secret);
+            return JWT.create()
+                    .withIssuer("Api NovaDeon")
+                    .withSubject(idBoSigma.toString())
+                    .withExpiresAt(dataExpiracao())
+                    .sign(algoritmo);
+        }catch (JWTCreationException exception){
+            throw  new JWTCreationException("Erro ao Gerar Token", exception);
+        }
+    }
+    
     public String getSubject(String tokenJWT){
-//        try {
-//            var algoritmo = Algorithm.HMAC256(secret);
-//            return JWT.require(algoritmo)
-//                    .withIssuer("Api NovaDeon")
-//                    .build()
-//                    .verify(tokenJWT)
-//                    .getSubject();
-//        }catch (JWTVerificationException exception){
-//            throw new JWTVerificationException("Token JWT inválido");
-//        }
         var algoritmo = Algorithm.HMAC256(secret);
         return JWT.require(algoritmo)
                 .withIssuer("Api NovaDeon")
