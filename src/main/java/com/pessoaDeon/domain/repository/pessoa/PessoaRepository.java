@@ -21,4 +21,8 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
 
 	Optional<Pessoa> findByNumeroDocumento(String numeroDocumento);
 
+	boolean existsByNumeroDocumento(String numeroDocumento);
+
+
+
 }

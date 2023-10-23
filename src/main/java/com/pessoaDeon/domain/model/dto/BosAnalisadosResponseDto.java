@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,9 +19,8 @@ public class BosAnalisadosResponseDto {
 
     private String natureza;
 
-    private LocalDate dataAnalise;
+    private LocalDateTime dataAnalise;
 
-    private LocalDate dataRegistro;
+    private LocalDateTime dataRegistro;
 
-    private Status status;
 }

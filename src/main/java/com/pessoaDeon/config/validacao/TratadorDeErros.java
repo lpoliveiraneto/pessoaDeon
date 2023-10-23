@@ -3,17 +3,13 @@ package com.pessoaDeon.config.validacao;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.pessoaDeon.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.pessoaDeon.domain.exception.EnderecoNotFoundException;
-import com.pessoaDeon.domain.exception.EnviaBoSigmaException;
-import com.pessoaDeon.domain.exception.PessoaAlreadyRegisteredException;
-import com.pessoaDeon.domain.exception.UsuarioAlreadyRegisteredException;
 
 @RestControllerAdvice
 public class TratadorDeErros {
@@ -36,6 +32,11 @@ public class TratadorDeErros {
     @ExceptionHandler(PessoaAlreadyRegisteredException.class)
     public ResponseEntity<?> tratarError409(PessoaAlreadyRegisteredException ex){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosErroStatus(HttpStatus.CONFLICT.toString(), "Pessoa já consta na Base de dados"));
+    }
+
+    @ExceptionHandler(PessoaNotFoundException.class)
+    public ResponseEntity<?> PessoaNãoEncontrada(PessoaNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DadosErroStatus(HttpStatus.NOT_FOUND.toString(), ex.getMessage()));
     }
     
     @ExceptionHandler(EnderecoNotFoundException.class)
