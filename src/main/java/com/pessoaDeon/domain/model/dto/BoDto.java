@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BoDto {	
 	
-	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East" , pattern = "dd/MM/yyyy")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East" , pattern = "yyyy-MM-dd")
 	private LocalDate dataFato;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm")

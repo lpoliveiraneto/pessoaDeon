@@ -1,14 +1,27 @@
 package com.pessoaDeon.domain.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.pessoaDeon.domain.exception.ArquivoNaoEncontradoException;
+import com.pessoaDeon.domain.model.AnexoPessoa;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 import com.pessoaDeon.domain.model.dto.CadastroResponseDto;
 import com.pessoaDeon.domain.model.endereco.Endereco;
@@ -19,6 +32,7 @@ import com.pessoaDeon.domain.model.pessoa.Email;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.pessoa.Telefone;
 import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
 
 
@@ -50,35 +64,34 @@ public class CadastroService {
 
 	@Autowired
 	private VerificacaoContaService verificacaoContaService;
+	
+	@Autowired
+	private ConfiguracaoUploadService uploadService;
+	
+	@Autowired
+	private AnexoPessoaService anexoPessoaService;
 
 	@Autowired
 	private PerfilRepository perfilRepository;
 
 	@Transactional
-	public Pessoa salvar(CadastroRequestDto cadastroRequestDto){
+	public Pessoa salvar(CadastroRequestDto cadastroRequestDto, MultipartFile[] files){
 		Pessoa pessoa = modelMapper.map(cadastroRequestDto, Pessoa.class);
-//		var user = salvarUsuario(cadastroRequestDto);
-//		pessoa.setUsuario(user);
 		var pessoaSave = pessoaService.salvarPessoaDeon(pessoa);
-		
 		if(pessoaSave != null) {
 			Logradouro logradouro = modelMapper.map(cadastroRequestDto, Logradouro.class);
-
 				var logradouroSave = logradouroService.getByCep(logradouro.getCep());
-				
 				if (logradouroSave.getCep() != null) {
 					this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroSave);
 				} else {
 					var logradouroWithoutCepNotFound = logradouroService.save(logradouro);
 					this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroWithoutCepNotFound);
 				}
-
 			this.salvarTelefone(cadastroRequestDto, pessoaSave);
 			this.salvarEmail(cadastroRequestDto, pessoaSave);
 		}
-		
 		salvarUsuario(cadastroRequestDto, pessoaSave);
-//		user.setPessoa(pessoaSave);
+		salvarAnexosDocumentoPessoa(pessoa, files);
 		return pessoaSave;
 	}
 	
@@ -188,4 +201,58 @@ public class CadastroService {
 		
 		return response;
 	}
+	
+	private String gerarNomeArquivo() {
+		UUID uuid = UUID.randomUUID();
+		String name = uuid.toString();		
+		return name; 
+	}
+
+	public String salvarAnexosDocumentoPessoa(Pessoa pessoa, MultipartFile[] files) {
+		ConfiguracaoUpload config = uploadService.getConfiguracaoUploadAtiva();
+		Path path = Paths.get(config.getPath());
+		try {
+			if (files != null) {
+				for(MultipartFile file : files) {
+					String extensao = FilenameUtils.getExtension(file.getOriginalFilename());
+                    String nomeArquivo = gerarNomeArquivo() + "." + extensao;
+                    Path filePath = path.resolve(nomeArquivo);
+					Files.copy(file.getInputStream(), filePath);
+					salvarInfoAnexo(config, pessoa, nomeArquivo, extensao);
+				}
+				 return "Arquivo salvo com sucesso!";
+			}
+		} catch (Exception e) {
+			return "Erro ao salvar arquivo: " +e.getMessage();		}
+		return null;
+	}
+	
+	private void salvarInfoAnexo(ConfiguracaoUpload config, Pessoa pessoa, 
+			String arquivo, String extensao) {
+		AnexoPessoa anexo = new AnexoPessoa();
+		anexo.setCaminho(config.getPath());
+		anexo.setConfigUpload(config);
+		anexo.setDataUpload(LocalDateTime.now());
+		anexo.setNomeArquivo(arquivo);
+		anexo.setPessoa(pessoa);
+		anexo.setTipoArquivo(extensao);	
+		anexoPessoaService.salvarAnexoPessoa(anexo);
+	}
+	
+	public Resource carregarArquivo(Integer idPessoa) {
+		List<AnexoPessoa> listaAnexo = anexoPessoaService.findByPessoaIdPessoa(idPessoa);
+		Path diretorioDeArmazenamento = Paths.get(listaAnexo.get(0).getCaminho());
+        try {
+        	Path caminhoArquivo = diretorioDeArmazenamento.resolve(listaAnexo.get(0).getNomeArquivo());
+            Resource resource = new UrlResource(caminhoArquivo.toUri());
+//            Resource resource = new UrlResource(diretorioDeArmazenamento.toUri());
+            if (resource.exists() && resource.isReadable()) {
+                return resource;
+            } else {
+                throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, null);
+            }
+        } catch (IOException e) {
+            throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, e);
+        }
+    }
 }
