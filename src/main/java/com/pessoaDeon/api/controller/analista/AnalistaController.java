@@ -52,6 +52,14 @@ public class AnalistaController {
         return boAnaliseService.getBoAnalisados(pageable);
     }
 
+    @GetMapping("/emAnalise")
+    public Page<BosAnalisadosResponseDto> listarBosEmAnalise(
+            @PageableDefault(size = 10, page = 0, sort = "idBo",
+                    direction = Sort.Direction.ASC)Pageable pageable){
+        return boAnaliseService.getBoEmAnalise(pageable);
+    }
+
+
     @GetMapping("funcionario/analisadas")
     public ResponseEntity<?>  listarOcorrenciasAnalisadasFuncionario(){
         return ResponseEntity.ok().build();
