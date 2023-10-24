@@ -56,7 +56,7 @@ public class BoAnaliseService {
         var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
         bo.setNatureza(natureza.getNome() + codigo);
         bo.setDataAnalise(b.getDataAnalise());
-        bo.setDataRegistro(LocalDateTime.ofInstant(b.getBoDeon().getDataRegistro().toInstant(), ZoneId.systemDefault()));
+        bo.setDataRegistro(b.getBoDeon().getDataRegistro());
         return bo;
     }
 
