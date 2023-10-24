@@ -11,4 +11,6 @@ public interface BoAnaliseRepository extends JpaRepository<BoAnalise, Integer> {
 
     List<BoAnalise> findByStatusTrue();
 
+    List<BoAnalise> findByStatusFalse();
+
 }
