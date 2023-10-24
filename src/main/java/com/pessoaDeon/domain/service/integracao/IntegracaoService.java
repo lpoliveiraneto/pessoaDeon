@@ -40,12 +40,11 @@ import com.pessoaDeon.domain.model.envolvido.Envolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.model.listas.UnidadeDestino;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
-import com.pessoaDeon.domain.repository.bo.BoRepository;
+import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
 import com.pessoaDeon.domain.service.ContatoService;
 import com.pessoaDeon.domain.service.DelegadoResponsavelService;
 import com.pessoaDeon.domain.service.EnderecoService;
 import com.pessoaDeon.domain.service.UnidadeDestinoService;
-import com.pessoaDeon.domain.service.analista.AnalistaService;
 import com.pessoaDeon.domain.service.bo.BoService;
 import com.pessoaDeon.domain.service.bo.EnderecoLocalFatoService;
 
@@ -64,9 +63,6 @@ public class IntegracaoService {
 	private UnidadeDestinoService unidadeDestinoService;
 	
 	@Autowired
-	private AnalistaService analistaService;
-	
-	@Autowired
 	private DelegadoResponsavelService delegadoService;
 	
 	@Autowired
@@ -74,6 +70,9 @@ public class IntegracaoService {
 	
 	@Autowired
 	private BoService boService;
+	
+	@Autowired
+	private AnalistaRepository analistaRepository;
 	
 	@Value("${url.api-integracao}")
 	private String URL;
@@ -305,7 +304,7 @@ public class IntegracaoService {
 //	monta o DTO com a lista da equipe do BO composta pelo Analista/Registrante e o Delegado responsavel pela DEON p/ SIGMA 
 	private List<EquipeRequestDto> listaEquipeBOtoDto(Integer idAnalista) {
 //		seta o analista/registrante do BO da DEON
-		Analista analista = analistaService.findById(idAnalista).orElse(null);
+		Analista analista = analistaRepository.findById(idAnalista).orElse(null);
 		
 //		seta o delegado responsavel pela DEON, definido automaticamente pelo status ativo.
 		DelegadoResponsavel delegado = delegadoService.getDelegadoResponsavel().orElse(null);

@@ -1,8 +1,5 @@
 package com.pessoaDeon.api.controller.analista;
 
-import com.pessoaDeon.domain.model.analista.BoAnalise;
-import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
-import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,14 +7,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
+import com.pessoaDeon.domain.model.dto.analista.AnalistaResponseDto;
+import com.pessoaDeon.domain.service.analista.AnalistaService;
+import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
 
-import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/ocorrencia")
@@ -28,6 +29,9 @@ public class AnalistaController {
 
     @Autowired
     private BoAnaliseService boAnaliseService;
+    
+    @Autowired
+    private AnalistaService analistaService;
 
     @GetMapping
     public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
@@ -56,5 +60,9 @@ public class AnalistaController {
     public ResponseEntity<?>  listarOcorrenciasAnalisadasFuncionario(){
         return ResponseEntity.ok().build();
     }
-
+    
+    @GetMapping("/verifica")
+    public AnalistaResponseDto verifica(@RequestParam(value = "cpf") String cpf, HttpServletRequest http) {
+    	return analistaService.verificaFuncionarioSigma(cpf, http);
+    }
 }
