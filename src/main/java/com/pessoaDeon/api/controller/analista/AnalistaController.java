@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
+import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaResponseDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.service.UsuarioService;
 import com.pessoaDeon.domain.service.analista.AnalistaService;
 import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
@@ -32,6 +35,9 @@ public class AnalistaController {
     
     @Autowired
     private AnalistaService analistaService;
+    
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping
     public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
@@ -72,5 +78,12 @@ public class AnalistaController {
     @GetMapping("/verifica")
     public AnalistaResponseDto verifica(@RequestParam(value = "cpf") String cpf, HttpServletRequest http) {
     	return analistaService.verificaFuncionarioSigma(cpf, http);
+    }
+    
+    @GetMapping("/listaUsuariosAnalise")
+    public Page<UsuariosPendentesResponseDto> usuariosAnalise(
+    		@PageableDefault(size = 10, page = 0, sort = "idUsuario",
+            direction = Sort.Direction.ASC)Pageable pageable){
+    	return usuarioService.getUsuariosAnalise(pageable);
     }
 }
