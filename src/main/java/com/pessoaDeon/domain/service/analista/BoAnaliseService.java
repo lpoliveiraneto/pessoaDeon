@@ -1,19 +1,18 @@
 package com.pessoaDeon.domain.service.analista;
 
-import com.pessoaDeon.domain.model.analista.BoAnalise;
-import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
-import com.pessoaDeon.domain.repository.analista.BoAnaliseRepository;
-import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import com.pessoaDeon.domain.model.analista.BoAnalise;
+import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
+import com.pessoaDeon.domain.repository.analista.BoAnaliseRepository;
+import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 
 @Service
 public class BoAnaliseService {
@@ -61,7 +60,7 @@ public class BoAnaliseService {
         BosAnalisadosResponseDto bo = new BosAnalisadosResponseDto();
         bo.setIdBo(b.getBoDeon().getIdBo());
         bo.setProtocolo(protocoloRepository.findByBo(b.getBoDeon()).getNumero());
-        bo.setNomeAnalista(b.getAnalista().getPessoa().getNome());
+        bo.setNomeAnalista(b.getAnalista().getNome());
         var natureza = b.getBoDeon().getListaNaturezas().get(0).getNaturezaDeon();
         var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
         bo.setNatureza(natureza.getNome() + codigo);
