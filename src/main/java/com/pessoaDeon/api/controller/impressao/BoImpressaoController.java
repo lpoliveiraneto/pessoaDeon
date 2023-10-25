@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.config.security.TokenService;
-import com.pessoaDeon.domain.service.bo.BoService;
 import com.pessoaDeon.domain.service.impressao.BoImpressaoService;
 
 import jakarta.servlet.http.HttpServletRequest;

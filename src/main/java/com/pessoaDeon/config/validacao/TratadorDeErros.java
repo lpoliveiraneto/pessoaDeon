@@ -48,6 +48,11 @@ public class TratadorDeErros {
     public ResponseEntity<?> tratarError409(EnviaBoSigmaException ex){
     	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DadosErroStatus("Erro de comunicação com a API de Integração DEON/SIGMA", ex.getMessage())); 
     }
+
+    @ExceptionHandler(ImpressaoErrorException.class)
+    public ResponseEntity<?> tratarError409(ImpressaoErrorException ex){
+    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DadosErroStatus("Erro de comunicação com a API de Impressão", ex.getMessage())); 
+    }
     
     private record DadosErroValidacao(String campo, String message){
         public DadosErroValidacao(FieldError erro){
