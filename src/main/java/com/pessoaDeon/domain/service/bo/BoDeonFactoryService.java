@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.model.bo.BoDeon;
-import com.pessoaDeon.domain.model.dto.BoDto;
+import com.pessoaDeon.domain.model.dto.bo.BoDto;
 import com.pessoaDeon.domain.model.dto.EnvolvidosRequestDto;
 import com.pessoaDeon.domain.model.envolvido.TipoParticipacao;
 import com.pessoaDeon.domain.repository.envolvido.TipoParticipacaoRepository;

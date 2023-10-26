@@ -1,5 +1,6 @@
-package com.pessoaDeon.domain.model.dto;
+package com.pessoaDeon.domain.model.dto.bo;
 
+import com.pessoaDeon.domain.model.dto.EnvolvidosRequestDto;
 import lombok.Data;
 
 @Data
