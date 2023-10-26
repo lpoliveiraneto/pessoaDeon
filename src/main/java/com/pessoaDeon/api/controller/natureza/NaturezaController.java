@@ -1,5 +1,7 @@
 package com.pessoaDeon.api.controller.natureza;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.domain.model.dto.NaturezaDeonRequestDto;
+import com.pessoaDeon.domain.model.mensagem.TituloAviso;
+import com.pessoaDeon.domain.repository.natureza.AvisoNaturezaRepository;
 import com.pessoaDeon.domain.service.natureza.NaturezaService;
 
 import jakarta.validation.Valid;
@@ -26,6 +30,9 @@ public class NaturezaController {
 
 	@Autowired
 	private NaturezaService naturezaService;
+	
+	@Autowired
+	private AvisoNaturezaRepository avisoNaturezaRepository;
 	
 	@GetMapping("/listNaturezaSigma")
 	public ResponseEntity<?> lista(@RequestParam(value = "nome" , required = false) String nome, @PageableDefault(size = 10, page = 0, sort = "nome", direction = Direction.ASC) Pageable pageable){
@@ -72,5 +79,10 @@ public class NaturezaController {
 	@GetMapping("/listaNaturezas")
 	public ResponseEntity<?> listaNaturezas(){
 		return naturezaService.listaNaturezasFront();
+	}
+	
+	@GetMapping("/listaAvisoNatureza/{id}")
+	public List<TituloAviso> buscarTituloPorIdNatureza(@PathVariable(value = "id") Integer id) {
+		return avisoNaturezaRepository.findByNaturezaDeonIdNatureza(id);
 	}
 }
