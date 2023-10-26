@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.pessoaDeon.domain.exception.EnviaBoSigmaException;
@@ -46,27 +47,40 @@ public class AnalistaService {
 		return analistaRepository.findById(id);
 	}
 
-	public void salvarAnalista(AnalistaRequest analistaRequest){
+	@Transactional
+	public Analista salvarAnalista(AnalistaRequest analistaRequest, HttpServletRequest http){
 
+		var analistaSigma = buscaFuncionarioSigma(analistaRequest.cpf(), http);
+		
+		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
+			throw new PessoaNotFoundException("Funcionario não está ativo no SIGMA");
+		}
+		
 		if(!verificaPessoaPeloNumeroDocumento(analistaRequest.cpf())){
 			throw new PessoaNotFoundException("Pessoa não consta no banco de dados");
 		}
 		Pessoa pessoa = pessoaService.buscaPessoaCpf(analistaRequest.cpf());
-		Analista analista = analistaRequestToAnalista(analistaRequest);
-		analista.setPessoa(pessoa);
-		analistaRepository.save(analista);
+		Analista analista = analistaRequestToAnalista(analistaRequest,analistaSigma, pessoa);
+		return analistaRepository.save(analista);
 	}
 
-	private Analista analistaRequestToAnalista(AnalistaRequest analistaRequest) {
+	@Transactional
+	private Analista analistaRequestToAnalista(AnalistaRequest analistaRequest, AnalistaResponseDto analistaSigma, Pessoa pessoa) {
 		final long PERFIL_ANALISTA = 3;
 		Analista analista = new Analista();
 		analista.setLogin(analistaRequest.cpf());
+		analista.setMatricula(analistaRequest.matricula());
+		analista.setNome(analistaRequest.nome());
+		analista.setStatus(true);
 		analista.setCargo(analistaRequest.cargo());
 		analista.setFuncao(analistaRequest.funcao());
 		analista.setSenha(new BCryptPasswordEncoder().encode(analistaRequest.senha()));
-		analista.adicionarPerfil(perfilRepository.findById(PERFIL_ANALISTA).get());
-		analista.setStatus(true);
+		analista.setAssinatura(analistaRequest.assinatura());
+		analista.setData_alteracao(LocalDateTime.now());
 		analista.setData_cadastro(LocalDateTime.now());
+		analista.adicionarPerfil(perfilRepository.findById(PERFIL_ANALISTA).get());
+		analista.setFuncionarioSigma(analistaSigma.getIdFuncionario());
+		analista.setPessoa(pessoa);
 		return analista;
 	}
 
@@ -74,7 +88,7 @@ public class AnalistaService {
 		return pessoaService.existsPessoaNumeroDocumento(numeroDocumento);
 	}
 	
-	public AnalistaResponseDto verificaFuncionarioSigma(String cpf, HttpServletRequest http) {
+	public AnalistaResponseDto buscaFuncionarioSigma(String cpf, HttpServletRequest http) {
 		var tokenJWT = recuperarToken(http);
 		if (tokenJWT != null) {
 			try {
@@ -99,5 +113,9 @@ public class AnalistaService {
         }
         return null;
     }
+	
+	private boolean verificaFuncionarioSigmaAtivo(AnalistaResponseDto analistaSigma) {
+		return analistaSigma.getAtivo() == true;
+	}
 
 }
