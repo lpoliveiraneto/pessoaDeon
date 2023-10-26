@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.domain.model.bo.BoDeon;
-import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.model.dto.BoEnvolvidosRequest;
-import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
+import com.pessoaDeon.domain.model.dto.bo.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.bo.BoEnvolvidosRequest;
+import com.pessoaDeon.domain.model.dto.bo.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.service.bo.BoDeonFactoryService;
@@ -51,7 +51,7 @@ public class BoController {
 	@GetMapping("/buscarPorId/{idBo}")
 	public BoDtoResponse buscarBoPorId(@PathVariable(value = "idBo" ) Integer idBo){
 		Optional<BoDeon> bo = boService.findById(idBo);
-		return boService.buscarBoPorId(bo.get()); 
+		return boService.boDeonToBoDeonResponse(bo.get());
 	}
 
 	@GetMapping("/analisarBoPorId/{idBo}")
@@ -60,7 +60,7 @@ public class BoController {
 		Optional<BoDeon> bo = boService.findById(idBo); 
 		if (bo.isPresent()) {
 			boService.mudaStatusBoEmAnalise(bo.get(), status);
-			BoDtoResponse boFound = boService.buscarBoPorId(bo.get()); 
+			BoDtoResponse boFound = boService.boDeonToBoDeonResponse(bo.get());
 			return ResponseEntity.status(HttpStatus.OK).body(boFound);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum boletim de ocorrência encontrado com o ID informado!");

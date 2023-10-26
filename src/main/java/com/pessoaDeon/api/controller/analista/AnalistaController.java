@@ -1,5 +1,8 @@
 package com.pessoaDeon.api.controller.analista;
 
+import com.pessoaDeon.domain.model.analista.Analista;
+import com.pessoaDeon.domain.model.dto.analista.AnalistaRequest;
+import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pessoaDeon.domain.model.analista.Analista;
-import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
-import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
-import com.pessoaDeon.domain.model.dto.analista.AnalistaRequest;
+import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
+import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
 import com.pessoaDeon.domain.service.analista.AnalistaService;
 import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
@@ -63,6 +64,13 @@ public class AnalistaController {
             @PageableDefault(size = 10, page = 0, sort = "idBo",
                     direction = Sort.Direction.ASC)Pageable pageable){
         return boAnaliseService.getBoEmAnalise(pageable);
+    }
+
+    @PostMapping("/emAnalise")
+    public ResponseEntity salvarBoAnalise(@RequestBody BoAnaliseRequest boAnaliseRequest){
+        System.out.println("irei salvar na tabela BoAnalise");
+        boAnaliseService.salvarBoEmAnalise(boAnaliseRequest);
+        return ResponseEntity.ok().build();
     }
 
 

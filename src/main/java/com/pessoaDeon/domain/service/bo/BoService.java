@@ -20,10 +20,10 @@ import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
-import com.pessoaDeon.domain.model.dto.BoDto;
-import com.pessoaDeon.domain.model.dto.BoDtoResponse;
-import com.pessoaDeon.domain.model.dto.BosPendentesResponseDto;
-import com.pessoaDeon.domain.model.dto.BosPessoaResponseDto;
+import com.pessoaDeon.domain.model.dto.bo.BoDto;
+import com.pessoaDeon.domain.model.dto.bo.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
+import com.pessoaDeon.domain.model.dto.bo.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.dto.EnvolvidoBoDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
@@ -124,7 +124,7 @@ public class BoService {
 	}
 	
 	@Transactional
-	public BoDtoResponse buscarBoPorId(BoDeon bo) {
+	public BoDtoResponse boDeonToBoDeonResponse(BoDeon bo) {
 		BoDtoResponse response = new BoDtoResponse();
 		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findByBoIdBo(bo.getIdBo());
 		Protocolo protocolo = protocoloRepository.findByBoIdBo(bo.getIdBo());

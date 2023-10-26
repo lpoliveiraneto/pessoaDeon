@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.model.dto;
+package com.pessoaDeon.domain.model.dto.bo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

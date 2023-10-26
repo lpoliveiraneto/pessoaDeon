@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.model.dto;
+package com.pessoaDeon.domain.model.dto.bo;
 
 import com.pessoaDeon.domain.model.enumeration.Status;
 import lombok.Getter;

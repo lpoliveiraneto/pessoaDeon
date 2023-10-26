@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.model.dto;
+package com.pessoaDeon.domain.model.dto.bo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pessoaDeon.domain.model.dto.EnvolvidoBoDto;
+import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.util.EnumToObject;
 
