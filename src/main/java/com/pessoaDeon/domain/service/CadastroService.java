@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -163,6 +165,7 @@ public class CadastroService {
 		Pessoa pessoa = pessoaService.buscarPessoa(idPessoa).get();
 		Telefone contato = contatoService.getById(idPessoa);
 		Email email = emailService.getByIdEmail(idPessoa);
+		List<String> anexos = carregarArquivo(idPessoa);
 		//dados referentes a pessoa
 		response.setNome(pessoa.getNome());
 		response.setDataNascimento(pessoa.getDataNascimento());
@@ -183,13 +186,13 @@ public class CadastroService {
 		response.setCidadeNaturalidade(pessoa.getCidadeNaturalidade() !=null ? pessoa.getCidadeNaturalidade().getDescricao() : "Não Informado");
 		response.setPais(pessoa.getPais() !=null ? pessoa.getPais().getDescricao() : "Não Informado");
 		//dados referentes a endereco
-		response.setCep(enderecoPessoa.getLogradouro().getCep() !=null ? enderecoPessoa.getLogradouro().getCep() : "Não Informado");
-		response.setEstado(enderecoPessoa.getLogradouro().getEstado() !=null ? enderecoPessoa.getLogradouro().getEstado().getDescricao() : "Não Informado");
-		response.setCidade(enderecoPessoa.getLogradouro().getCidade() !=null ? enderecoPessoa.getLogradouro().getCidade().getDescricao() : "Não Informado");
-		response.setBairro(enderecoPessoa.getLogradouro().getBairro() !=null ? enderecoPessoa.getLogradouro().getBairro().getDescricao() : "Não Informado");
-		response.setLogradouro(enderecoPessoa.getLogradouro().getLogradouro() !=null ? enderecoPessoa.getLogradouro().getLogradouro() : "Não Informado");
+		response.setCep(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getCep() : "Não Informado");
+		response.setEstado(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getEstado().getDescricao() : "Não Informado");
+		response.setCidade(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getCidade().getDescricao() : "Não Informado");
+		response.setBairro(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getBairro().getDescricao() : "Não Informado");
+		response.setLogradouro(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getLogradouro() : "Não Informado");
 		response.setNumero(enderecoPessoa.getNumero());
-		response.setTipoMoradia(enderecoPessoa.getTipoMoradia().getDescricao() !=null ? enderecoPessoa.getTipoMoradia().getDescricao() : "Não Informado");
+		response.setTipoMoradia(enderecoPessoa.getTipoMoradia() != null ? enderecoPessoa.getTipoMoradia().getDescricao() : "Não Informado");
 		response.setComplemento(enderecoPessoa.getComplemento());
 		response.setReferencia(enderecoPessoa.getReferencia());
 		//dados referentes
@@ -197,6 +200,8 @@ public class CadastroService {
 		response.setTipoWhatsapp(contato.getTipowhatsapp());
 		response.setTipoTelegram(contato.getTipotelegram());
 		response.setEmail(email.getEmail());
+//		lista de anexos
+		response.setListaAnexos(anexos);
 		
 		return response;
 	}
@@ -238,21 +243,26 @@ public class CadastroService {
 		anexoPessoaService.salvarAnexoPessoa(anexo);
 	}
 	
-	public Resource carregarArquivo(Integer idPessoa) {
+	public List<String> carregarArquivo(Integer idPessoa) {
 		List<AnexoPessoa> listaAnexo = anexoPessoaService.findByPessoaIdPessoa(idPessoa);
-		Path diretorioDeArmazenamento = Paths.get(listaAnexo.get(0).getCaminho());
-        try {
-        	Path caminhoArquivo = diretorioDeArmazenamento.resolve(listaAnexo.get(0).getNomeArquivo());
-            Resource resource = new UrlResource(caminhoArquivo.toUri());
-//            Resource resource = new UrlResource(diretorioDeArmazenamento.toUri());
-            if (resource.exists() && resource.isReadable()) {
-                return resource;
-            } else {
-                throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, null);
-            }
-        } catch (IOException e) {
-            throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, e);
-        }
+		List<String> listaAnexoToString = new ArrayList<>();
+		listaAnexo.forEach(a -> {
+			Path diretorioDeArmazenamento = Paths.get(a.getCaminho());
+			try {
+				Path caminhoArquivo = diretorioDeArmazenamento.resolve(a.getNomeArquivo());
+				Resource resource = new UrlResource(caminhoArquivo.toUri());
+				if (resource.exists() && resource.isReadable()) {
+					var bin = resource.getContentAsByteArray();
+					String imagemString = Base64.getEncoder().encodeToString(bin);
+					listaAnexoToString.add(imagemString);
+				} else {
+					throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, null);
+				}
+			} catch (IOException e) {
+				throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, e);
+			}
+		});
+		return listaAnexoToString;
     }
 }
 

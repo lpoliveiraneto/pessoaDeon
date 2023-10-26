@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.pessoaDeon.domain.exception.EnviaBoSigmaException;
+import com.pessoaDeon.domain.exception.ImpressaoErrorException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,7 +39,7 @@ public class BoImpressaoService {
 				    }
 				}
 			} catch (Exception e) {
-				throw new EnviaBoSigmaException(e.getMessage());
+				throw new ImpressaoErrorException(e.getMessage());
 			}
 		}
 		return null;

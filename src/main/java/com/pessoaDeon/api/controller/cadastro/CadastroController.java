@@ -1,7 +1,9 @@
 package com.pessoaDeon.api.controller.cadastro;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.service.CadastroService;
 import com.pessoaDeon.domain.service.VerificacaoContaService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("api/v1/cadastro")
@@ -62,16 +66,13 @@ public class CadastroController {
 	}
 	
 	@GetMapping("/{idPessoa}")
-    public ResponseEntity<Resource> baixarArquivo(@PathVariable Integer idPessoa) {
-        Resource arquivo = cadastroService.carregarArquivo(idPessoa);
-        // Verifique se o arquivo existe e pode ser lido
-        if (arquivo.exists() && arquivo.isReadable()) {
-            return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=" + idPessoa)
-                .body(arquivo);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> baixarArquivo(@PathVariable Integer idPessoa,
+    		HttpServletResponse response) throws IOException {
+        List<String> arquivos = cadastroService.carregarArquivo(idPessoa);
+        if (arquivos.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum anexo encontrado!");
+		}
+        return ResponseEntity.ok(arquivos);
     }
 	
 }

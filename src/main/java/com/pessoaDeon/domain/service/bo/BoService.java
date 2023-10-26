@@ -126,8 +126,8 @@ public class BoService {
 	@Transactional
 	public BoDtoResponse boDeonToBoDeonResponse(BoDeon bo) {
 		BoDtoResponse response = new BoDtoResponse();
-		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findById(bo.getIdBo()).get();
-		Protocolo protocolo = protocoloRepository.findById(bo.getIdBo()).get();
+		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findByBoIdBo(bo.getIdBo());
+		Protocolo protocolo = protocoloRepository.findByBoIdBo(bo.getIdBo());
 		response.setDataFato(bo.getDataFato());
 		response.setHoraFato(bo.getHoraFato());
 		response.setRelato(bo.getRelato());
@@ -214,7 +214,7 @@ public class BoService {
 			BosPessoaResponseDto dto = new BosPessoaResponseDto();
 			dto.setIdBo(bo.getIdBo());
 			dto.setDataRegistro(bo.getDataRegistro());
-			dto.setProtocolo(protocoloRepository.findByBo(bo).getNumero());
+			dto.setProtocolo(protocoloRepository.findByBoIdBo(bo.getIdBo()).getNumero());
 			dto.setNomeNatureza(bo.getListaNaturezas().get(0).getNaturezaDeon().getNome());
 			dto.setCodigoNatureza(bo.getListaNaturezas().get(0).getNaturezaDeon().getCodigo());
 			dto.setStatus(new EnumToObject(bo.getStatus().name(), bo.getStatus().getDescricao()));
@@ -234,7 +234,8 @@ public class BoService {
 			bo.setNumeroBo(response.getNumeroBo());
 			bo.setStatus(Status.VA);
 			bo.setIdBoSigma(response.getIdBoSigma());
-			bo.setAno(response.getAno().toString());
+			var ano = response.getAno().getYear();
+			bo.setAno(Integer.toString(ano));
 			return boRepository.saveAndFlush(bo);
 		}
 		return null;
@@ -252,7 +253,7 @@ public class BoService {
 			bo.setDataDoRegistro(b.getDataRegistro());
 			var envolvimento = envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM", b.getIdBo(), "CV");
 			bo.setNome(envolvimento.getEnvolvido() != null ? envolvimento.getEnvolvido().getPessoa().getNome() : "NÃO CONSEGUI ENCONTRAR");
-			bo.setProtocolo(protocoloRepository.findByBo(b).getNumero());
+			bo.setProtocolo(protocoloRepository.findByBoIdBo(b.getIdBo()).getNumero());
 			bos.add(bo);
 		});
 		return new PageImpl<>(bos, pageable, bos.size());

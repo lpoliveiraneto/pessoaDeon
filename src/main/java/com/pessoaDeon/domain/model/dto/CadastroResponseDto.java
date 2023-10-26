@@ -1,6 +1,7 @@
 package com.pessoaDeon.domain.model.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.Data;
 
@@ -55,6 +56,8 @@ public class CadastroResponseDto {
 	//email
 	private String email;
 	
+//	lista de anexos da pessoa;
+	private List<String> listaAnexos;
 	
 	
 }
