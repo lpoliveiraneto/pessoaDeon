@@ -1,5 +1,8 @@
 package com.pessoaDeon.api.controller.analista;
 
+import com.pessoaDeon.domain.model.analista.Analista;
+import com.pessoaDeon.domain.model.dto.analista.AnalistaRequest;
+import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
-import com.pessoaDeon.domain.model.dto.analista.AnalistaResponseDto;
 import com.pessoaDeon.domain.service.analista.AnalistaService;
 import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;

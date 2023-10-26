@@ -24,12 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import com.pessoaDeon.domain.model.analista.BoAnalise;
-import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
-import com.pessoaDeon.domain.repository.analista.BoAnaliseRepository;
-import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
+
 
 @Service
 public class BoAnaliseService {
