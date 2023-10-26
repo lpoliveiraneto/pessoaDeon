@@ -9,6 +9,6 @@ import com.pessoaDeon.domain.model.bo.Protocolo;
 @Repository
 public interface ProtocoloRepository extends JpaRepository<Protocolo, Integer> {
 
-	Protocolo findByBo(BoDeon bo);
+	Protocolo findByBoIdBo(Integer idBo);
 
 }

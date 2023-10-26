@@ -60,7 +60,7 @@ public class BoAnaliseService {
     private BosAnalisadosResponseDto getBoAnalisetoBosAnalisadosResponseDto(BoAnalise b) {
         BosAnalisadosResponseDto bo = new BosAnalisadosResponseDto();
         bo.setIdBo(b.getBoDeon().getIdBo());
-        bo.setProtocolo(protocoloRepository.findByBo(b.getBoDeon()).getNumero());
+        bo.setProtocolo(protocoloRepository.findByBoIdBo(b.getBoDeon().getIdBo()).getNumero());
         bo.setNomeAnalista(b.getAnalista().getPessoa().getNome());
         var natureza = b.getBoDeon().getListaNaturezas().get(0).getNaturezaDeon();
         var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
