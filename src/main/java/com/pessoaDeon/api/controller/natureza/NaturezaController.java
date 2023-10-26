@@ -46,7 +46,10 @@ public class NaturezaController {
 		if(erros.hasErrors())
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(erros.getFieldErrors());
 		if(!naturezaService.existeNatureza(natDto)) {
-			return ResponseEntity.ok(naturezaService.salvar(natDto));			
+			var naturezaDeon = naturezaService.salvar(natDto);
+			if (naturezaDeon != null) {
+				return ResponseEntity.ok().body("Natureza salva com sucesso!");			
+			}
 		}
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Natureza já existe");
 	}

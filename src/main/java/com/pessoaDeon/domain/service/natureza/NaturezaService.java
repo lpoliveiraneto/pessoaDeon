@@ -52,7 +52,7 @@ public class NaturezaService {
 	}
 	
 	@Transactional
-	public ResponseEntity<?> salvar(NaturezaDeonRequestDto dto) {
+	public NaturezaDeon salvar(NaturezaDeonRequestDto dto) {
 
 		NaturezaDeon deon =  new NaturezaDeon();
 		deon.setNome(!dto.getNome().isEmpty() ? dto.getNome() : null);
@@ -62,8 +62,7 @@ public class NaturezaService {
 		deon.setPathSvg(dto.getPathSvg());
 		deon.setNaturezaSigma(dto.getIdNaturezaSigma());
 		deon.setStatus(true);
-		
-		return ResponseEntity.ok(repository.save(deon));
+		return repository.save(deon);
 	}
 	
 	public NaturezaSigma buscarNaturezaSigma(Integer idNaturezaSigma){
