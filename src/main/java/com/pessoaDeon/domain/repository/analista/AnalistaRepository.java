@@ -10,6 +10,8 @@ import com.pessoaDeon.domain.model.analista.Analista;
 @Repository
 public interface AnalistaRepository extends JpaRepository<Analista, Integer> {
 
-   	Optional<Analista> findByLogin(String login);
+   	Optional<Analista> findByLogin(String cpf);
+
+	Boolean existsByLogin(String cpf);
     
 }
