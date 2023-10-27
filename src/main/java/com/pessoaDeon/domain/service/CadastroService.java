@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.pessoaDeon.domain.exception.ArquivoNaoEncontradoException;
 import com.pessoaDeon.domain.model.AnexoPessoa;
+import com.pessoaDeon.domain.model.FotoPerfil;
+import com.pessoaDeon.domain.model.TipoArquivo;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 import com.pessoaDeon.domain.model.dto.CadastroResponseDto;
 import com.pessoaDeon.domain.model.endereco.Endereco;
@@ -71,6 +73,9 @@ public class CadastroService {
 	
 	@Autowired
 	private AnexoPessoaService anexoPessoaService;
+	
+	@Autowired
+	private FotoPerfilService fotoPerfilService;
 
 	@Autowired
 	private PerfilRepository perfilRepository;
@@ -213,7 +218,7 @@ public class CadastroService {
 	}
 
 	public String salvarAnexosDocumentoPessoa(Pessoa pessoa, MultipartFile[] files) {
-		ConfiguracaoUpload config = uploadService.getConfiguracaoUploadAtiva();
+		ConfiguracaoUpload config = uploadService.getConfiguracaoUpload(TipoArquivo.AN);
 		Path path = Paths.get(config.getPath());
 		try {
 			if (files != null) {
@@ -264,5 +269,50 @@ public class CadastroService {
 		});
 		return listaAnexoToString;
     }
+	
+	public String salvarFotoPerfil(Integer idPessoa, MultipartFile file) {
+		ConfiguracaoUpload config = uploadService.getConfiguracaoUpload(TipoArquivo.FP);
+		Path path = Paths.get(config.getPath());
+		try {
+			String extensao = FilenameUtils.getExtension(file.getOriginalFilename());
+            String nomeArquivo = gerarNomeArquivo() + "." + extensao;
+            Path filePath = path.resolve(nomeArquivo);
+			Files.copy(file.getInputStream(), filePath);
+			salvarInfoFotoPerfil(config, idPessoa, nomeArquivo, extensao);
+		} catch (Exception e) {
+			return "Erro ao salvar arquivo: " +e.getMessage();
+		}
+		return null;
+	}
+	
+	private void salvarInfoFotoPerfil(ConfiguracaoUpload config, Integer idPessoa, 
+			String arquivo, String extensao) {
+		FotoPerfil fotoPerfil = new FotoPerfil();
+		fotoPerfil.setCaminho(config.getPath());
+		fotoPerfil.setConfigUpload(config);
+		fotoPerfil.setDataUpload(LocalDateTime.now());
+		fotoPerfil.setNomeArquivo(arquivo);
+		fotoPerfil.setPessoa(idPessoa);
+		fotoPerfil.setTipoArquivo(extensao);	
+		fotoPerfilService.salvarFotoPerfil(fotoPerfil);
+	}
+
+	public String carregarFotoPerfil(Integer idPessoa) {
+		FotoPerfil fotoPerfil = fotoPerfilService.findByPessoaIdPessoa(idPessoa);
+		Path diretorioDeArmazenamento = Paths.get(fotoPerfil.getCaminho());
+		try {
+			Path caminhoArquivo = diretorioDeArmazenamento.resolve(fotoPerfil.getNomeArquivo());
+			Resource resource = new UrlResource(caminhoArquivo.toUri());
+			if (resource.exists() && resource.isReadable()) {
+				var bin = resource.getContentAsByteArray();
+				String imagemString = Base64.getEncoder().encodeToString(bin);
+				return imagemString;
+			} else {
+				throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, null);
+			}
+		} catch (IOException e) {
+			throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, e);
+		}
+	}
 }
 
