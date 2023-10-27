@@ -3,8 +3,8 @@ package com.pessoaDeon.domain.service.analista;
 import com.pessoaDeon.domain.exception.AnalistaNotFoundException;
 import com.pessoaDeon.domain.exception.BoAnaliseNotFoundException;
 import com.pessoaDeon.domain.exception.BoNotFoundException;
+import com.pessoaDeon.domain.exception.RespostaAnaliseNotFoundException;
 import com.pessoaDeon.domain.model.analista.BoAnalise;
-import com.pessoaDeon.domain.model.analista.RespostaAnaliseBo;
 import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
@@ -102,18 +102,21 @@ public class BoAnaliseService {
     }
 
     public void salvarRespostaBoEmAnalise(BoAnaliseRequest boAnaliseRequest){
+        final int FINALIZADO_COM_SUCESSO = 1;
         var boAnalise = boAnaliseRepository.findById(boAnaliseRequest.fkBoAnalise())
-                .orElseThrow(() -> new BoAnaliseNotFoundException("Não existe analise para esse id"));
-        if(!boAnalise.isStatus()){
-            boAnalise.setDataAnalise(LocalDateTime.now());
-            boAnalise.setStatus(true);
-            boAnalise.setRespostaAnaliseBo(respostaAnaliseBoRepository.findById(boAnaliseRequest.fkRespostaBo()).get());
-            if(boAnalise.getRespostaAnaliseBo().getIdRespostaAnalise() != 1 ){
-                boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), Status.IV);
-            }else{
-                boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), Status.VA);
-            }
-            boAnaliseRepository.save(boAnalise);
+               .orElseThrow(() -> new BoAnaliseNotFoundException("Não existe analise para esse id"));
+        if(boAnalise.isStatus()){
+            return;
         }
+        boAnalise.setDataAnalise(LocalDateTime.now());
+        boAnalise.setStatus(true);
+        var respostaAnaliseBo = respostaAnaliseBoRepository.findById(boAnaliseRequest.fkRespostaBo())
+                .orElseThrow(() -> new RespostaAnaliseNotFoundException("Não existe resposta para esse id"));
+        boAnalise.setRespostaAnaliseBo(respostaAnaliseBo);
+
+        Status novoStatus = (boAnalise.getRespostaAnaliseBo().getIdRespostaAnalise() != FINALIZADO_COM_SUCESSO) ? Status.IV : Status.VA;
+        boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), novoStatus);
+
+        boAnaliseRepository.saveAndFlush(boAnalise);
     }
 }
