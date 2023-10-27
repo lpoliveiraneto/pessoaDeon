@@ -2,7 +2,6 @@ package com.pessoaDeon.domain.service;
 
 import com.pessoaDeon.domain.exception.UsuarioAlreadyRegisteredException;
 import com.pessoaDeon.domain.model.analista.BoAnalise;
-import com.pessoaDeon.domain.model.dto.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;

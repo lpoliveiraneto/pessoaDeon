@@ -102,7 +102,7 @@ public class BoAnaliseService {
     }
 
     public void salvarRespostaBoEmAnalise(BoAnaliseRequest boAnaliseRequest){
-        var boAnalise = boAnaliseRepository.findById(boAnaliseRequest.fkBo())
+        var boAnalise = boAnaliseRepository.findById(boAnaliseRequest.fkBoAnalise())
                 .orElseThrow(() -> new BoAnaliseNotFoundException("Não existe analise para esse id"));
         if(!boAnalise.isStatus()){
             boAnalise.setDataAnalise(LocalDateTime.now());
