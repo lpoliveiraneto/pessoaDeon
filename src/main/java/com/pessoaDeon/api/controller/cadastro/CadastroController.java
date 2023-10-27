@@ -75,4 +75,20 @@ public class CadastroController {
         return ResponseEntity.ok(arquivos);
     }
 	
+	@PostMapping("/salvarFotoPerfil/{idPessoa}")
+	public ResponseEntity<?> salvarFotoPerfil(@PathVariable Integer idPessoa, 
+			@RequestParam(name = "foto") MultipartFile foto){
+		var x = cadastroService.salvarFotoPerfil(idPessoa, foto);
+		return ResponseEntity.ok(x);
+	}
+	
+	@GetMapping("/getFotoPerfil/{idPessoa}")
+	public ResponseEntity<?> getFotoPerfil(Integer idPessoa){
+		String imgBase64 = cadastroService.carregarFotoPerfil(idPessoa);
+		if (imgBase64 == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum arquivo encontrado!");
+		}
+		return ResponseEntity.ok(imgBase64);
+	}
+	
 }
