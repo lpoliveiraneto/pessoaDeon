@@ -3,6 +3,7 @@ package com.pessoaDeon.domain.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pessoaDeon.domain.model.TipoArquivo;
 import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.ConfiguracaoUploadRepository;
 
@@ -12,7 +13,7 @@ public class ConfiguracaoUploadService {
 	@Autowired
 	private ConfiguracaoUploadRepository configuracaoUploadRepository;
 	
-	public ConfiguracaoUpload getConfiguracaoUploadAtiva() {
-		return configuracaoUploadRepository.findByStatusIsTrue();
+	public ConfiguracaoUpload getConfiguracaoUpload(TipoArquivo tipoArquivo) {
+		return configuracaoUploadRepository.findByTipoArquivoAndStatusIsTrue(tipoArquivo);
 	}
 }

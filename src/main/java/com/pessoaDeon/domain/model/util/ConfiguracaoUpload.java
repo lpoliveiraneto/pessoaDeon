@@ -2,6 +2,8 @@ package com.pessoaDeon.domain.model.util;
 
 import java.io.Serializable;
 
+import com.pessoaDeon.domain.model.TipoArquivo;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +27,7 @@ public class ConfiguracaoUpload implements Serializable{
 	private String descricao;
 	
 	private Boolean status;
+	
+	private TipoArquivo tipoArquivo;
 	
 }
