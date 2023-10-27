@@ -1,9 +1,12 @@
 package com.pessoaDeon.domain.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.pessoaDeon.domain.exception.UsuarioAlreadyRegisteredException;
+import com.pessoaDeon.domain.model.analista.BoAnalise;
+import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,12 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.domain.exception.UsuarioAlreadyRegisteredException;
-import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
-import com.pessoaDeon.domain.model.enumeration.Status;
-import com.pessoaDeon.domain.model.pessoa.Pessoa;
-import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.pessoaDeon.domain.exception.AnalistaNotFoundException;
 import com.pessoaDeon.domain.exception.EnviaBoSigmaException;
 import com.pessoaDeon.domain.exception.PessoaNotFoundException;
 import com.pessoaDeon.domain.model.analista.Analista;
@@ -68,6 +69,11 @@ public class AnalistaService {
 	private Analista analistaRequestToAnalista(AnalistaRequest analistaRequest, AnalistaResponseDto analistaSigma, Pessoa pessoa) {
 		final long PERFIL_ANALISTA = 3;
 		Analista analista = new Analista();
+		
+		var verifica = analistaRepository.existsByLogin(analistaRequest.cpf());
+		if (verifica.equals(true)) {
+			throw new AnalistaNotFoundException("Analista já está cadastrado!");
+		}
 		analista.setLogin(analistaRequest.cpf());
 		analista.setMatricula(analistaRequest.matricula());
 		analista.setNome(analistaRequest.nome());

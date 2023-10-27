@@ -1,4 +1,4 @@
-package com.pessoaDeon.api.controller.analista;
+package com.pessoaDeon.api.controller.ocorrencia;
 
 import java.util.Optional;
 
