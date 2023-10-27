@@ -20,6 +20,7 @@ import com.pessoaDeon.domain.model.dto.seguranca.DadosAlterarSenhaDTO;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacao;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
 import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.service.CadastroService;
 import com.pessoaDeon.domain.service.PessoaService;
 import com.pessoaDeon.domain.service.SenhaResetService;
 
@@ -38,6 +39,9 @@ public class AutenticacaoController {
     private PessoaService pessoaService;
     
     @Autowired
+    private CadastroService cadastroService;
+    
+    @Autowired
     private SenhaResetService senhaResetService;
 
     @PostMapping("login")
@@ -50,7 +54,8 @@ public class AutenticacaoController {
             	var tokenJWT = tokenService.gerarToken(user);
             	var pessoa = pessoaService.buscaPessoaEmail(dados.email());
                 String primeiroNomeUltimo = primeiroEUltimonome(pessoa.getNome());
-            	return ResponseEntity.ok(new DadosTokenJwt(user.getIdUsuario().toString(),primeiroNomeUltimo,tokenJWT, user.getPerfis(), pessoa.getId()));
+                String fotoPerfil = cadastroService.carregarFotoPerfil(pessoa.getId());
+            	return ResponseEntity.ok(new DadosTokenJwt(user.getIdUsuario().toString(),primeiroNomeUltimo,tokenJWT, user.getPerfis(), pessoa.getId(), fotoPerfil));
             } else {
             	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sua conta ainda não esta ativa. Por favor, verifique sua caixa de e-mail.");
             }

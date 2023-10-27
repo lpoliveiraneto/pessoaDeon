@@ -21,10 +21,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenService tokenService;
+    
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
     @Autowired
     private AnalistaRepository analistaRepository;
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenJWT = recuperarToken(request);

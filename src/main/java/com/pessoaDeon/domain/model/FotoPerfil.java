@@ -31,7 +31,7 @@ public class FotoPerfil implements Serializable{
 	private LocalDateTime dataUpload;
 	
 //	@ManyToOne
-	@JoinColumn(name = "fk_pessoa")
+	@Column(name = "fk_pessoa")
 	private Integer pessoa;
 	
 	private String caminho;

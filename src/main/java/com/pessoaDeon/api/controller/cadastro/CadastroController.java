@@ -20,6 +20,7 @@ import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.service.CadastroService;
 import com.pessoaDeon.domain.service.VerificacaoContaService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -62,7 +63,12 @@ public class CadastroController {
      */
 	@GetMapping("/pessoaPorId/{idPessoa}")
 	public ResponseEntity<?> listarPessoaPorId(@PathVariable (value = "idPessoa") Integer idPessoa){
-		return ResponseEntity.ok().body(cadastroService.listarCadastroPessoa(idPessoa));
+		return ResponseEntity.ok().body(cadastroService.listarCadastroPessoa(idPessoa, true));
+	}
+
+	@GetMapping("/getPessoaToken")
+	public ResponseEntity<?> getPessoaToken(HttpServletRequest request){
+		return ResponseEntity.ok().body(cadastroService.getPessoaToken(request));
 	}
 	
 	@GetMapping("/{idPessoa}")
@@ -75,16 +81,17 @@ public class CadastroController {
         return ResponseEntity.ok(arquivos);
     }
 	
-	@PostMapping("/salvarFotoPerfil/{idPessoa}")
-	public ResponseEntity<?> salvarFotoPerfil(@PathVariable Integer idPessoa, 
-			@RequestParam(name = "foto") MultipartFile foto){
-		var x = cadastroService.salvarFotoPerfil(idPessoa, foto);
+	@PostMapping("/salvarFotoPerfil")
+	public ResponseEntity<?> salvarFotoPerfil(HttpServletRequest request,
+			@RequestPart MultipartFile foto){
+		var x = cadastroService.salvarFotoPerfil(request, foto);
 		return ResponseEntity.ok(x);
 	}
 	
-	@GetMapping("/getFotoPerfil/{idPessoa}")
-	public ResponseEntity<?> getFotoPerfil(Integer idPessoa){
-		String imgBase64 = cadastroService.carregarFotoPerfil(idPessoa);
+	@GetMapping("/getFotoPerfil")
+	public ResponseEntity<?> getFotoPerfil(HttpServletRequest request){
+		Pessoa pessoa = cadastroService.getPessoaByToken(request);
+		String imgBase64 = cadastroService.carregarFotoPerfil(pessoa.getId());
 		if (imgBase64 == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum arquivo encontrado!");
 		}

@@ -59,5 +59,7 @@ public class CadastroResponseDto {
 //	lista de anexos da pessoa;
 	private List<String> listaAnexos;
 	
+//	retorna a foto de perfil da pessoa em base64
+	private String fotoPerfil;
 	
 }

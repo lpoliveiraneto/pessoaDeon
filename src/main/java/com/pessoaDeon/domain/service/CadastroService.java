@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pessoaDeon.config.security.TokenService;
 import com.pessoaDeon.domain.exception.ArquivoNaoEncontradoException;
 import com.pessoaDeon.domain.model.AnexoPessoa;
 import com.pessoaDeon.domain.model.FotoPerfil;
@@ -37,6 +38,8 @@ import com.pessoaDeon.domain.model.pessoa.Telefone;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Service
@@ -59,6 +62,7 @@ public class CadastroService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -76,7 +80,10 @@ public class CadastroService {
 	
 	@Autowired
 	private FotoPerfilService fotoPerfilService;
-
+	
+	@Autowired
+	private TokenService tokenService;
+	
 	@Autowired
 	private PerfilRepository perfilRepository;
 
@@ -163,14 +170,13 @@ public class CadastroService {
 	}
 
 	@ReadOnlyProperty
-	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa) {
+	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa, Boolean trazAnexo) {
 		CadastroResponseDto response = new CadastroResponseDto();
-		
 		Endereco enderecoPessoa = enderecoService.getEnderecoByIdPessoa(idPessoa).get();
 		Pessoa pessoa = pessoaService.buscarPessoa(idPessoa).get();
 		Telefone contato = contatoService.getById(idPessoa);
 		Email email = emailService.getByIdEmail(idPessoa);
-		List<String> anexos = carregarArquivo(idPessoa);
+		List<String> anexos = trazAnexo == true ? carregarArquivo(idPessoa) : null;
 		//dados referentes a pessoa
 		response.setNome(pessoa.getNome());
 		response.setDataNascimento(pessoa.getDataNascimento());
@@ -270,7 +276,8 @@ public class CadastroService {
 		return listaAnexoToString;
     }
 	
-	public String salvarFotoPerfil(Integer idPessoa, MultipartFile file) {
+	public String salvarFotoPerfil(HttpServletRequest request, MultipartFile file) {
+		Pessoa pessoa = getPessoaByToken(request);
 		ConfiguracaoUpload config = uploadService.getConfiguracaoUpload(TipoArquivo.FP);
 		Path path = Paths.get(config.getPath());
 		try {
@@ -278,7 +285,7 @@ public class CadastroService {
             String nomeArquivo = gerarNomeArquivo() + "." + extensao;
             Path filePath = path.resolve(nomeArquivo);
 			Files.copy(file.getInputStream(), filePath);
-			salvarInfoFotoPerfil(config, idPessoa, nomeArquivo, extensao);
+			salvarInfoFotoPerfil(config, pessoa.getId(), nomeArquivo, extensao);
 		} catch (Exception e) {
 			return "Erro ao salvar arquivo: " +e.getMessage();
 		}
@@ -313,6 +320,27 @@ public class CadastroService {
 		} catch (IOException e) {
 			throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, e);
 		}
+	}
+
+//	pega os dados da pessoa para exibir em Minha Conta no front
+	public CadastroResponseDto getPessoaToken(HttpServletRequest request) {
+		Pessoa pessoa = getPessoaByToken(request);
+		return pessoa == null ? null : listarCadastroPessoa(pessoa.getId(), false);
+	}
+	
+	private String recuperarToken(HttpServletRequest request) {
+        var authorizationHeader = request.getHeader("Authorization");
+        if(authorizationHeader != null){
+            return authorizationHeader.replace("Bearer ","");
+        }
+        return null;
+    }
+	
+	public Pessoa getPessoaByToken(HttpServletRequest request) {
+		var tokenJWT = recuperarToken(request);
+		var email = tokenService.getSubject(tokenJWT);
+		Pessoa pessoa = pessoaService.buscaPessoaEmail(email);
+		return pessoa != null ? pessoa : null;
 	}
 }
 
