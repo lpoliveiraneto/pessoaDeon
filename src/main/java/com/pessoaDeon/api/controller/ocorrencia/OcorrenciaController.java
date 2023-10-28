@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
+import com.pessoaDeon.domain.model.enumeration.TipoPesquisa;
 import com.pessoaDeon.domain.service.analista.AnalistaService;
 import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
@@ -32,8 +33,10 @@ public class OcorrenciaController {
     @GetMapping
     public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
     		@PageableDefault(size = 10, page = 0, sort = "idBo", 
-    		direction = Sort.Direction.ASC)Pageable pageable){
-        return boService.getBosPendentes(pageable);
+    		direction = Sort.Direction.ASC)Pageable pageable,
+    		@RequestParam(name = "tipoPesquisa") TipoPesquisa tipoPesquisa,
+    		@RequestParam(name = "parametro") String parametro){
+        return boService.getBosPendentes(pageable, tipoPesquisa, parametro);
     }
 
     @GetMapping("/todos")

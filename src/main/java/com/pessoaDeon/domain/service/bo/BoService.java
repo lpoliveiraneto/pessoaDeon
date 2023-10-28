@@ -1,9 +1,13 @@
 package com.pessoaDeon.domain.service.bo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,7 @@ import com.pessoaDeon.domain.model.dto.EnvolvidoBoDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.enumeration.TipoPesquisa;
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
@@ -42,6 +47,7 @@ import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.service.envolvido.EnvolvimentoService;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -241,10 +247,52 @@ public class BoService {
 		return null;
 	}
 
-	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable){
-		List<BoDeon> bosPendentes = boRepository.findByStatusEquals(Status.PE);
-		List<BosPendentesResponseDto> bos = new ArrayList<BosPendentesResponseDto>();
-		bosPendentes.forEach( b-> {
+	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable, TipoPesquisa tipoPesquisa, String parametro){
+		QBoDeon qBoDeon = QBoDeon.boDeon;
+		QProtocolo qProtocolo = QProtocolo.protocolo;
+		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
+		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
+		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
+		QPessoa qPessoa = QPessoa.pessoa;
+		JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon);
+		if (tipoPesquisa != null) {
+			switch (tipoPesquisa) {
+				case PROTOCOLO:
+					query.leftJoin(qProtocolo).on(qBoDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.eq(parametro));
+					break;
+				case COMUNICANTE:
+					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+					query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
+					query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
+					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))					.where(qPessoa.nome.containsIgnoreCase(parametro));
+					break;
+				case CPF:
+					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+					query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
+					query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
+					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
+					.where(qPessoa.numeroDocumento.containsIgnoreCase(parametro));
+					break;
+				case DATA_REGISTRO:
+			        DateTimeFormatter formatoDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			        LocalDate data = LocalDate.parse(parametro, formatoDataHora);
+			        LocalTime horaInicio = LocalTime.of(0, 0, 0);
+			        LocalDateTime tInicial = LocalDateTime.of(data, horaInicio);
+			        LocalDateTime tFinal = tInicial.plusHours(23).plusMinutes(59).plusSeconds(59);
+			        query.where(qBoDeon.dataRegistro.between(tInicial, tFinal));
+					break;
+				case NATUREZA:
+					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+					query.leftJoin(qNaturezaBo.naturezaDeon, qNaturezaDeon)
+					.where(qNaturezaDeon.nome.containsIgnoreCase(parametro));
+					break;
+				default:
+					break;				}
+		}
+		List<BoDeon> listaBos = query.distinct().offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+		List<BosPendentesResponseDto> bos = new ArrayList<>();
+		listaBos.stream().forEach( b-> {
 			BosPendentesResponseDto bo = new BosPendentesResponseDto();
 			bo.setIdBo(b.getIdBo());
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();

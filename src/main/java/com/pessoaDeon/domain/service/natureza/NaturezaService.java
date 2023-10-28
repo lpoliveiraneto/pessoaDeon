@@ -36,7 +36,7 @@ public class NaturezaService {
 		QNaturezaSigma naturezaSigma = QNaturezaSigma.naturezaSigma;
 		BooleanBuilder bb = new BooleanBuilder();
 		if (nome != null) {
-			bb.and(naturezaSigma.nome.contains(nome));
+			bb.and(naturezaSigma.nome.containsIgnoreCase(nome));
 		}
 		return naturezaRepository.findAll(bb, pageable);
 	}
