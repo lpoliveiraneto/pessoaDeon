@@ -1,10 +1,8 @@
 package com.pessoaDeon.config.validacao;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.pessoaDeon.domain.exception.*;
-import com.pessoaDeon.domain.model.analista.Analista;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -47,6 +45,11 @@ public class TratadorDeErros {
 
     @ExceptionHandler(BoNotFoundException.class)
     public ResponseEntity<?> BoNãoEncontrada(BoNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DadosErroStatus(HttpStatus.NOT_FOUND.toString(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(RespostaAnaliseNotFoundException.class)
+    public ResponseEntity<?> RespostaAnaliseBoNotFound(RespostaAnaliseNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DadosErroStatus(HttpStatus.NOT_FOUND.toString(), ex.getMessage()));
     }
     @ExceptionHandler(EnderecoNotFoundException.class)
