@@ -48,6 +48,7 @@ import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.service.envolvido.EnvolvimentoService;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -247,7 +248,18 @@ public class BoService {
 		return null;
 	}
 
-	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable, TipoPesquisa tipoPesquisa, String parametro){
+	/**
+	 * @author Jeff Andrade, em 30 de outubro de 2023
+	 * */
+	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable, TipoPesquisa tipoPesquisa, String parametro) {
+	    JPAQuery<BoDeon> query = buildQuery(tipoPesquisa, parametro);
+	    long count = query.fetchCount();
+	    List<BoDeon> listaBos = query.distinct().offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	    List<BosPendentesResponseDto> bos = processResults(listaBos);
+	    return new PageImpl<>(bos, pageable, count);
+	}
+
+	private JPAQuery<BoDeon> buildQuery(TipoPesquisa tipoPesquisa, String parametro) {
 		QBoDeon qBoDeon = QBoDeon.boDeon;
 		QProtocolo qProtocolo = QProtocolo.protocolo;
 		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
@@ -255,17 +267,18 @@ public class BoService {
 		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
 		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
 		QPessoa qPessoa = QPessoa.pessoa;
-		JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon);
-		if (tipoPesquisa != null) {
-			switch (tipoPesquisa) {
-				case PROTOCOLO:
+	    JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon);
+	    if (tipoPesquisa != null) {
+		    switch (tipoPesquisa) {
+			    case PROTOCOLO:
 					query.leftJoin(qProtocolo).on(qBoDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.eq(parametro));
 					break;
 				case COMUNICANTE:
 					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
 					query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
 					query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
-					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))					.where(qPessoa.nome.containsIgnoreCase(parametro));
+					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
+					.where(qPessoa.nome.containsIgnoreCase(parametro));
 					break;
 				case CPF:
 					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
@@ -288,12 +301,15 @@ public class BoService {
 					.where(qNaturezaDeon.nome.containsIgnoreCase(parametro));
 					break;
 				default:
-					break;				}
-		}
-		List<BoDeon> listaBos = query.distinct().offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
-		List<BosPendentesResponseDto> bos = new ArrayList<>();
-		listaBos.stream().forEach( b-> {
-			BosPendentesResponseDto bo = new BosPendentesResponseDto();
+					break;
+				}
+	    }
+	    return query;
+	}
+
+	private List<BosPendentesResponseDto> processResults(List<BoDeon> listaBos) {
+	    return listaBos.stream().map(b -> {
+	    	BosPendentesResponseDto bo = new BosPendentesResponseDto();
 			bo.setIdBo(b.getIdBo());
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
 			var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
@@ -302,9 +318,8 @@ public class BoService {
 			var envolvimento = envolvimentoRepository.findByNaturezaBoBoIdBoAndTipoParticipacaoValorOrNaturezaBoBoIdBoAndTipoParticipacaoValor(b.getIdBo(),"CM", b.getIdBo(), "CV");
 			bo.setNome(envolvimento.getEnvolvido() != null ? envolvimento.getEnvolvido().getPessoa().getNome() : "NÃO CONSEGUI ENCONTRAR");
 			bo.setProtocolo(protocoloRepository.findByBoIdBo(b.getIdBo()).getNumero());
-			bos.add(bo);
-		});
-		return new PageImpl<>(bos, pageable, bos.size());
+			return bo;
+	    }).collect(Collectors.toList());
 	}
 
 	@ReadOnlyProperty
