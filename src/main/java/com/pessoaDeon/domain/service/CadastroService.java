@@ -41,28 +41,27 @@ import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
 @Service
 public class CadastroService {
 
 	@Autowired
 	private PessoaService pessoaService;
-	
+
 	@Autowired
-    private LogradouroService logradouroService;
-    
-    @Autowired
-    private EnderecoService enderecoService;
-    
-    @Autowired
-    private ContatoService contatoService;
-    
-    @Autowired
-    private EmailService emailService;
-	
+	private LogradouroService logradouroService;
+
+	@Autowired
+	private EnderecoService enderecoService;
+
+	@Autowired
+	private ContatoService contatoService;
+
+	@Autowired
+	private EmailService emailService;
+
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -71,35 +70,35 @@ public class CadastroService {
 
 	@Autowired
 	private VerificacaoContaService verificacaoContaService;
-	
+
 	@Autowired
 	private ConfiguracaoUploadService uploadService;
-	
+
 	@Autowired
 	private AnexoPessoaService anexoPessoaService;
-	
+
 	@Autowired
 	private FotoPerfilService fotoPerfilService;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Autowired
 	private PerfilRepository perfilRepository;
 
 	@Transactional
-	public Pessoa salvar(CadastroRequestDto cadastroRequestDto, MultipartFile[] files){
+	public Pessoa salvar(CadastroRequestDto cadastroRequestDto, MultipartFile[] files) {
 		Pessoa pessoa = modelMapper.map(cadastroRequestDto, Pessoa.class);
 		var pessoaSave = pessoaService.salvarPessoaDeon(pessoa);
-		if(pessoaSave != null) {
+		if (pessoaSave != null) {
 			Logradouro logradouro = modelMapper.map(cadastroRequestDto, Logradouro.class);
-				var logradouroSave = logradouroService.getByCep(logradouro.getCep());
-				if (logradouroSave.getCep() != null) {
-					this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroSave);
-				} else {
-					var logradouroWithoutCepNotFound = logradouroService.save(logradouro);
-					this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroWithoutCepNotFound);
-				}
+			var logradouroSave = logradouroService.getByCep(logradouro.getCep());
+			if (logradouroSave.getCep() != null) {
+				this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroSave);
+			} else {
+				var logradouroWithoutCepNotFound = logradouroService.save(logradouro);
+				this.salvarEndereco(cadastroRequestDto, pessoaSave, logradouroWithoutCepNotFound);
+			}
 			this.salvarTelefone(cadastroRequestDto, pessoaSave);
 			this.salvarEmail(cadastroRequestDto, pessoaSave);
 		}
@@ -107,7 +106,7 @@ public class CadastroService {
 		salvarAnexosDocumentoPessoa(pessoa, files);
 		return pessoaSave;
 	}
-	
+
 	@Transactional
 	private Endereco salvarEndereco(CadastroRequestDto dto, Pessoa pessoa, Logradouro logradouro) {
 		Endereco endereco = new Endereco();
@@ -120,7 +119,7 @@ public class CadastroService {
 		endereco.setTipoMoradia(dto.getTipoMoradia());
 		return enderecoService.salvarEndereco(endereco);
 	}
-	
+
 	@Transactional
 	private Telefone salvarTelefone(CadastroRequestDto requestDto, Pessoa pessoa) {
 		Telefone telefone = new Telefone();
@@ -140,7 +139,7 @@ public class CadastroService {
 		var telefoneSave = contatoService.saveContato(telefone);
 		return telefoneSave;
 	}
-	
+
 	@Transactional
 	private Email salvarEmail(CadastroRequestDto dto, Pessoa pessoa) {
 		Email email = new Email();
@@ -152,7 +151,7 @@ public class CadastroService {
 	}
 
 	@Transactional
-	private Usuario salvarUsuario(CadastroRequestDto cadastroDto, Pessoa pessoa){
+	private Usuario salvarUsuario(CadastroRequestDto cadastroDto, Pessoa pessoa) {
 		final long PERFIL_USER = 1;
 		Usuario usuario = new Usuario();
 		usuario.setEmail(cadastroDto.getEmail());
@@ -177,7 +176,7 @@ public class CadastroService {
 		Telefone contato = contatoService.getById(idPessoa);
 		Email email = emailService.getByIdEmail(idPessoa);
 		List<String> anexos = trazAnexo == true ? carregarArquivo(idPessoa) : null;
-		//dados referentes a pessoa
+		// dados referentes a pessoa
 		response.setNome(pessoa.getNome());
 		response.setDataNascimento(pessoa.getDataNascimento());
 		response.setNomeMae(pessoa.getNomeMae());
@@ -185,42 +184,59 @@ public class CadastroService {
 		response.setAlcunha(pessoa.getAlcunha());
 		response.setNomeSocial(pessoa.getNomeSocial());
 		response.setSexo(pessoa.getSexo() != null ? pessoa.getSexo().getDescricao() : "Não Informado");
-		response.setEstadoCivil(pessoa.getEstadoCivil() !=null ? pessoa.getEstadoCivil().getNome() : "Não Informado");
-		response.setOrientacaoSexual(pessoa.getOrientacaoSexual() !=null ? pessoa.getOrientacaoSexual().getNome() : "Não Informado");
-		response.setIdentidadeGenero(pessoa.getIdentidadeGenero() !=null ? pessoa.getIdentidadeGenero().getNome() : "Não Informado");
-		response.setDeficiencia(pessoa.getDeficiencia()!=null ? pessoa.getDeficiencia().getNome() : "Não Informado");
-		response.setCorPele(pessoa.getCorPele() !=null ? pessoa.getCorPele().getNome() : "Não Informado");
-		response.setEscolaridade(pessoa.getEscolaridade() !=null ? pessoa.getEscolaridade().getNome() : "Não Informado");
-		response.setTipoDocumento(pessoa.getTipoDocumento() !=null ? pessoa.getTipoDocumento().getDescricao() : "Não Informado");
+		response.setEstadoCivil(pessoa.getEstadoCivil() != null ? pessoa.getEstadoCivil().getNome() : "Não Informado");
+		response.setOrientacaoSexual(
+				pessoa.getOrientacaoSexual() != null ? pessoa.getOrientacaoSexual().getNome() : "Não Informado");
+		response.setIdentidadeGenero(
+				pessoa.getIdentidadeGenero() != null ? pessoa.getIdentidadeGenero().getNome() : "Não Informado");
+		response.setDeficiencia(pessoa.getDeficiencia() != null ? pessoa.getDeficiencia().getNome() : "Não Informado");
+		response.setCorPele(pessoa.getCorPele() != null ? pessoa.getCorPele().getNome() : "Não Informado");
+		response.setEscolaridade(
+				pessoa.getEscolaridade() != null ? pessoa.getEscolaridade().getNome() : "Não Informado");
+		response.setTipoDocumento(
+				pessoa.getTipoDocumento() != null ? pessoa.getTipoDocumento().getDescricao() : "Não Informado");
 		response.setNumeroDocumento(pessoa.getNumeroDocumento());
-		response.setEstadoNaturalidade(pessoa.getEstadoNaturalidade() !=null ? pessoa.getEstadoNaturalidade().getDescricao() : "Não Informado");
-		response.setCidadeNaturalidade(pessoa.getCidadeNaturalidade() !=null ? pessoa.getCidadeNaturalidade().getDescricao() : "Não Informado");
-		response.setPais(pessoa.getPais() !=null ? pessoa.getPais().getDescricao() : "Não Informado");
-		//dados referentes a endereco
-		response.setCep(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getCep() : "Não Informado");
-		response.setEstado(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getEstado().getDescricao() : "Não Informado");
-		response.setCidade(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getCidade().getDescricao() : "Não Informado");
-		response.setBairro(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getBairro().getDescricao() : "Não Informado");
-		response.setLogradouro(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getLogradouro() : "Não Informado");
+		response.setEstadoNaturalidade(
+				pessoa.getEstadoNaturalidade() != null ? pessoa.getEstadoNaturalidade().getDescricao()
+						: "Não Informado");
+		response.setCidadeNaturalidade(
+				pessoa.getCidadeNaturalidade() != null ? pessoa.getCidadeNaturalidade().getDescricao()
+						: "Não Informado");
+		response.setPais(pessoa.getPais() != null ? pessoa.getPais().getDescricao() : "Não Informado");
+		// dados referentes a endereco
+		response.setCep(
+				enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getCep() : "Não Informado");
+		response.setEstado(
+				enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getEstado().getDescricao()
+						: "Não Informado");
+		response.setCidade(
+				enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getCidade().getDescricao()
+						: "Não Informado");
+		response.setBairro(
+				enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getBairro().getDescricao()
+						: "Não Informado");
+		response.setLogradouro(enderecoPessoa.getLogradouro() != null ? enderecoPessoa.getLogradouro().getLogradouro()
+				: "Não Informado");
 		response.setNumero(enderecoPessoa.getNumero());
-		response.setTipoMoradia(enderecoPessoa.getTipoMoradia() != null ? enderecoPessoa.getTipoMoradia().getDescricao() : "Não Informado");
+		response.setTipoMoradia(enderecoPessoa.getTipoMoradia() != null ? enderecoPessoa.getTipoMoradia().getDescricao()
+				: "Não Informado");
 		response.setComplemento(enderecoPessoa.getComplemento());
 		response.setReferencia(enderecoPessoa.getReferencia());
-		//dados referentes
+		// dados referentes
 		response.setTelefone(contato.getTelefone());
 		response.setTipoWhatsapp(contato.getTipowhatsapp());
 		response.setTipoTelegram(contato.getTipotelegram());
 		response.setEmail(email.getEmail());
 //		lista de anexos
 		response.setListaAnexos(anexos);
-		
+
 		return response;
 	}
-	
+
 	private String gerarNomeArquivo() {
 		UUID uuid = UUID.randomUUID();
-		String name = uuid.toString();		
-		return name; 
+		String name = uuid.toString();
+		return name;
 	}
 
 	public String salvarAnexosDocumentoPessoa(Pessoa pessoa, MultipartFile[] files) {
@@ -228,32 +244,32 @@ public class CadastroService {
 		Path path = Paths.get(config.getPath());
 		try {
 			if (files != null) {
-				for(MultipartFile file : files) {
+				for (MultipartFile file : files) {
 					String extensao = FilenameUtils.getExtension(file.getOriginalFilename());
-                    String nomeArquivo = gerarNomeArquivo() + "." + extensao;
-                    Path filePath = path.resolve(nomeArquivo);
+					String nomeArquivo = gerarNomeArquivo() + "." + extensao;
+					Path filePath = path.resolve(nomeArquivo);
 					Files.copy(file.getInputStream(), filePath);
 					salvarInfoAnexo(config, pessoa, nomeArquivo, extensao);
 				}
-				 return "Arquivo salvo com sucesso!";
+				return "Arquivo salvo com sucesso!";
 			}
 		} catch (Exception e) {
-			return "Erro ao salvar arquivo: " +e.getMessage();		}
+			return "Erro ao salvar arquivo: " + e.getMessage();
+		}
 		return null;
 	}
-	
-	private void salvarInfoAnexo(ConfiguracaoUpload config, Pessoa pessoa, 
-			String arquivo, String extensao) {
+
+	private void salvarInfoAnexo(ConfiguracaoUpload config, Pessoa pessoa, String arquivo, String extensao) {
 		AnexoPessoa anexo = new AnexoPessoa();
 		anexo.setCaminho(config.getPath());
 		anexo.setConfigUpload(config);
 		anexo.setDataUpload(LocalDateTime.now());
 		anexo.setNomeArquivo(arquivo);
 		anexo.setPessoa(pessoa);
-		anexo.setTipoArquivo(extensao);	
+		anexo.setTipoArquivo(extensao);
 		anexoPessoaService.salvarAnexoPessoa(anexo);
 	}
-	
+
 	public List<String> carregarArquivo(Integer idPessoa) {
 		List<AnexoPessoa> listaAnexo = anexoPessoaService.findByPessoaIdPessoa(idPessoa);
 		List<String> listaAnexoToString = new ArrayList<>();
@@ -274,52 +290,54 @@ public class CadastroService {
 			}
 		});
 		return listaAnexoToString;
-    }
-	
+	}
+
 	public String salvarFotoPerfil(HttpServletRequest request, MultipartFile file) {
 		Pessoa pessoa = getPessoaByToken(request);
 		ConfiguracaoUpload config = uploadService.getConfiguracaoUpload(TipoArquivo.FP);
 		Path path = Paths.get(config.getPath());
 		try {
 			String extensao = FilenameUtils.getExtension(file.getOriginalFilename());
-            String nomeArquivo = gerarNomeArquivo() + "." + extensao;
-            Path filePath = path.resolve(nomeArquivo);
+			String nomeArquivo = gerarNomeArquivo() + "." + extensao;
+			Path filePath = path.resolve(nomeArquivo);
 			Files.copy(file.getInputStream(), filePath);
 			salvarInfoFotoPerfil(config, pessoa.getId(), nomeArquivo, extensao);
 		} catch (Exception e) {
-			return "Erro ao salvar arquivo: " +e.getMessage();
+			return "Erro ao salvar arquivo: " + e.getMessage();
 		}
 		return null;
 	}
-	
-	private void salvarInfoFotoPerfil(ConfiguracaoUpload config, Integer idPessoa, 
-			String arquivo, String extensao) {
+
+	private void salvarInfoFotoPerfil(ConfiguracaoUpload config, Integer idPessoa, String arquivo, String extensao) {
 		FotoPerfil fotoPerfil = new FotoPerfil();
 		fotoPerfil.setCaminho(config.getPath());
 		fotoPerfil.setConfigUpload(config);
 		fotoPerfil.setDataUpload(LocalDateTime.now());
 		fotoPerfil.setNomeArquivo(arquivo);
 		fotoPerfil.setPessoa(idPessoa);
-		fotoPerfil.setTipoArquivo(extensao);	
+		fotoPerfil.setTipoArquivo(extensao);
 		fotoPerfilService.salvarFotoPerfil(fotoPerfil);
 	}
 
 	public String carregarFotoPerfil(Integer idPessoa) {
 		FotoPerfil fotoPerfil = fotoPerfilService.findByPessoaIdPessoa(idPessoa);
-		Path diretorioDeArmazenamento = Paths.get(fotoPerfil.getCaminho());
-		try {
-			Path caminhoArquivo = diretorioDeArmazenamento.resolve(fotoPerfil.getNomeArquivo());
-			Resource resource = new UrlResource(caminhoArquivo.toUri());
-			if (resource.exists() && resource.isReadable()) {
-				var bin = resource.getContentAsByteArray();
-				String imagemString = Base64.getEncoder().encodeToString(bin);
-				return imagemString;
-			} else {
-				throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, null);
+		if (fotoPerfil != null) {
+			Path diretorioDeArmazenamento = Paths.get(fotoPerfil.getCaminho());
+			try {
+				Path caminhoArquivo = diretorioDeArmazenamento.resolve(fotoPerfil.getNomeArquivo());
+				Resource resource = new UrlResource(caminhoArquivo.toUri());
+				if (resource.exists() && resource.isReadable()) {
+					var bin = resource.getContentAsByteArray();
+					String imagemString = Base64.getEncoder().encodeToString(bin);
+					return imagemString;
+				} else {
+					throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, null);
+				}
+			} catch (IOException e) {
+				throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, e);
 			}
-		} catch (IOException e) {
-			throw new ArquivoNaoEncontradoException("Arquivo não encontrado: " + idPessoa, e);
 		}
+		return null;
 	}
 
 //	pega os dados da pessoa para exibir em Minha Conta no front
@@ -327,15 +345,15 @@ public class CadastroService {
 		Pessoa pessoa = getPessoaByToken(request);
 		return pessoa == null ? null : listarCadastroPessoa(pessoa.getId(), false);
 	}
-	
+
 	private String recuperarToken(HttpServletRequest request) {
-        var authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader != null){
-            return authorizationHeader.replace("Bearer ","");
-        }
-        return null;
-    }
-	
+		var authorizationHeader = request.getHeader("Authorization");
+		if (authorizationHeader != null) {
+			return authorizationHeader.replace("Bearer ", "");
+		}
+		return null;
+	}
+
 	public Pessoa getPessoaByToken(HttpServletRequest request) {
 		var tokenJWT = recuperarToken(request);
 		var email = tokenService.getSubject(tokenJWT);
@@ -343,4 +361,3 @@ public class CadastroService {
 		return pessoa != null ? pessoa : null;
 	}
 }
-

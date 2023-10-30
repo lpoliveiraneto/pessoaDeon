@@ -22,6 +22,7 @@ import com.pessoaDeon.domain.exception.PessoaNotFoundException;
 import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaRequest;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaResponseDto;
+import com.pessoaDeon.domain.model.dto.analista.AnalistaReturnDto;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
@@ -48,21 +49,45 @@ public class AnalistaService {
 		return analistaRepository.findById(id);
 	}
 
+	/**
+	 * 
+	 * @return metodo para salvar analista
+	 * */
 	@Transactional
-	public Analista salvarAnalista(AnalistaRequest analistaRequest, HttpServletRequest http){
+	public Analista salvarAnalista(AnalistaRequest analistaRequest, HttpServletRequest http, AnalistaResponseDto analistaSigma){
 
-		var analistaSigma = buscaFuncionarioSigma(analistaRequest.cpf(), http);
-		
 		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
-			throw new PessoaNotFoundException("Funcionario não está ativo no SIGMA");
+			throw new PessoaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
 		}
 		
 		if(!verificaPessoaPeloNumeroDocumento(analistaRequest.cpf())){
-			throw new PessoaNotFoundException("Pessoa não consta no banco de dados");
+			throw new PessoaNotFoundException("Pessoa não consta no banco de dados, cadastre-o!");
 		}
 		Pessoa pessoa = pessoaService.buscaPessoaCpf(analistaRequest.cpf());
 		Analista analista = analistaRequestToAnalista(analistaRequest,analistaSigma, pessoa);
 		return analistaRepository.save(analista);
+	}
+	
+	/**
+	 * @param cpf
+	 * @return verifica pelo cpf se o funcionario esta no banco do sigma 
+	 * e se consta na tabela pessoa da DEON
+	 * 
+	 * */
+	public AnalistaReturnDto verificaAnalista(String cpf, HttpServletRequest http) {
+		var analistaSigma = buscaFuncionarioSigma(cpf, http);
+		
+		AnalistaReturnDto analistaReturnDto = new AnalistaReturnDto(analistaSigma, "As informações foram encontradas com sucesso");
+		
+		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
+			throw new AnalistaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
+		}
+		
+		if(!verificaPessoaPeloNumeroDocumento(cpf)){
+			analistaReturnDto.setMessage("Pessoa não consta no banco de dados, cadastre-o!");
+		}
+		
+		return analistaReturnDto;
 	}
 
 	@Transactional

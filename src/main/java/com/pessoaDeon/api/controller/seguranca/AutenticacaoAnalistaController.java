@@ -28,7 +28,7 @@ import com.pessoaDeon.domain.service.SenhaResetService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/analista/")
+@RequestMapping("/api/v1/autenticacaoAnalista/")
 public class AutenticacaoAnalistaController {
     
     @Autowired
