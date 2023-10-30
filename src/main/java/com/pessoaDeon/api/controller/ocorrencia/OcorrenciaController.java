@@ -34,8 +34,8 @@ public class OcorrenciaController {
     public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
     		@PageableDefault(size = 10, page = 0, sort = "idBo", 
     		direction = Sort.Direction.ASC)Pageable pageable,
-    		@RequestParam(name = "tipoPesquisa") TipoPesquisa tipoPesquisa,
-    		@RequestParam(name = "parametro") String parametro){
+    		@RequestParam(name = "tipoPesquisa", required = false) TipoPesquisa tipoPesquisa,
+    		@RequestParam(name = "parametro", required = false) String parametro){
         return boService.getBosPendentes(pageable, tipoPesquisa, parametro);
     }
 
