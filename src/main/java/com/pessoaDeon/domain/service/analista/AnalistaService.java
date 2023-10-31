@@ -77,7 +77,7 @@ public class AnalistaService {
 	public AnalistaReturnDto verificaAnalista(String cpf, HttpServletRequest http) {
 		var analistaSigma = buscaFuncionarioSigma(cpf, http);
 		
-		AnalistaReturnDto analistaReturnDto = new AnalistaReturnDto(analistaSigma, "As informações foram encontradas com sucesso");
+		AnalistaReturnDto analistaReturnDto = new AnalistaReturnDto(analistaSigma, null);
 		
 		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
 			throw new AnalistaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
