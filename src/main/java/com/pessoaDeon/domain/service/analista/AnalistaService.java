@@ -60,7 +60,7 @@ public class AnalistaService {
 			throw new PessoaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
 		}
 		
-		if(!verificaPessoaPeloNumeroDocumento(analistaRequest.cpf())){
+		if(!pessoaService.existsPessoaNumeroDocumento(analistaRequest.cpf())){
 			throw new PessoaNotFoundException("Pessoa não consta no banco de dados, cadastre-o!");
 		}
 		Pessoa pessoa = pessoaService.buscaPessoaCpf(analistaRequest.cpf());
@@ -76,17 +76,18 @@ public class AnalistaService {
 	 * */
 	public AnalistaReturnDto verificaAnalista(String cpf, HttpServletRequest http) {
 		var analistaSigma = buscaFuncionarioSigma(cpf, http);
-		
-		AnalistaReturnDto analistaReturnDto = new AnalistaReturnDto(analistaSigma, null);
+
+		AnalistaReturnDto analistaReturnDto = new AnalistaReturnDto(analistaSigma, null, null);
 		
 		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
 			throw new AnalistaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
 		}
 		
-		if(!verificaPessoaPeloNumeroDocumento(cpf)){
+		if(!pessoaService.existsPessoaNumeroDocumento(cpf)){
 			analistaReturnDto.setMessage("Pessoa não consta no banco de dados, cadastre-o!");
+		}else {
+			analistaReturnDto.setPessoa(verificaPessoaPeloNumeroDocumento(cpf));
 		}
-		
 		return analistaReturnDto;
 	}
 
@@ -115,8 +116,8 @@ public class AnalistaService {
 		return analista;
 	}
 
-	public boolean verificaPessoaPeloNumeroDocumento(String numeroDocumento){
-		return pessoaService.existsPessoaNumeroDocumento(numeroDocumento);
+	public Pessoa verificaPessoaPeloNumeroDocumento(String numeroDocumento){
+		return pessoaService.buscaPessoaCpf(numeroDocumento);
 	}
 	
 	public AnalistaResponseDto buscaFuncionarioSigma(String cpf, HttpServletRequest http) {
@@ -134,7 +135,7 @@ public class AnalistaService {
 				throw new EnviaBoSigmaException(e.getMessage());
 			}
 		}
-		return null;
+ 		return null;
 	}
 	
 	private String recuperarToken(HttpServletRequest request) {

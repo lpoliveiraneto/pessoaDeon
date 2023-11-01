@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.pessoaDeon.domain.model.mensagem.TituloAviso;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -60,4 +61,7 @@ public class NaturezaDeon implements Serializable{
     
     @Column(name = "autor")
     private Boolean autor = false;
+    
+    @OneToMany
+    private List<TituloAviso> aviso;
 }

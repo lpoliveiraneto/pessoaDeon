@@ -15,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.dto.   NaturezaDeonRequestDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
+import com.pessoaDeon.domain.model.mensagem.TituloAviso;
 import com.pessoaDeon.domain.model.natureza.NaturezaDeon;
 import com.pessoaDeon.domain.model.natureza.NaturezaSigma;
 import com.pessoaDeon.domain.model.natureza.QNaturezaSigma;
+import com.pessoaDeon.domain.repository.natureza.AvisoNaturezaRepository;
 import com.pessoaDeon.domain.repository.natureza.NaturezaDeonRepository;
 import com.pessoaDeon.domain.repository.natureza.NaturezaSigmaRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -30,6 +32,9 @@ public class NaturezaService {
 	
 	@Autowired
 	private NaturezaDeonRepository repository;
+	
+	@Autowired
+	private AvisoNaturezaRepository avisoNaturezaRepository;
 	
 	@ReadOnlyProperty
 	public Page<NaturezaSigma> listNatureza(Pageable pageable, String nome) {
@@ -63,6 +68,16 @@ public class NaturezaService {
 		deon.setNaturezaSigma(dto.getIdNaturezaSigma());
 		deon.setStatus(true);
 		return repository.save(deon);
+	}
+	
+	@Transactional
+	public TituloAviso saveTitulo(TituloAviso tituloAviso) {
+		TituloAviso titulo = new TituloAviso();
+		titulo.setNome(tituloAviso.getNome());
+//		titulo.setNaturezaDeon(tituloAviso.getNaturezaDeon());
+		titulo.setListaDescricaoAviso(tituloAviso.getListaDescricaoAviso());
+		
+		return avisoNaturezaRepository.save(titulo);
 	}
 	
 	public NaturezaSigma buscarNaturezaSigma(Integer idNaturezaSigma){
