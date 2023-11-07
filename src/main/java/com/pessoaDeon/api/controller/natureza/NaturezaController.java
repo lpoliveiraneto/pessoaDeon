@@ -85,9 +85,4 @@ public class NaturezaController {
 	public List<TituloAviso> buscarTituloPorIdNatureza(@PathVariable(value = "id") Integer id) {
 		return avisoNaturezaRepository.findByNaturezaDeonIdNatureza(id);
 	}
-	
-	@PostMapping("/salvarAviso")
-	public TituloAviso saveAviso(@RequestBody TituloAviso tituloAviso) {
-		return naturezaService.saveTitulo(tituloAviso);
-	}
 }

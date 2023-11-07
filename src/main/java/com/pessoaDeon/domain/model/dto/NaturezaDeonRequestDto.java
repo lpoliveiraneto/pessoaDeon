@@ -1,14 +1,14 @@
 package com.pessoaDeon.domain.model.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class NaturezaDeonRequestDto {
 
 	@NotNull
@@ -28,5 +28,6 @@ public class NaturezaDeonRequestDto {
    
     @NotEmpty(message = "Não pode ser nulo ou vazio")
     private String tipoNatureza;
-	
+    
+    private List<TituloRequestDto> titulos;
 }
