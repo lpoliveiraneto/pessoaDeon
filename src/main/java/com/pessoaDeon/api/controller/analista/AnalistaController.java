@@ -3,6 +3,7 @@ package com.pessoaDeon.api.controller.analista;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.domain.Sort;
+
 import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaReturnDto;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaSigmaDeonDto;
 import com.pessoaDeon.domain.service.UsuarioService;
 import com.pessoaDeon.domain.service.analista.AnalistaService;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -27,7 +29,7 @@ public class AnalistaController {
     
     @Autowired
     private UsuarioService usuarioService;
-
+    
     @PostMapping("/salvarAnalista")
     public Analista salvarAnalista(@RequestBody AnalistaSigmaDeonDto analistaRequest, HttpServletRequest http) {
         return analistaService.salvarAnalista(analistaRequest.getAnalistaRequest(), http, analistaRequest.getAnalistaResponseDto());
