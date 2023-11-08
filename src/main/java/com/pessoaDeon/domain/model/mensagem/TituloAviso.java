@@ -42,5 +42,6 @@ public class TituloAviso implements Serializable {
 	
 //	@JsonBackReference
 	@OneToMany(mappedBy = "aviso", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+	//@OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<DescricaoTitulo> listaDescricaoAviso;
 }

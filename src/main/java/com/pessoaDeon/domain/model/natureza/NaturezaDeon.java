@@ -62,6 +62,6 @@ public class NaturezaDeon implements Serializable{
     @Column(name = "autor")
     private Boolean autor = false;
     
-    @OneToMany
-    private List<TituloAviso> aviso;
+//    @OneToMany
+//    private List<TituloAviso> aviso;
 }

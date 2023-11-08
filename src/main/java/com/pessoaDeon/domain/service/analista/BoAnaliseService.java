@@ -8,7 +8,7 @@ import com.pessoaDeon.domain.model.analista.BoAnalise;
 import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
-import com.pessoaDeon.domain.repository.analista.BoAnaliseRepository;
+import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 import com.pessoaDeon.domain.repository.respostaBo.RespostaAnaliseBoRepository;

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -40,6 +41,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/ocorrencia/**").hasRole("ANALISTA");
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/violenciaDomestica/**").hasRole("MULHER");
                     req.anyRequest().authenticated(); 
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
