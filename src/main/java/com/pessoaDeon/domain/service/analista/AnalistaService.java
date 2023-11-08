@@ -23,10 +23,14 @@ import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaRequest;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaResponseDto;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaReturnDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
+import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
 import com.pessoaDeon.domain.service.PessoaService;
+import com.pessoaDeon.domain.service.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -42,6 +46,12 @@ public class AnalistaService {
 	@Autowired
 	private PerfilRepository perfilRepository;
 	
+	@Autowired
+	private UsuarioService usuarioService;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
 	@Value("${url.api-integracao}")
 	private String URL;
 	
@@ -54,7 +64,7 @@ public class AnalistaService {
 	 * @return metodo para salvar analista
 	 * */
 	@Transactional
-	public Analista salvarAnalista(AnalistaRequest analistaRequest, HttpServletRequest http, AnalistaResponseDto analistaSigma){
+	public Analista salvarAnalista(AnalistaRequest analistaRequest, HttpServletRequest http, AnalistaResponseDto analistaSigma) {
 
 		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
 			throw new PessoaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
@@ -64,6 +74,12 @@ public class AnalistaService {
 			throw new PessoaNotFoundException("Pessoa não consta no banco de dados, cadastre-o!");
 		}
 		Pessoa pessoa = pessoaService.buscaPessoaCpf(analistaRequest.cpf());
+		Usuario usuario = usuarioRepository.findByPessoa(pessoa).get();
+		
+		if(usuarioService.getUsuarioStatusAndContaAtiva(usuario.getIdUsuario(), Status.VA) == null ) {
+			throw new PessoaNotFoundException("Usuario não está com conta ativa!");
+		}
+		
 		Analista analista = analistaRequestToAnalista(analistaRequest,analistaSigma, pessoa);
 		return analistaRepository.save(analista);
 	}

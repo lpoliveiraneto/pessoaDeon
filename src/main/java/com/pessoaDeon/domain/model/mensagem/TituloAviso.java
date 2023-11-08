@@ -1,6 +1,7 @@
 package com.pessoaDeon.domain.model.mensagem;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,11 +18,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+//@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TituloAviso implements Serializable {
@@ -41,7 +45,6 @@ public class TituloAviso implements Serializable {
 	private NaturezaDeon naturezaDeon;
 	
 //	@JsonBackReference
-	@OneToMany(mappedBy = "aviso", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
-	//@OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<DescricaoTitulo> listaDescricaoAviso;
+	@OneToMany(mappedBy = "aviso", cascade = CascadeType.PERSIST)
+	private List<DescricaoTitulo> listaDescricaoAviso = new ArrayList<>();
 }
