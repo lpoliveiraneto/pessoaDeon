@@ -1,21 +1,19 @@
 package com.pessoaDeon.config.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.pessoaDeon.config.validacao.TratadorDeErros;
-import com.pessoaDeon.domain.model.analista.Analista;
-import com.pessoaDeon.domain.model.security.Usuario;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.pessoaDeon.domain.model.analista.Analista;
+import com.pessoaDeon.domain.model.security.Usuario;
 
 @Service
 public class TokenService {

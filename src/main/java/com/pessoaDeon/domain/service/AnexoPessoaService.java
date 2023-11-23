@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.AnexoPessoa;
-import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.AnexoPessoaRepository;
-import com.pessoaDeon.domain.repository.ConfiguracaoUploadRepository;
 
 @Service
 public class AnexoPessoaService {

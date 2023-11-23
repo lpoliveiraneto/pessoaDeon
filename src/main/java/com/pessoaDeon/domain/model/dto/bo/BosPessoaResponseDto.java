@@ -1,7 +1,6 @@
 package com.pessoaDeon.domain.model.dto.bo;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pessoaDeon.domain.model.util.EnumToObject;

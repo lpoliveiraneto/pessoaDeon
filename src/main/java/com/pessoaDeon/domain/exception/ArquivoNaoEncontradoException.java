@@ -4,7 +4,9 @@ import java.io.IOException;
 
 public class ArquivoNaoEncontradoException extends RuntimeException{
 
-    public ArquivoNaoEncontradoException(String exception, IOException e){
+    private static final long serialVersionUID = 1L;
+
+	public ArquivoNaoEncontradoException(String exception, IOException e){
         super(exception);
     }
 }

@@ -72,7 +72,6 @@ public class BairroService {
 					listaBairrosApi = response.getBody();
 				}
 			} catch (RestClientException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

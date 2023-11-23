@@ -19,9 +19,7 @@ import com.pessoaDeon.config.security.TokenService;
 import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosAlterarSenhaDTO;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosAutenticacaoAnalista;
-import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenJwt;
 import com.pessoaDeon.domain.model.dto.seguranca.DadosTokenAnalistaJwt;
-import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.service.PessoaService;
 import com.pessoaDeon.domain.service.SenhaResetService;
 

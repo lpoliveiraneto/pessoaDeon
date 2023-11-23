@@ -1,11 +1,9 @@
 package com.pessoaDeon.domain.model.dto.bo;
 
-import com.pessoaDeon.domain.model.enumeration.Status;
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

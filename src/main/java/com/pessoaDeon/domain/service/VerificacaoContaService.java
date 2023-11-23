@@ -7,22 +7,18 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
-
-import org.modelmapper.internal.bytebuddy.asm.Advice.Return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.domain.model.VerificacaoConta;
 import com.pessoaDeon.domain.model.enumeration.TipoEnvio;
-import com.pessoaDeon.domain.model.listas.TipoDocumento;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.VerificacaoContaRepository;
+import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
 
 @Service
 public class VerificacaoContaService {

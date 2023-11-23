@@ -3,7 +3,6 @@ package com.pessoaDeon.domain.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 
 import jakarta.persistence.Column;

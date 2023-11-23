@@ -17,7 +17,6 @@ import com.pessoaDeon.domain.model.listas.Profissao;
 import com.pessoaDeon.domain.model.listas.Raca;
 import com.pessoaDeon.domain.model.listas.Sexo;
 import com.pessoaDeon.domain.model.listas.TipoDocumento;
-import com.pessoaDeon.domain.model.listas.TipoLocal;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

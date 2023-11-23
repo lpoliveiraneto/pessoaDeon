@@ -1,7 +1,8 @@
 package com.pessoaDeon.domain.repository.boAnalise;
 
+import java.util.List;
+
 import com.pessoaDeon.domain.model.analista.BoAnalise;
-import com.pessoaDeon.domain.model.analista.QBoAnalise;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
@@ -11,9 +12,8 @@ import com.pessoaDeon.domain.model.natureza.QNaturezaDeon;
 import com.pessoaDeon.domain.model.pessoa.QPessoa;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 
-import java.util.List;
+import jakarta.persistence.EntityManager;
 
 public class BoAnaliseQueryDSLRepositoryImpl implements BoAnaliseQueryDSLRepository{
     @Override

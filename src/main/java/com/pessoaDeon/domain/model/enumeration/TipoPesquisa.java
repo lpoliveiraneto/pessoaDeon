@@ -1,7 +1,6 @@
 package com.pessoaDeon.domain.model.enumeration;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum TipoPesquisa {

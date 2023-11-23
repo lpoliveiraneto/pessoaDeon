@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.pessoaDeon.domain.exception.EnviaBoSigmaException;
 import com.pessoaDeon.domain.exception.ImpressaoErrorException;
 
 import jakarta.servlet.http.HttpServletRequest;

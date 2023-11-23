@@ -5,7 +5,6 @@ import com.pessoaDeon.domain.model.endereco.TipoMoradia;
 import com.pessoaDeon.domain.model.listas.Bairro;
 import com.pessoaDeon.domain.model.listas.Cidade;
 import com.pessoaDeon.domain.model.listas.Estado;
-import com.pessoaDeon.domain.model.listas.TipoLocal;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

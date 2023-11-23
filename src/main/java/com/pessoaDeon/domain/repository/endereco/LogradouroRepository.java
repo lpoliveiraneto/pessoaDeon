@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface LogradouroRepository extends JpaRepository<Logradouro, Long> {
+public interface LogradouroRepository extends JpaRepository<Logradouro, Integer> {
     
 	Optional<Logradouro> findByCep(String cep);
     

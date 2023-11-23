@@ -1,5 +1,8 @@
 package com.pessoaDeon.domain.model.enumeration;
 
+import lombok.Getter;
+
+@Getter
 public enum PerfilUsuario {
 
     ROLE_USER("usuario"),

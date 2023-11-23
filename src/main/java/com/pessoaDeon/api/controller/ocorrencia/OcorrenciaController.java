@@ -1,18 +1,23 @@
 package com.pessoaDeon.api.controller.ocorrencia;
 
-import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
 import com.pessoaDeon.domain.model.enumeration.TipoPesquisa;
-import com.pessoaDeon.domain.service.analista.AnalistaService;
 import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
 
@@ -27,9 +32,6 @@ public class OcorrenciaController {
     @Autowired
     private BoAnaliseService boAnaliseService;
     
-    @Autowired
-    private AnalistaService analistaService;
-
     @GetMapping
     public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
     		@PageableDefault(size = 10, page = 0, sort = "idBo", 
@@ -63,14 +65,14 @@ public class OcorrenciaController {
     }
 
     @PostMapping("/emAnalise")
-    public ResponseEntity salvarBoAnalise(@RequestBody BoAnaliseRequest boAnaliseRequest){
+    public ResponseEntity<?> salvarBoAnalise(@RequestBody BoAnaliseRequest boAnaliseRequest){
         System.out.println("irei salvar na tabela BoAnalise");
         boAnaliseService.salvarBoEmAnalise(boAnaliseRequest);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/emAnalise")
-    public ResponseEntity salvarRespostaBoAnalise(@RequestBody BoAnaliseRequest boAnaliseRequest){
+    public ResponseEntity<?> salvarRespostaBoAnalise(@RequestBody BoAnaliseRequest boAnaliseRequest){
         boAnaliseService.salvarRespostaBoEmAnalise(boAnaliseRequest);
        // System.out.println("testando rota.");
         return ResponseEntity.ok().build();

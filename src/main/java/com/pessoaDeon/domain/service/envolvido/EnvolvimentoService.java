@@ -1,27 +1,20 @@
 package com.pessoaDeon.domain.service.envolvido;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.model.envolvido.TipoParticipacao;
 import com.pessoaDeon.domain.model.natureza.NaturezaBo;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
-import com.pessoaDeon.domain.repository.envolvido.TipoParticipacaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EnvolvimentoService {
-
-    @Autowired
-    private EnvolvidoService envolvidoService;
-
-    @Autowired
-    private TipoParticipacaoRepository tipoParticipacaoRepository;
-
     @Autowired
     private EnvolvimentoRepository envolvimentoRepository;
 

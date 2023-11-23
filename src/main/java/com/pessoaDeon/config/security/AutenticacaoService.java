@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
 import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
 

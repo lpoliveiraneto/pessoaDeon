@@ -1,24 +1,24 @@
 package service.envolvido;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
 import com.pessoaDeon.domain.model.envolvido.Envolvido;
 import com.pessoaDeon.domain.model.envolvido.Envolvimento;
 import com.pessoaDeon.domain.model.envolvido.TipoParticipacao;
 import com.pessoaDeon.domain.model.natureza.NaturezaBo;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.service.envolvido.EnvolvimentoService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.AssertionErrors;
-
-import java.util.Optional;
 
 public class EnvolvimentoServiceTest {
 

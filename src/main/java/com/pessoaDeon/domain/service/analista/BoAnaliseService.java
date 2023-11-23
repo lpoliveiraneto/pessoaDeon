@@ -1,19 +1,6 @@
 package com.pessoaDeon.domain.service.analista;
 
-import com.pessoaDeon.domain.exception.AnalistaNotFoundException;
-import com.pessoaDeon.domain.exception.BoAnaliseNotFoundException;
-import com.pessoaDeon.domain.exception.BoNotFoundException;
-import com.pessoaDeon.domain.exception.RespostaAnaliseNotFoundException;
-import com.pessoaDeon.domain.model.analista.BoAnalise;
-import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
-import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
-import com.pessoaDeon.domain.model.enumeration.Status;
-import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
-import com.pessoaDeon.domain.repository.bo.BoRepository;
-import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
-import com.pessoaDeon.domain.repository.respostaBo.RespostaAnaliseBoRepository;
-import com.pessoaDeon.domain.service.bo.BoService;
-import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +10,20 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import com.pessoaDeon.domain.exception.AnalistaNotFoundException;
+import com.pessoaDeon.domain.exception.BoAnaliseNotFoundException;
+import com.pessoaDeon.domain.exception.BoNotFoundException;
+import com.pessoaDeon.domain.exception.RespostaAnaliseNotFoundException;
+import com.pessoaDeon.domain.model.analista.BoAnalise;
+import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
+import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
+import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
+import com.pessoaDeon.domain.repository.respostaBo.RespostaAnaliseBoRepository;
+import com.pessoaDeon.domain.service.bo.BoService;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -35,8 +35,6 @@ public class BoAnaliseService {
     private ProtocoloRepository protocoloRepository;
     @Autowired
     private BoService boService;
-    @Autowired
-    private BoRepository boRepository;
     @Autowired
     private AnalistaService analistaService;
     @Autowired

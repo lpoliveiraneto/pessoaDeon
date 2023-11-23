@@ -1,8 +1,5 @@
 package com.pessoaDeon.domain.model.enumeration;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public enum Sexo {
     M("Masculino"),
     F("Feminino"),
