@@ -28,9 +28,9 @@ import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
-import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
+import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
 import com.pessoaDeon.domain.service.PessoaService;
-import com.pessoaDeon.domain.service.UsuarioService;
+import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
 

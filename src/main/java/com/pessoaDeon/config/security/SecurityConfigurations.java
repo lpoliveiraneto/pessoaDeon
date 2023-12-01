@@ -35,11 +35,14 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.POST, "/api/v1/resetSenha").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/cadastro/salvar").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/esqueciMinhaSenha").permitAll();
-                    req.requestMatchers(HttpMethod.GET, "/api/v1/natureza/listaNaturezas").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/natureza/listaNaturezas/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/natureza/listaAvisoNatureza/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/ocorrencia/**").hasRole("ANALISTA");
                     req.requestMatchers(HttpMethod.GET, "/api/v1/violenciaDomestica/**").hasRole("MULHER");
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/usuario/**").hasRole("ANALISTA");
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/usuario/**").hasRole("ANALISTA");
                     req.anyRequest().authenticated(); 
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

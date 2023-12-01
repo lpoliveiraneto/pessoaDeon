@@ -18,7 +18,8 @@ import com.pessoaDeon.domain.model.enumeration.TipoEnvio;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.VerificacaoContaRepository;
-import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
+import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
+import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 @Service
 public class VerificacaoContaService {

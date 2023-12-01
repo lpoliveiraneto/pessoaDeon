@@ -21,7 +21,8 @@ import com.pessoaDeon.domain.model.enumeration.TipoEnvio;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.SenhaResetRepository;
-import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
+import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
+import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 @Service
 public class SenhaResetService {
@@ -149,7 +150,7 @@ public class SenhaResetService {
 	}
 
 	@Transactional
-	public ResponseEntity<?> alterarMinhaSenha(Long idUsuario, String senhaAntiga, String novaSenha) {
+	public ResponseEntity<?> alterarMinhaSenha(Integer idUsuario, String senhaAntiga, String novaSenha) {
 		var user = usuarioService.findById(idUsuario).get();
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		Boolean matches = passwordEncoder.matches(senhaAntiga, user.getPassword());

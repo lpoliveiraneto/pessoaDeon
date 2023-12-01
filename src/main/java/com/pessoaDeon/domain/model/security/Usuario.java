@@ -30,7 +30,7 @@ public class Usuario implements UserDetails {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    private Integer idUsuario;
     
     @Column(name = "login")
     private String email;

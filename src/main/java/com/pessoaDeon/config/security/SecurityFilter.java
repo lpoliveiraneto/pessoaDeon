@@ -3,7 +3,8 @@ package com.pessoaDeon.config.security;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
-import com.pessoaDeon.domain.repository.pessoa.UsuarioRepository;
+import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

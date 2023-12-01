@@ -6,5 +6,5 @@ import lombok.Getter;
 public class DadosAlterarSenhaDTO {
     private String senhaNova;
     private String senhaAntiga;
-    private Long idUsuario;
+    private Integer idUsuario;
 }
