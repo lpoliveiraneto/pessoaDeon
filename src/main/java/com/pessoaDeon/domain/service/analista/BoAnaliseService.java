@@ -96,9 +96,11 @@ public class BoAnaliseService {
                 .orElseThrow(() -> new BoNotFoundException("Não existe analista com esse id"));
         boAnalise.setAnalista(analista);
         boAnalise.setBoDeon(bodeon);
+        boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), Status.EA);
         boAnaliseRepository.save(boAnalise);
     }
 
+    @Transactional
     public void salvarRespostaBoEmAnalise(BoAnaliseRequest boAnaliseRequest){
         final int FINALIZADO_COM_SUCESSO = 1;
         var boAnalise = boAnaliseRepository.findById(boAnaliseRequest.fkBoAnalise())
