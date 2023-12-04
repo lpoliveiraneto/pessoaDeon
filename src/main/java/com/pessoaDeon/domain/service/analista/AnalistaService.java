@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.pessoaDeon.config.security.TokenService;
 import com.pessoaDeon.domain.exception.AnalistaNotFoundException;
 import com.pessoaDeon.domain.exception.EnviaBoSigmaException;
 import com.pessoaDeon.domain.exception.PessoaNotFoundException;
@@ -51,6 +52,9 @@ public class AnalistaService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private TokenService tokenService;
 	
 	@Value("${url.api-integracao}")
 	private String URL;
@@ -164,6 +168,26 @@ public class AnalistaService {
 	
 	private boolean verificaFuncionarioSigmaAtivo(AnalistaResponseDto analistaSigma) {
 		return analistaSigma.getAtivo() == true;
+	}
+	
+	public Analista getAnalistaToken(HttpServletRequest request) {
+		Analista analista = getAnalistaByToken(request);
+		return analista;
+	}
+
+	private String recuperarTokenAnalista(HttpServletRequest request) {
+		var authorizationHeader = request.getHeader("Authorization");
+		if (authorizationHeader != null) {
+			return authorizationHeader.replace("Bearer ", "");
+		}
+		return null;
+	}
+
+	public Analista getAnalistaByToken(HttpServletRequest request) {
+		var tokenJWT = recuperarTokenAnalista(request);
+		var cpf = tokenService.getSubject(tokenJWT);
+		Analista analista = analistaRepository.findByLogin(cpf).get();
+		return analista != null ? analista : null;
 	}
 
 }

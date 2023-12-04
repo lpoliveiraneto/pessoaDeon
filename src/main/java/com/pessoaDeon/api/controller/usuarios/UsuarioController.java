@@ -50,4 +50,9 @@ public class UsuarioController {
 	public void salvarRespostaUsuario(@RequestBody UsuarioAnaliseRequest usuarioRequest, @RequestParam(name = "id") Integer id){
 		analiseService.aprovarUsuarioEmAnalise(usuarioRequest, id);
 	}
+	
+	@PostMapping("/recusarUsuario")
+	public void recusatRespostaUsuario(@RequestBody UsuarioAnaliseRequest usuarioRequest, @RequestParam(name = "id") Integer id, HttpServletRequest request){
+		analiseService.recusarUsuarioEmAnalise(usuarioRequest, id, request);
+	}
 }

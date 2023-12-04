@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pessoaDeon.config.security.TokenService;
-import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.usuario.UsuarioAnalise;
 import com.pessoaDeon.domain.model.usuario.UsuarioAnaliseRequest;
-import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
 import com.pessoaDeon.domain.repository.usuario.RespostaUsuarioAnaliseRepository;
 import com.pessoaDeon.domain.repository.usuario.UsuarioAnaliseRepository;
+import com.pessoaDeon.domain.service.analista.AnalistaService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -30,10 +28,7 @@ public class UsuarioAnaliseService {
 	private UsuarioAnaliseRepository analiseRepository;
 
 	@Autowired
-	private AnalistaRepository analistaRepository;
-	
-	@Autowired
-	private TokenService tokenService;
+	private AnalistaService analistaService;
 	
 	/**
 	 * @return salva o usuario durante a analise para ter registro
@@ -47,7 +42,7 @@ public class UsuarioAnaliseService {
 			usuarioService.mudaStatusUsuarioEmAnalise(user, status);
 		}
 		usuarioAnalise.setUsuario(user);
-		usuarioAnalise.setAnalista(this.getAnalistaToken(request));
+		usuarioAnalise.setAnalista(analistaService.getAnalistaToken(request));
 		usuarioAnalise.setDataEntradaAnalise(LocalDateTime.now());
 		analiseRepository.save(usuarioAnalise);
 	}
@@ -87,25 +82,18 @@ public class UsuarioAnaliseService {
         analiseRepository.saveAndFlush(analise);
 	}
 	
-	
-	public Analista getAnalistaToken(HttpServletRequest request) {
-		Analista analista = getAnalistaByToken(request);
-		return analista;
+	public void recusarUsuarioEmAnalise(UsuarioAnaliseRequest usuarioRequest, Integer id, HttpServletRequest request) {
+		var analise = analiseRepository.findByUsuario_IdUsuario(usuarioRequest.fkUsuario()).orElseThrow(() 
+				-> new RuntimeException("Não existe usuario para analise com esse id"));
+		var respostaRecusar = respostaUsuarioAnaliseRepository.findById(id);
+		
+		analise.setStatus(false);
+		analise.setAnalista(analistaService.getAnalistaToken(request));
+		analise.setDataAnalise(LocalDateTime.now());
+		analise.setRespostaAnalise(respostaRecusar.get());
+		
+		Status novoStatus = (analise.getRespostaAnalise().getIdRespostaAnalise() != id) ? Status.VA : Status.IV;
+        usuarioService.mudaStatusUsuarioEmAnalise(analise.getUsuario(), novoStatus);
+        analiseRepository.saveAndFlush(analise);
 	}
-
-	private String recuperarToken(HttpServletRequest request) {
-		var authorizationHeader = request.getHeader("Authorization");
-		if (authorizationHeader != null) {
-			return authorizationHeader.replace("Bearer ", "");
-		}
-		return null;
-	}
-
-	public Analista getAnalistaByToken(HttpServletRequest request) {
-		var tokenJWT = recuperarToken(request);
-		var cpf = tokenService.getSubject(tokenJWT);
-		Analista analista = analistaRepository.findByLogin(cpf).get();
-		return analista != null ? analista : null;
-	}
-	
 }
