@@ -3,6 +3,7 @@ package com.pessoaDeon.domain.repository.boAnalise;
 import java.util.List;
 
 import com.pessoaDeon.domain.model.analista.BoAnalise;
+import com.pessoaDeon.domain.model.analista.QBoAnalise;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.envolvido.QEnvolvido;
@@ -18,12 +19,32 @@ import jakarta.persistence.EntityManager;
 public class BoAnaliseQueryDSLRepositoryImpl implements BoAnaliseQueryDSLRepository{
     @Override
     public List<BoAnalise> findByStatusFalseViolenciaDomestica(EntityManager entityManager) {
-        return null;
+
+        final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+        QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+        QBoDeon qBoDeon = QBoDeon.boDeon;
+        QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+        JPAQuery<BoAnalise> query = new JPAQueryFactory(entityManager).selectFrom(qBoAnalise).distinct();
+        query.join(qBoAnalise.boDeon, qBoDeon);
+        query.join(qBoDeon.listaNaturezas,qNaturezaBo);
+        query.where(qBoAnalise.status.isFalse().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA)));
+        List<BoAnalise> bosPendentes = query.fetch();
+        return bosPendentes;
     }
 
     @Override
     public List<BoAnalise> findByStatusTrueViolenciaDomestica(EntityManager entityManager) {
-        return null;
+
+        final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+        QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+        QBoDeon qBoDeon = QBoDeon.boDeon;
+        QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+        JPAQuery<BoAnalise> query = new JPAQueryFactory(entityManager).selectFrom(qBoAnalise).distinct();
+        query.join(qBoAnalise.boDeon, qBoDeon);
+        query.join(qBoDeon.listaNaturezas,qNaturezaBo);
+        query.where(qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA)));
+        List<BoAnalise> bosPendentes = query.fetch();
+        return bosPendentes;
     }
 
     @Override
