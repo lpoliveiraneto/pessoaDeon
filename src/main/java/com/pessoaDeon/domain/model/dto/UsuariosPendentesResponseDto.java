@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class UsuariosPendentesResponseDto {
 
-    private Long idUsuario;
+    private Integer idUsuario;
     
     private String nome;
     

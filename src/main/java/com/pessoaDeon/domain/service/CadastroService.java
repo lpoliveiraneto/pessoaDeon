@@ -38,6 +38,7 @@ import com.pessoaDeon.domain.model.pessoa.Telefone;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
+import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -176,6 +177,7 @@ public class CadastroService {
 		Telefone contato = contatoService.getById(idPessoa);
 		Email email = emailService.getByIdEmail(idPessoa);
 		List<String> anexos = trazAnexo == true ? carregarArquivo(idPessoa) : null;
+		
 		// dados referentes a pessoa
 		response.setNome(pessoa.getNome());
 		response.setDataNascimento(pessoa.getDataNascimento());

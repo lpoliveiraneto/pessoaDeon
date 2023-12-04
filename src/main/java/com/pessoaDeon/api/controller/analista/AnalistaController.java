@@ -16,8 +16,8 @@ import com.pessoaDeon.domain.model.analista.Analista;
 import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaReturnDto;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaSigmaDeonDto;
-import com.pessoaDeon.domain.service.UsuarioService;
 import com.pessoaDeon.domain.service.analista.AnalistaService;
+import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
 

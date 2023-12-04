@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.repository.pessoa;
+package com.pessoaDeon.domain.repository.usuario;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
 //	UserDetails findByEmail(String email);
 	Optional<Usuario> findByEmail(String email);
@@ -22,6 +22,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     
 	List<Usuario> findByStatusAndContaAtivaIsTrue(Status pe);
 	
-    Usuario findByIdUsuarioAndStatusAndContaAtivaIsTrue(Long idUsuario, Status va);
+    Usuario findByIdUsuarioAndStatusAndContaAtivaIsTrue(Integer idUsuario, Status va);
 	
 }
