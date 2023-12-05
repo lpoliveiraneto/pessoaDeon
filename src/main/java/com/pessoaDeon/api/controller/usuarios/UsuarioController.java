@@ -32,7 +32,7 @@ public class UsuarioController {
 
 	@PostMapping("/analise")
     public ResponseEntity<?> analiseUsuarioPorId(@RequestBody UsuarioAnaliseRequest usuarioRequest, HttpServletRequest request, @RequestParam(value = "status") Status status){
-		analiseService.salvarUsuarioAnalise(usuarioRequest, request, status);
+		analiseService.salvarUsuarioEmTabelaAnalise(usuarioRequest, request, status);
         return ResponseEntity.ok().build();
     }
 	
@@ -40,7 +40,7 @@ public class UsuarioController {
 	public ResponseEntity<?> mudaStatusUsuario(@PathVariable(value = "idUsuario") Integer idUsuario,
 			@RequestBody Usuario usuarioRequest){
 		Optional<Usuario> usuario = usuarioService.findById(idUsuario);
-		if (usuario.isPresent()) {
+		if (usuario.isPresent() && usuario.get().getStatus().equals(Status.EA)) {
 			usuarioService.mudaStatusUsuarioEmAnalise(usuario.get(), usuarioRequest.getStatus());
 		}
 		return ResponseEntity.ok("Analise cancelada!");
