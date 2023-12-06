@@ -59,7 +59,6 @@ public class BoController {
 			@RequestParam(value = "status") Status status){
 		Optional<BoDeon> bo = boService.findById(idBo); 
 		if (bo.isPresent()) {
-			boService.mudaStatusBoEmAnalise(bo.get(), status);
 			BoDtoResponse boFound = boService.boDeonToBoDeonResponse(bo.get());
 			return ResponseEntity.status(HttpStatus.OK).body(boFound);
 		}

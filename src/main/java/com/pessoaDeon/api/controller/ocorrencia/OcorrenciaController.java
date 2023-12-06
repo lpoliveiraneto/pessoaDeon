@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.enumeration.TipoPesquisa;
 import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -64,11 +67,10 @@ public class OcorrenciaController {
         return boAnaliseService.getBoEmAnalise(pageable);
     }
 
-    @PostMapping("/emAnalise")
-    public ResponseEntity<?> salvarBoAnalise(@RequestBody BoAnaliseRequest boAnaliseRequest){
-        System.out.println("irei salvar na tabela BoAnalise");
-        boAnaliseService.salvarBoEmAnalise(boAnaliseRequest);
-        return ResponseEntity.ok().build();
+    @PostMapping("/analisarBo")
+	public ResponseEntity<?> analiseBo(@RequestBody BoAnaliseRequest analiseRequest, HttpServletRequest request, @RequestParam(value = "status") Status status){
+		boAnaliseService.salvarBoEmAnalise(analiseRequest,request, status);
+		return ResponseEntity.ok().build();
     }
 
     @PutMapping("/emAnalise")
@@ -82,6 +84,4 @@ public class OcorrenciaController {
     public ResponseEntity<?>  listarOcorrenciasAnalisadasFuncionario(){
         return ResponseEntity.ok().build();
     }
-    
-
 }

@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.pessoaDeon.domain.exception.AnalistaNotFoundException;
 import com.pessoaDeon.domain.exception.BoAnaliseNotFoundException;
 import com.pessoaDeon.domain.exception.BoNotFoundException;
 import com.pessoaDeon.domain.exception.RespostaAnaliseNotFoundException;
@@ -23,6 +22,7 @@ import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
 import com.pessoaDeon.domain.repository.respostaBo.RespostaAnaliseBoRepository;
 import com.pessoaDeon.domain.service.bo.BoService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 
 
@@ -87,16 +87,19 @@ public class BoAnaliseService {
     }
 
     @Transactional
-    public void salvarBoEmAnalise(BoAnaliseRequest boAnaliseRequest) {
+    public void salvarBoEmAnalise(BoAnaliseRequest boAnaliseRequest, HttpServletRequest request, Status status) {
         BoAnalise boAnalise = new BoAnalise();
-        boAnalise.setDataEntradaAnalise(LocalDateTime.now());
-        var analista = analistaService.findById(boAnaliseRequest.fkAnalista())
-                .orElseThrow(() -> new  AnalistaNotFoundException("Não existe analista com esse id"));
+        
+        var analista = analistaService.getAnalistaToken(request);
         var bodeon = boService.findById(boAnaliseRequest.fkBo())
                 .orElseThrow(() -> new BoNotFoundException("Não existe analista com esse id"));
+
+        if (bodeon != null) {
+        	boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), status);
+		}
+        boAnalise.setDataEntradaAnalise(LocalDateTime.now());
         boAnalise.setAnalista(analista);
         boAnalise.setBoDeon(bodeon);
-        boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), Status.EA);
         boAnaliseRepository.save(boAnalise);
     }
 
