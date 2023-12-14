@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.pessoaDeon.domain.exception.BoAnaliseNotFoundException;
 import com.pessoaDeon.domain.exception.BoNotFoundException;
-import com.pessoaDeon.domain.exception.RespostaAnaliseNotFoundException;
 import com.pessoaDeon.domain.model.analista.BoAnalise;
 import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
+import com.pessoaDeon.domain.model.dto.integracao.BoRequestDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
@@ -95,7 +95,7 @@ public class BoAnaliseService {
                 .orElseThrow(() -> new BoNotFoundException("Não existe analista com esse id"));
 
         if (bodeon != null) {
-        	boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), status);
+        	boService.mudaStatusBoEmAnalise(bodeon, status);
 		}
         boAnalise.setDataEntradaAnalise(LocalDateTime.now());
         boAnalise.setAnalista(analista);
@@ -104,22 +104,49 @@ public class BoAnaliseService {
     }
 
     @Transactional
-    public void salvarRespostaBoEmAnalise(BoAnaliseRequest boAnaliseRequest){
-        final int FINALIZADO_COM_SUCESSO = 1;
-        var boAnalise = boAnaliseRepository.findById(boAnaliseRequest.fkBoAnalise())
+    public void aprovaBoEmAnalise(BoRequestDto request, Integer idResposta){
+
+    	var resposta = respostaAnaliseBoRepository.findById(idResposta).orElseThrow(() ->
+        	new BoAnaliseNotFoundException("Resposta não encontrado na base de dados"));
+        var boDeon = boService.findById(request.getIdBoDeon())
                .orElseThrow(() -> new BoAnaliseNotFoundException("Não existe analise para esse id"));
-        if(boAnalise.isStatus()){
-            return;
-        }
-        boAnalise.setDataAnalise(LocalDateTime.now());
-        boAnalise.setStatus(true);
-        var respostaAnaliseBo = respostaAnaliseBoRepository.findById(boAnaliseRequest.fkRespostaBo())
-                .orElseThrow(() -> new RespostaAnaliseNotFoundException("Não existe resposta para esse id"));
-        boAnalise.setRespostaAnaliseBo(respostaAnaliseBo);
-
-        Status novoStatus = (boAnalise.getRespostaAnaliseBo().getIdRespostaAnalise() != FINALIZADO_COM_SUCESSO) ? Status.IV : Status.VA;
-        boService.mudaStatusBoEmAnalise(boAnalise.getBoDeon(), novoStatus);
-
-        boAnaliseRepository.saveAndFlush(boAnalise);
+        var analiseBo = boAnaliseRepository.findByBoDeon_IdBo(boDeon.getIdBo()).get();
+        
+        try {
+        	if(boDeon.getStatus().equals(Status.EA)){
+        		analiseBo.setStatus(true);
+        		analiseBo.setDataAnalise(LocalDateTime.now());
+        		analiseBo.setRespostaAnaliseBo(resposta);
+    		Status novoStatus = (analiseBo.getRespostaAnaliseBo().getIdRespostaAnalise() != idResposta) ? Status.IV : Status.VA;
+    		boService.mudaStatusBoEmAnalise(analiseBo.getBoDeon(), novoStatus);
+    		boAnaliseRepository.saveAndFlush(analiseBo);
+        	}
+			
+		} catch (RuntimeException e) {
+			new BoAnaliseNotFoundException("Operação indisponivel com esse status");
+		}
     }
+
+	public void recusarBoEmAnalise(BoAnaliseRequest boRequest, Integer idResposta, HttpServletRequest request) {
+		var resposta = respostaAnaliseBoRepository.findById(idResposta).orElseThrow(() ->
+			new BoAnaliseNotFoundException("Resposta não encontrado na base de dados"));
+		var boDeon = boService.findById(boRequest.fkBo())
+				.orElseThrow(() -> new BoAnaliseNotFoundException("Não existe analise para esse id"));
+		var analiseBo = boAnaliseRepository.findByBoDeon_IdBo(boDeon.getIdBo()).get();
+		
+		try {
+			if (boDeon.getStatus().equals(Status.EA)) {
+				analiseBo.setStatus(false);
+				analiseBo.setAnalista(analistaService.getAnalistaToken(request));
+				analiseBo.setDataAnalise(LocalDateTime.now());
+				analiseBo.setRespostaAnaliseBo(resposta);
+				
+				Status status = (analiseBo.getRespostaAnaliseBo().getIdRespostaAnalise() != idResposta) ? Status.VA : Status.IV;
+	    		boService.mudaStatusBoEmAnalise(analiseBo.getBoDeon(), status);
+	    		boAnaliseRepository.saveAndFlush(analiseBo);
+			}
+		} catch (RuntimeException e) {
+			throw new BoAnaliseNotFoundException("Operação indisponivel com esse status");
+		}
+	}
 }

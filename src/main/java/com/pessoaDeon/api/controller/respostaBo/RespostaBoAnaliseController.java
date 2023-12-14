@@ -10,14 +10,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/ocorrencia/respostaBo")
+@RequestMapping("api/v1/lista/respostaOcorrencia")
 public class RespostaBoAnaliseController {
 
     @Autowired
     private RespostaAnaliseBoRepository respostabo;
 
-    @GetMapping
+    @GetMapping("/todas")
     public List<RespostaAnaliseBo> listaRespostaBo(){
         return respostabo.findAll();
+    }
+    
+    @GetMapping
+    public List<RespostaAnaliseBo> listarRespostaRecusa(){
+    	final int BOLETIM_ESTÁ_VALIDO = 0;
+    	var lista = respostabo.findAll();
+    	lista.remove(BOLETIM_ESTÁ_VALIDO);
+    	return lista;
     }
 }

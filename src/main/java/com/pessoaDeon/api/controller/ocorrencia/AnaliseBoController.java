@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.RequestDto;
+import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
 import com.pessoaDeon.domain.service.envolvido.EnvolvidoService;
 import com.pessoaDeon.domain.service.integracao.IntegracaoService;
@@ -34,6 +35,9 @@ public class AnaliseBoController {
 	@Autowired
 	private EnvolvidoService envolvidoService;
 	
+	@Autowired
+	private BoAnaliseService boAnaliseService;
+	
 	@GetMapping
 	public ResponseEntity<?> getDadosBo(@RequestParam("idBo") Integer idBo,
 			@RequestParam("idAnalista") Integer idAnalista) throws IllegalAccessException{
@@ -47,7 +51,8 @@ public class AnaliseBoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> enviarBoSigma(@RequestBody RequestDto request, HttpServletRequest http){
+	public ResponseEntity<?> enviarBoSigma(@RequestBody RequestDto request, HttpServletRequest http, Integer idResposta){
+		boAnaliseService.aprovaBoEmAnalise(request.getBoDto(), idResposta);
 		BoResponseDto response = integracaoService.enviaBoSigma(request, http);
 		if (response == null) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao salvar Boletim de Ocorrência no SIGMA!");

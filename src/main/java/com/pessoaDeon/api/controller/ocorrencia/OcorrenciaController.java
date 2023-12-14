@@ -8,7 +8,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,15 +72,13 @@ public class OcorrenciaController {
 		return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/emAnalise")
-    public ResponseEntity<?> salvarRespostaBoAnalise(@RequestBody BoAnaliseRequest boAnaliseRequest){
-        boAnaliseService.salvarRespostaBoEmAnalise(boAnaliseRequest);
-       // System.out.println("testando rota.");
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/funcionario/analisadas")
     public ResponseEntity<?>  listarOcorrenciasAnalisadasFuncionario(){
         return ResponseEntity.ok().build();
     }
+    
+    @PostMapping("/recusarOcorrencia")
+	public void recusarOcorrencia(@RequestBody BoAnaliseRequest boRequest, @RequestParam(name = "id") Integer idResposta, HttpServletRequest request){
+    	boAnaliseService.recusarBoEmAnalise(boRequest, idResposta, request);
+	}
 }
