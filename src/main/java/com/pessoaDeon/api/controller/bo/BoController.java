@@ -24,6 +24,8 @@ import com.pessoaDeon.domain.model.dto.bo.BoEnvolvidosRequest;
 import com.pessoaDeon.domain.model.dto.bo.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
+import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
+import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoDeonFactoryService;
 import com.pessoaDeon.domain.service.bo.BoService;
 
@@ -41,6 +43,9 @@ public class BoController {
 	
 	@Autowired
 	private BoRepository boRepository;
+	
+	@Autowired
+    private BoAnaliseRepository boAnaliseRepository;
 	
 	@PostMapping("/salvarBo")
 	public ResponseEntity<?> salvarOcorrencia(@RequestBody BoEnvolvidosRequest boEnvolvidosRequest){
@@ -78,8 +83,11 @@ public class BoController {
 	public ResponseEntity<?> mudaStatusBo(@PathVariable(value = "idBo") Integer idBo,
 			@RequestBody BoDeon boRequest){
 		Optional<BoDeon> bo = boRepository.findById(idBo);
+		var boAnalise = boAnaliseRepository.findByBoDeon_IdBo(idBo).get();
+		
 		if (bo.isPresent()) {
 			boService.mudaStatusBoEmAnalise(bo.get(), boRequest.getStatus());
+			boAnaliseRepository.delete(boAnalise);
 		}
 		return ResponseEntity.ok("Analise cancelada!");
 	}
