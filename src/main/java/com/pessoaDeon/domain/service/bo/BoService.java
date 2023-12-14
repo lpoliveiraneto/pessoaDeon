@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -249,15 +249,27 @@ public class BoService {
 	/**
 	 * @author Jeff Andrade, em 30 de outubro de 2023
 	 * */
-	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable, TipoPesquisa tipoPesquisa, String parametro) {
-	    JPAQuery<BoDeon> query = buildQuery(tipoPesquisa, parametro);
+	public Page<BosPendentesResponseDto> getBosPendentes(Pageable pageable, TipoPesquisa tipoPesquisa, String parametro, String perfil) {
+		final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+		JPAQuery<BoDeon> query = new JPAQuery<>();
+		QBoDeon qBoDeon = QBoDeon.boDeon;
+		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+		Predicate predicate;
+		if(perfil.equals("analista")){
+			predicate = qBoDeon.status.eq(Status.PE).and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA));
+			query = buildQuery(tipoPesquisa, parametro, predicate);
+		}
+		if(perfil.equals("mulher")){
+			predicate = qBoDeon.status.eq(Status.PE).and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA));
+			query = buildQuery(tipoPesquisa, parametro, predicate);
+		}
 	    long count = query.fetchCount();
 	    List<BoDeon> listaBos = query.distinct().offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	    List<BosPendentesResponseDto> bos = processResults(listaBos);
 	    return new PageImpl<>(bos, pageable, count);
 	}
 
-	private JPAQuery<BoDeon> buildQuery(TipoPesquisa tipoPesquisa, String parametro) {
+	private JPAQuery<BoDeon> buildQuery(TipoPesquisa tipoPesquisa, String parametro, Predicate predicate) {
 		QBoDeon qBoDeon = QBoDeon.boDeon;
 		QProtocolo qProtocolo = QProtocolo.protocolo;
 		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
@@ -265,25 +277,28 @@ public class BoService {
 		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
 		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
 		QPessoa qPessoa = QPessoa.pessoa;
-	    JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon).where(qBoDeon.status.eq(Status.PE));
+		JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon)
+				.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo)
+				.leftJoin(qNaturezaBo.naturezaDeon, qNaturezaDeon)
+				.where(predicate);
 	    if (tipoPesquisa != null) {
 		    switch (tipoPesquisa) {
 			    case PROTOCOLO:
-					query.leftJoin(qProtocolo).on(qBoDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.eq(parametro).and(qBoDeon.status.eq(Status.PE)));
+					query.leftJoin(qProtocolo).on(qBoDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.eq(parametro).and(predicate));
 					break;
 				case COMUNICANTE:
-					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+					//query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
 					query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
 					query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
 					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
-					.where(qPessoa.nome.containsIgnoreCase(parametro).and(qBoDeon.status.eq(Status.PE)));
+					.where(qPessoa.nome.containsIgnoreCase(parametro).and(predicate));
 					break;
 				case CPF:
-					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+					//query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
 					query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
 					query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
 					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
-					.where(qPessoa.numeroDocumento.containsIgnoreCase(parametro).and(qBoDeon.status.eq(Status.PE)));
+					.where(qPessoa.numeroDocumento.containsIgnoreCase(parametro).and(predicate));
 					break;
 				case DATA_REGISTRO:
 			        DateTimeFormatter formatoDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -291,12 +306,12 @@ public class BoService {
 			        LocalTime horaInicio = LocalTime.of(0, 0, 0);
 			        LocalDateTime tInicial = LocalDateTime.of(data, horaInicio);
 			        LocalDateTime tFinal = tInicial.plusHours(23).plusMinutes(59).plusSeconds(59);
-			        query.where(qBoDeon.dataRegistro.between(tInicial, tFinal).and(qBoDeon.status.eq(Status.PE)));
+			        query.where(qBoDeon.dataRegistro.between(tInicial, tFinal).and(predicate));
 					break;
 				case NATUREZA:
 					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
 					query.leftJoin(qNaturezaBo.naturezaDeon, qNaturezaDeon)
-					.where(qNaturezaDeon.nome.containsIgnoreCase(parametro).and(qBoDeon.status.eq(Status.PE)));
+					.where(qNaturezaDeon.nome.containsIgnoreCase(parametro).and(predicate));
 					break;
 				default:
 					break;

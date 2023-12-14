@@ -40,7 +40,8 @@ public class OcorrenciaController {
     		direction = Sort.Direction.ASC)Pageable pageable,
     		@RequestParam(name = "tipoPesquisa", required = false) TipoPesquisa tipoPesquisa,
     		@RequestParam(name = "parametro", required = false) String parametro){
-        return boService.getBosPendentes(pageable, tipoPesquisa, parametro);
+        String perfil = "analista";
+        return boService.getBosPendentes(pageable, tipoPesquisa, parametro, perfil);
     }
 
     @GetMapping("/todos")
