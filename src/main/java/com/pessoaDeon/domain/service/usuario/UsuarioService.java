@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pessoaDeon.config.security.TokenService;
 import com.pessoaDeon.domain.exception.UsuarioAlreadyRegisteredException;
 import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
@@ -18,11 +19,16 @@ import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private TokenService tokenService;
 
 	@Transactional
 	public Usuario salvarUsuario(Usuario usuario) {
@@ -52,6 +58,10 @@ public class UsuarioService {
 	public Usuario getUsuarioStatusAndContaAtiva(Integer idUsuario, Status va) {
 		return usuarioRepository.findByIdUsuarioAndStatusAndContaAtivaIsTrue(idUsuario, va);
 	}
+	
+	public Usuario getUsuarioInvalido(HttpServletRequest request, Status status) {
+		return usuarioRepository.findByIdUsuarioAndStatus(getUsuarioByToken(request).getIdUsuario(), status);
+	}
 
 	public Page<UsuariosPendentesResponseDto> getUsuariosAnalise(Pageable pageable) {
 		List<Usuario> usuarios = findByStatusAndContaAtivaIsTrue(Status.PE);
@@ -76,4 +86,18 @@ public class UsuarioService {
 		}
 	}
 	
+	private String recuperarToken(HttpServletRequest request) {
+		var authorizationHeader = request.getHeader("Authorization");
+		if (authorizationHeader != null) {
+			return authorizationHeader.replace("Bearer ", "");
+		}
+		return null;
+	}
+
+	public Usuario getUsuarioByToken(HttpServletRequest request) {
+		var tokenJWT = recuperarToken(request);
+		var email = tokenService.getSubject(tokenJWT);
+		Usuario usuario = usuarioRepository.findByEmail(email).get();
+		return usuario != null ? usuario : null;
+	}
 }

@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
+import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.service.CadastroService;
 import com.pessoaDeon.domain.service.VerificacaoContaService;
+import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,6 +34,9 @@ public class CadastroController {
 	
 	@Autowired
 	private VerificacaoContaService contaService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@PostMapping("/salvar")
 	public ResponseEntity<?> salvarCadastroPessoa(
@@ -98,4 +103,12 @@ public class CadastroController {
 		return ResponseEntity.ok(imgBase64);
 	}
 	
+	@GetMapping("/invalido")
+	public ResponseEntity<?> verificarUsuarioInvalido(HttpServletRequest request){
+		var user = usuarioService.getUsuarioInvalido(request, Status.IV);
+		if (user != null ) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário inválido");
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("Usuário está com status Válido"); 
+	}
 }

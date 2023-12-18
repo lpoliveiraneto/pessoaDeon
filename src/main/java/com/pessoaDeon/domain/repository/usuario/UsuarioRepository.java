@@ -23,5 +23,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 	List<Usuario> findByStatusAndContaAtivaIsTrue(Status pe);
 	
     Usuario findByIdUsuarioAndStatusAndContaAtivaIsTrue(Integer idUsuario, Status va);
+
+	Usuario findByIdUsuarioAndStatus(Integer idUsuario, Status status);
 	
 }

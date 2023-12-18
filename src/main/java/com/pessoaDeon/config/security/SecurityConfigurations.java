@@ -40,6 +40,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.GET, "/api/v1/cadastro/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/lista/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/ocorrencia/**").hasRole("ANALISTA");
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/ocorrencia/todos").hasRole("ADM");
                     req.requestMatchers(HttpMethod.GET, "/api/v1/violenciaDomestica/**").hasRole("MULHER");
                     req.requestMatchers(HttpMethod.GET, "/api/v1/usuario/**").hasRole("ANALISTA");
                     req.requestMatchers(HttpMethod.POST, "/api/v1/usuario/**").hasRole("ANALISTA");
