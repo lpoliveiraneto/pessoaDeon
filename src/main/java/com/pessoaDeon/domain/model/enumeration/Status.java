@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum Status {
 
-    VA("VALIDO"),
-    IV("INVALIDO"),
-    EA("EM ANALISE"),
+    VA("APROVADO"),
+    IV("RECUSADO"),
+    EA("EM ANÁLISE"),
     PE("PENDENTE");
 
     private String descricao;

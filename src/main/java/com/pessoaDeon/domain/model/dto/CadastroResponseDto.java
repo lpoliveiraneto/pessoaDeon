@@ -3,6 +3,9 @@ package com.pessoaDeon.domain.model.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.usuario.RespostaAnaliseUsuario;
+
 import lombok.Data;
 
 @Data
@@ -62,4 +65,9 @@ public class CadastroResponseDto {
 //	retorna a foto de perfil da pessoa em base64
 	private String fotoPerfil;
 	
+	private RespostaAnaliseUsuario respostaUsuario;
+	
+	private Status statusUsuario;
+	
+	private String descricaoStatusUsuario;
 }

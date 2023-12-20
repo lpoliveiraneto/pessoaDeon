@@ -36,8 +36,11 @@ import com.pessoaDeon.domain.model.pessoa.Email;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.pessoa.Telefone;
 import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.model.usuario.RespostaAnaliseUsuario;
+import com.pessoaDeon.domain.model.usuario.UsuarioAnalise;
 import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
+import com.pessoaDeon.domain.service.usuario.UsuarioAnaliseService;
 import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -86,6 +89,9 @@ public class CadastroService {
 
 	@Autowired
 	private PerfilRepository perfilRepository;
+	
+	@Autowired
+	private UsuarioAnaliseService analiseService;
 
 	@Transactional
 	public Pessoa salvar(CadastroRequestDto cadastroRequestDto, MultipartFile[] files) {
@@ -170,12 +176,14 @@ public class CadastroService {
 	}
 
 	@ReadOnlyProperty
-	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa, Boolean trazAnexo) {
+	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa, Boolean trazAnexo, HttpServletRequest request) {
 		CadastroResponseDto response = new CadastroResponseDto();
 		Endereco enderecoPessoa = enderecoService.getEnderecoByIdPessoa(idPessoa).get();
 		Pessoa pessoa = pessoaService.buscarPessoa(idPessoa).get();
 		Telefone contato = contatoService.getById(idPessoa);
 		Email email = emailService.getByIdEmail(idPessoa);
+		Usuario usuario = usuarioService.getUsuarioByToken(request);
+		RespostaAnaliseUsuario analise = analiseService.getRespostaAnaliseUsuario(usuario.getIdUsuario(), usuario.getStatus());
 		List<String> anexos = trazAnexo == true ? carregarArquivo(idPessoa) : null;
 		
 		// dados referentes a pessoa
@@ -231,6 +239,9 @@ public class CadastroService {
 		response.setEmail(email.getEmail());
 //		lista de anexos
 		response.setListaAnexos(anexos);
+		response.setRespostaUsuario(analise);
+		response.setStatusUsuario(usuario.getStatus());
+		response.setDescricaoStatusUsuario(usuario.getStatus().getDescricao());
 
 		return response;
 	}
@@ -345,7 +356,7 @@ public class CadastroService {
 //	pega os dados da pessoa para exibir em Minha Conta no front
 	public CadastroResponseDto getPessoaToken(HttpServletRequest request) {
 		Pessoa pessoa = getPessoaByToken(request);
-		return pessoa == null ? null : listarCadastroPessoa(pessoa.getId(), false);
+		return pessoa == null ? null : listarCadastroPessoa(pessoa.getId(), false, request);
 	}
 
 	private String recuperarToken(HttpServletRequest request) {
