@@ -67,8 +67,8 @@ public class CadastroController {
      * @return retorna os dados de Cadastro para o analista
      */
 	@GetMapping("/pessoaPorId/{idPessoa}")
-	public ResponseEntity<?> listarPessoaPorId(@PathVariable (value = "idPessoa") Integer idPessoa, HttpServletRequest request){
-		return ResponseEntity.ok().body(cadastroService.listarCadastroPessoa(idPessoa, true, request));
+	public ResponseEntity<?> listarPessoaPorId(@PathVariable (value = "idPessoa") Integer idPessoa){
+		return ResponseEntity.ok().body(cadastroService.listarCadastroPessoa(idPessoa, true));
 	}
 
 	@GetMapping("/getPessoaToken")

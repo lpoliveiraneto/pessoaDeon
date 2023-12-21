@@ -6,17 +6,22 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pessoaDeon.domain.model.analista.RespostaAnaliseBo;
 import com.pessoaDeon.domain.model.dto.EnvolvidoBoDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
-import com.pessoaDeon.domain.model.util.EnumToObject;
+import com.pessoaDeon.domain.model.enumeration.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class BoDtoResponse {
 
 	@JsonFormat(shape=JsonFormat.Shape.STRING, locale = "pt-BR", timezone = "Brazil/East" , pattern = "yyyy-MM-dd HH:mm:ss")
@@ -56,10 +61,13 @@ public class BoDtoResponse {
     
     private List<EnvolvidoBoDto> listaEnvolvidos;
     
-    private EnumToObject status;
-    
     private String tokenBoSigma;
     
     private String numeroBo;
+
+    private Status statusBo;
     
+    private String descricaoStatusBo;
+    
+    private RespostaAnaliseBo respostaOcorrencia;
 }

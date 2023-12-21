@@ -25,7 +25,6 @@ import com.pessoaDeon.domain.model.dto.bo.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
-import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoDeonFactoryService;
 import com.pessoaDeon.domain.service.bo.BoService;
 

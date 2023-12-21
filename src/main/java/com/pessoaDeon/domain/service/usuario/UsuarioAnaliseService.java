@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pessoaDeon.domain.exception.PessoaNotFoundException;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.domain.model.usuario.RespostaAnaliseUsuario;
 import com.pessoaDeon.domain.model.usuario.UsuarioAnalise;
 import com.pessoaDeon.domain.model.usuario.UsuarioAnaliseRequest;
 import com.pessoaDeon.domain.repository.usuario.RespostaUsuarioAnaliseRepository;
@@ -118,13 +117,5 @@ public class UsuarioAnaliseService {
 		} catch (RuntimeException e) {
 			throw new PessoaNotFoundException("Operação indisponivel com esse status");
 		}
-	}
-	
-	public RespostaAnaliseUsuario getRespostaAnaliseUsuario(Integer idUsuario, Status status) {
-		var resposta = analiseRepository.findByUsuario_IdUsuario(idUsuario).get();
-		if (resposta != null && status.equals(Status.IV)) {
-			return resposta.getRespostaAnalise();
-		}
-		return null;
 	}
 }

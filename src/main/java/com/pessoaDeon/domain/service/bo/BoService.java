@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import com.querydsl.core.types.Predicate;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.config.security.TokenService;
+import com.pessoaDeon.domain.model.analista.BoAnalise;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
@@ -45,8 +46,10 @@ import com.pessoaDeon.domain.model.util.EnumToObject;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
 import com.pessoaDeon.domain.repository.bo.EnderecoLocalFatoRepository;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
+import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
 import com.pessoaDeon.domain.repository.envolvido.EnvolvimentoRepository;
 import com.pessoaDeon.domain.service.envolvido.EnvolvimentoService;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -75,6 +78,9 @@ public class BoService {
 
 	@Autowired
 	private EntityManager entityManager;
+	
+	@Autowired
+    private BoAnaliseRepository boAnaliseRepository;
 
 	@Transactional
 	public BoDeon salvar(BoDto bo) {
@@ -131,8 +137,15 @@ public class BoService {
 	@Transactional
 	public BoDtoResponse boDeonToBoDeonResponse(BoDeon bo) {
 		BoDtoResponse response = new BoDtoResponse();
+		BoAnalise resposta = new BoAnalise();
+
 		EnderecoLocalFato endereco = enderecoLocalFatoRepository.findByBoIdBo(bo.getIdBo());
 		Protocolo protocolo = protocoloRepository.findByBoIdBo(bo.getIdBo());
+		Status status = bo.getStatus();
+		
+		if (status.equals(Status.IV)) {
+			resposta = boAnaliseRepository.findByBoDeon_IdBo(bo.getIdBo()).get();
+		}
 		response.setDataFato(bo.getDataFato());
 		response.setHoraFato(bo.getHoraFato());
 		response.setRelato(bo.getRelato());
@@ -149,7 +162,6 @@ public class BoService {
 		response.setTipoLocal(endereco.getTipoLocal().getNome());
 		response.setTokenBoSigma(gerarTokenBoSigma(bo.getIdBoSigma() != null ? bo.getIdBoSigma() : null));
 		response.setProtocolo(protocolo.getNumero());
-		response.setStatus(new EnumToObject(bo.getStatus().name(), bo.getStatus().getDescricao()));
 		List<NaturezaDeonResponseDto> naturezaDto = new ArrayList<>();
 		bo.getListaNaturezas().forEach(n -> {
 			NaturezaDeonResponseDto nt = new NaturezaDeonResponseDto();
@@ -157,12 +169,17 @@ public class BoService {
 			naturezaDto.add(nt);
 		});
 		response.setListaNatureza(naturezaDto);
+		
 		var listaEnvolvimento = envolvimentoService.getListaEnvolvimentoBo(bo.getIdBo());
 		List<EnvolvidoBoDto> listaEnvolvidosBo = new ArrayList<>();
 		listaEnvolvimento.forEach(e -> {
 			listaEnvolvidosBo.add(montaDtoTipoEnvolvido(e));
 		});
+
 		response.setListaEnvolvidos(listaEnvolvidosBo);
+		response.setStatusBo(status);
+		response.setDescricaoStatusBo(status.getDescricao());
+		response.setRespostaOcorrencia(resposta.getRespostaAnaliseBo());
 		return response;
 	}
 

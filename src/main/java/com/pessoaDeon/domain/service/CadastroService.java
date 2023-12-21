@@ -40,6 +40,8 @@ import com.pessoaDeon.domain.model.usuario.RespostaAnaliseUsuario;
 import com.pessoaDeon.domain.model.usuario.UsuarioAnalise;
 import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
+import com.pessoaDeon.domain.repository.usuario.UsuarioAnaliseRepository;
+import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
 import com.pessoaDeon.domain.service.usuario.UsuarioAnaliseService;
 import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
@@ -92,6 +94,12 @@ public class CadastroService {
 	
 	@Autowired
 	private UsuarioAnaliseService analiseService;
+	
+	@Autowired
+	private UsuarioAnaliseRepository analiseRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@Transactional
 	public Pessoa salvar(CadastroRequestDto cadastroRequestDto, MultipartFile[] files) {
@@ -176,14 +184,22 @@ public class CadastroService {
 	}
 
 	@ReadOnlyProperty
-	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa, Boolean trazAnexo, HttpServletRequest request) {
+	public CadastroResponseDto listarCadastroPessoa(Integer idPessoa, Boolean trazAnexo) {
 		CadastroResponseDto response = new CadastroResponseDto();
+		UsuarioAnalise resposta = new UsuarioAnalise();
+		
 		Endereco enderecoPessoa = enderecoService.getEnderecoByIdPessoa(idPessoa).get();
 		Pessoa pessoa = pessoaService.buscarPessoa(idPessoa).get();
 		Telefone contato = contatoService.getById(idPessoa);
 		Email email = emailService.getByIdEmail(idPessoa);
-		Usuario usuario = usuarioService.getUsuarioByToken(request);
-		RespostaAnaliseUsuario analise = analiseService.getRespostaAnaliseUsuario(usuario.getIdUsuario(), usuario.getStatus());
+		Usuario usuario = usuarioRepository.findByEmail(email.getEmail()).get();
+		Status statusUsuario = usuario.getStatus();
+
+		if (statusUsuario.equals(Status.IV)) {
+			resposta = analiseRepository.findByUsuario_IdUsuario(usuario.getIdUsuario()).get();
+		}
+		
+//		RespostaAnaliseUsuario analise = analiseService.getRespostaAnaliseUsuario(usuario.getIdUsuario(), usuario.getStatus());
 		List<String> anexos = trazAnexo == true ? carregarArquivo(idPessoa) : null;
 		
 		// dados referentes a pessoa
@@ -239,9 +255,9 @@ public class CadastroService {
 		response.setEmail(email.getEmail());
 //		lista de anexos
 		response.setListaAnexos(anexos);
-		response.setRespostaUsuario(analise);
-		response.setStatusUsuario(usuario.getStatus());
-		response.setDescricaoStatusUsuario(usuario.getStatus().getDescricao());
+		response.setStatusUsuario(statusUsuario);
+		response.setDescricaoStatusUsuario(statusUsuario.getDescricao());
+		response.setRespostaUsuario(resposta.getRespostaAnalise());
 
 		return response;
 	}
@@ -356,7 +372,7 @@ public class CadastroService {
 //	pega os dados da pessoa para exibir em Minha Conta no front
 	public CadastroResponseDto getPessoaToken(HttpServletRequest request) {
 		Pessoa pessoa = getPessoaByToken(request);
-		return pessoa == null ? null : listarCadastroPessoa(pessoa.getId(), false, request);
+		return pessoa == null ? null : listarCadastroPessoa(pessoa.getId(), false);
 	}
 
 	private String recuperarToken(HttpServletRequest request) {
