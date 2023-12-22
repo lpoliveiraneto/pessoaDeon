@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.pessoaDeon.domain.model.dto.CadastroRequestDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.service.CadastroService;
 import com.pessoaDeon.domain.service.VerificacaoContaService;
 import com.pessoaDeon.domain.service.usuario.UsuarioService;
@@ -105,9 +106,10 @@ public class CadastroController {
 	
 	@GetMapping("/invalido")
 	public ResponseEntity<?> verificarUsuarioInvalido(HttpServletRequest request){
-		var user = usuarioService.getUsuarioInvalido(request, Status.IV);
+		Usuario user = usuarioService.getUsuarioInvalido(request, Status.IV);
 		if (user != null ) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário inválido");
+			var resposta = usuarioService.getRespostaUsuario(user.getIdUsuario());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("Usuário está com status Válido"); 
 	}

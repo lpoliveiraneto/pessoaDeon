@@ -17,6 +17,8 @@ import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
+import com.pessoaDeon.domain.model.usuario.UsuarioAnalise;
+import com.pessoaDeon.domain.repository.usuario.UsuarioAnaliseRepository;
 import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +31,9 @@ public class UsuarioService {
 	
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private UsuarioAnaliseRepository usuarioAnaliseRepository;
 
 	@Transactional
 	public Usuario salvarUsuario(Usuario usuario) {
@@ -61,6 +66,10 @@ public class UsuarioService {
 	
 	public Usuario getUsuarioInvalido(HttpServletRequest request, Status status) {
 		return usuarioRepository.findByIdUsuarioAndStatus(getUsuarioByToken(request).getIdUsuario(), status);
+	}
+	
+	public Object getRespostaUsuario(Integer idUsuario) {
+		return usuarioAnaliseRepository.findByUsuario_IdUsuario(idUsuario).get().getRespostaAnalise().getDescricao();	
 	}
 
 	public Page<UsuariosPendentesResponseDto> getUsuariosAnalise(Pageable pageable) {
