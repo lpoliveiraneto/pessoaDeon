@@ -1,7 +1,9 @@
 package com.pessoaDeon.api.controller.ocorrencia;
 
+import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
 import com.pessoaDeon.domain.model.enumeration.TipoPesquisa;
+import com.pessoaDeon.domain.service.analista.BoAnaliseService;
 import com.pessoaDeon.domain.service.bo.BoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class OcorrenciaViolenciaDomestica {
 
     @Autowired
-    private BoService boService;    // @Autowired
-     //private BoAnaliseService boAnaliseService;
+    private BoService boService;
+     @Autowired
+     private BoAnaliseService boAnaliseService;
 
     @GetMapping
     public Page<BosPendentesResponseDto> listarOcorrenciasParaAnalise(
@@ -32,6 +35,13 @@ public class OcorrenciaViolenciaDomestica {
         return boService.getBosPendentes(pageable, tipoPesquisa, parametro, perfil);
     }
 
+    @GetMapping("/analisadas")
+    public Page<BosAnalisadosResponseDto> listarBosAnalisados(
+            @PageableDefault(size = 10, page = 0, sort = "idBo",
+                    direction = Sort.Direction.ASC)Pageable pageable){
+
+        return boAnaliseService.getBoAnalisadosViolenciaDomestica(pageable);
+    }
 //    @GetMapping
 //    public ResponseEntity<?> listarOcorrenciaViolenciaDomestica(){
 //        System.out.println("testando a rota de violencia domestica");
