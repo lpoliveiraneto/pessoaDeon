@@ -42,6 +42,13 @@ public class OcorrenciaViolenciaDomestica {
 
         return boAnaliseService.getBoAnalisadosViolenciaDomestica(pageable);
     }
+
+    @GetMapping("/emAnalise")
+    public Page<BosAnalisadosResponseDto> listarBosEmAnalise(
+            @PageableDefault(size = 10, page = 0, sort = "idBo",
+                    direction = Sort.Direction.ASC)Pageable pageable){
+        return boAnaliseService.getBoEmAnaliseViolenciaDomestica(pageable);
+    }
 //    @GetMapping
 //    public ResponseEntity<?> listarOcorrenciaViolenciaDomestica(){
 //        System.out.println("testando a rota de violencia domestica");

@@ -80,7 +80,19 @@ public class BoAnaliseService {
     }
 
     public Page<BosAnalisadosResponseDto> getBoEmAnalise(Pageable pageable){
-        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
+        ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
+        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseNotViolenciaDomestica(entityManager);
+        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
+        bosEmAnalise.forEach(b -> {
+            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
+            bos.add(bo);
+        });
+        return new PageImpl<>(bos, pageable, bos.size());
+    }
+
+    public Page<BosAnalisadosResponseDto> getBoEmAnaliseViolenciaDomestica(Pageable pageable){
+        ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
+        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseViolenciaDomestica(entityManager);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosEmAnalise.forEach(b -> {
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
