@@ -17,7 +17,6 @@ import com.pessoaDeon.domain.model.dto.UsuariosPendentesResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.domain.model.usuario.UsuarioAnalise;
 import com.pessoaDeon.domain.repository.usuario.UsuarioAnaliseRepository;
 import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
 
