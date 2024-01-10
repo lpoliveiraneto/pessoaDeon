@@ -3,6 +3,7 @@ package com.pessoaDeon.domain.service.analista;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,8 +117,10 @@ public class BoAnaliseService {
 
     @Transactional
     public void salvarBoEmAnalise(BoAnaliseRequest boAnaliseRequest, HttpServletRequest request, Status status) {
-        BoAnalise boAnalise = new BoAnalise();
-        
+        //verificar se o bo já não consta em análise.
+        Optional<BoAnalise> analise = boAnaliseRepository.findByBoDeon_IdBo(boAnaliseRequest.fkBo());
+        BoAnalise boAnalise = analise.orElseGet(BoAnalise::new);
+
         var analista = analistaService.getAnalistaToken(request);
         var bodeon = boService.findById(boAnaliseRequest.fkBo())
                 .orElseThrow(() -> new BoNotFoundException("Não existe analista com esse id"));
