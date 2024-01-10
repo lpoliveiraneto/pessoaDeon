@@ -43,8 +43,8 @@ public class BoAnaliseQueryDSLRepositoryImpl implements BoAnaliseQueryDSLReposit
         query.join(qBoAnalise.boDeon, qBoDeon);
         query.join(qBoDeon.listaNaturezas,qNaturezaBo);
         query.where(qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA)));
-        List<BoAnalise> bosPendentes = query.fetch();
-        return bosPendentes;
+        List<BoAnalise> bosAnalisados = query.fetch();
+        return bosAnalisados;
     }
 
     @Override
@@ -64,6 +64,20 @@ public class BoAnaliseQueryDSLRepositoryImpl implements BoAnaliseQueryDSLReposit
         query.join(qEnvolvido.pessoa, qPessoa);
         query.where(qPessoa.id.isNotNull().and(qNaturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA)));
         List<BoDeon> bosPendentes = query.fetch();
+        return bosPendentes;
+    }
+
+    public List<BoAnalise> findByStatusFalseNotViolenciaDomestica(EntityManager entityManager) {
+
+        final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+        QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+        QBoDeon qBoDeon = QBoDeon.boDeon;
+        QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+        JPAQuery<BoAnalise> query = new JPAQueryFactory(entityManager).selectFrom(qBoAnalise).distinct();
+        query.join(qBoAnalise.boDeon, qBoDeon);
+        query.join(qBoDeon.listaNaturezas,qNaturezaBo);
+        query.where(qBoAnalise.status.isFalse().and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA)));
+        List<BoAnalise> bosPendentes = query.fetch();
         return bosPendentes;
     }
 }

@@ -274,67 +274,16 @@ public class BoService {
 		Predicate predicate;
 		if(perfil.equals("analista")){
 			predicate = qBoDeon.status.eq(Status.PE).and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA));
-			query = buildQuery(tipoPesquisa, parametro, predicate);
+			query = boRepository.buildQuery(tipoPesquisa, parametro, predicate, entityManager);
 		}
 		if(perfil.equals("mulher")){
 			predicate = qBoDeon.status.eq(Status.PE).and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA));
-			query = buildQuery(tipoPesquisa, parametro, predicate);
+			query = boRepository.buildQuery(tipoPesquisa, parametro, predicate, entityManager);
 		}
 	    long count = query.fetchCount();
 	    List<BoDeon> listaBos = query.distinct().offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	    List<BosPendentesResponseDto> bos = processResults(listaBos);
 	    return new PageImpl<>(bos, pageable, count);
-	}
-
-	private JPAQuery<BoDeon> buildQuery(TipoPesquisa tipoPesquisa, String parametro, Predicate predicate) {
-		QBoDeon qBoDeon = QBoDeon.boDeon;
-		QProtocolo qProtocolo = QProtocolo.protocolo;
-		QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
-		QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
-		QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
-		QEnvolvido qEnvolvido = QEnvolvido.envolvido;
-		QPessoa qPessoa = QPessoa.pessoa;
-		JPAQuery<BoDeon> query = new JPAQueryFactory(entityManager).selectFrom(qBoDeon)
-				.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo)
-				.leftJoin(qNaturezaBo.naturezaDeon, qNaturezaDeon)
-				.where(predicate);
-	    if (tipoPesquisa != null) {
-		    switch (tipoPesquisa) {
-			    case PROTOCOLO:
-					query.leftJoin(qProtocolo).on(qBoDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.eq(parametro).and(predicate));
-					break;
-				case COMUNICANTE:
-					//query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
-					query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
-					query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
-					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
-					.where(qPessoa.nome.containsIgnoreCase(parametro).and(predicate));
-					break;
-				case CPF:
-					//query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
-					query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
-					query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
-					query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
-					.where(qPessoa.numeroDocumento.containsIgnoreCase(parametro).and(predicate));
-					break;
-				case DATA_REGISTRO:
-			        DateTimeFormatter formatoDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			        LocalDate data = LocalDate.parse(parametro, formatoDataHora);
-			        LocalTime horaInicio = LocalTime.of(0, 0, 0);
-			        LocalDateTime tInicial = LocalDateTime.of(data, horaInicio);
-			        LocalDateTime tFinal = tInicial.plusHours(23).plusMinutes(59).plusSeconds(59);
-			        query.where(qBoDeon.dataRegistro.between(tInicial, tFinal).and(predicate));
-					break;
-				case NATUREZA:
-					query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
-					query.leftJoin(qNaturezaBo.naturezaDeon, qNaturezaDeon)
-					.where(qNaturezaDeon.nome.containsIgnoreCase(parametro).and(predicate));
-					break;
-				default:
-					break;
-				}
-	    }
-	    return query;
 	}
 
 	private List<BosPendentesResponseDto> processResults(List<BoDeon> listaBos) {

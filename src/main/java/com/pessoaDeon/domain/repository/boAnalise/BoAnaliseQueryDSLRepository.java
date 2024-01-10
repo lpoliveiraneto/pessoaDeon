@@ -13,4 +13,6 @@ public interface BoAnaliseQueryDSLRepository {
  public List<BoAnalise> findByStatusTrueViolenciaDomestica(EntityManager entityManager);
 
  public List<BoDeon> getBosPendentesViolenciaDomestica(EntityManager entityManager);
+
+ public List<BoAnalise> findByStatusFalseNotViolenciaDomestica(EntityManager entityManager);
 }

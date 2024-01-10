@@ -3,7 +3,9 @@ package com.pessoaDeon.domain.service.analista;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,6 +42,9 @@ public class BoAnaliseService {
     @Autowired
     private RespostaAnaliseBoRepository respostaAnaliseBoRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
     public Page<BosAnalisadosResponseDto> getBoAnalise(Pageable pageable){
 
         List<BoAnalise> bosAnalise = boAnaliseRepository.findAll();
@@ -53,7 +58,19 @@ public class BoAnaliseService {
     }
 
     public Page<BosAnalisadosResponseDto> getBoAnalisados(Pageable pageable){
-        List<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrue();
+        //List<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrue();
+        List<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusFalseNotViolenciaDomestica(entityManager);
+        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
+        bosAnalise.forEach(b ->{
+            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
+            bos.add(bo);
+        });
+
+        return new PageImpl<>(bos, pageable, bos.size());
+    }
+
+    public Page<BosAnalisadosResponseDto> getBoAnalisadosViolenciaDomestica(Pageable pageable){
+        List<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrueViolenciaDomestica(entityManager);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosAnalise.forEach(b ->{
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
@@ -64,7 +81,19 @@ public class BoAnaliseService {
     }
 
     public Page<BosAnalisadosResponseDto> getBoEmAnalise(Pageable pageable){
-        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
+        ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
+        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseNotViolenciaDomestica(entityManager);
+        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
+        bosEmAnalise.forEach(b -> {
+            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
+            bos.add(bo);
+        });
+        return new PageImpl<>(bos, pageable, bos.size());
+    }
+
+    public Page<BosAnalisadosResponseDto> getBoEmAnaliseViolenciaDomestica(Pageable pageable){
+        ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
+        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseViolenciaDomestica(entityManager);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosEmAnalise.forEach(b -> {
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
@@ -88,8 +117,10 @@ public class BoAnaliseService {
 
     @Transactional
     public void salvarBoEmAnalise(BoAnaliseRequest boAnaliseRequest, HttpServletRequest request, Status status) {
-        BoAnalise boAnalise = new BoAnalise();
-        
+        //verificar se o bo já não consta em análise.
+        Optional<BoAnalise> analise = boAnaliseRepository.findByBoDeon_IdBo(boAnaliseRequest.fkBo());
+        BoAnalise boAnalise = analise.orElseGet(BoAnalise::new);
+
         var analista = analistaService.getAnalistaToken(request);
         var bodeon = boService.findById(boAnaliseRequest.fkBo())
                 .orElseThrow(() -> new BoNotFoundException("Não existe analista com esse id"));
