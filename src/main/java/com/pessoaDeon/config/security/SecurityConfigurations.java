@@ -44,6 +44,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.GET, "/api/v1/violenciaDomestica/**").hasRole("MULHER");
                     req.requestMatchers(HttpMethod.GET, "/api/v1/usuario/**").hasRole("ANALISTA");
                     req.requestMatchers(HttpMethod.POST, "/api/v1/usuario/**").hasRole("ANALISTA");
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/pecas/**").permitAll();
                     req.anyRequest().authenticated(); 
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

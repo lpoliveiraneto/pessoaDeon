@@ -36,13 +36,11 @@ import com.pessoaDeon.domain.model.pessoa.Email;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.pessoa.Telefone;
 import com.pessoaDeon.domain.model.security.Usuario;
-import com.pessoaDeon.domain.model.usuario.RespostaAnaliseUsuario;
 import com.pessoaDeon.domain.model.usuario.UsuarioAnalise;
 import com.pessoaDeon.domain.model.util.ConfiguracaoUpload;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
 import com.pessoaDeon.domain.repository.usuario.UsuarioAnaliseRepository;
 import com.pessoaDeon.domain.repository.usuario.UsuarioRepository;
-import com.pessoaDeon.domain.service.usuario.UsuarioAnaliseService;
 import com.pessoaDeon.domain.service.usuario.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -91,9 +89,6 @@ public class CadastroService {
 
 	@Autowired
 	private PerfilRepository perfilRepository;
-	
-	@Autowired
-	private UsuarioAnaliseService analiseService;
 	
 	@Autowired
 	private UsuarioAnaliseRepository analiseRepository;
