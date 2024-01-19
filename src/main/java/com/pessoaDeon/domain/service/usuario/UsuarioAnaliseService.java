@@ -28,7 +28,7 @@ public class UsuarioAnaliseService {
 	private UsuarioService usuarioService;
 
 	@Autowired
-	private UsuarioAnaliseRepository analiseRepository;
+	private UsuarioAnaliseRepository analiseUsuarioRepository;
 
 	@Autowired
 	private AnalistaService analistaService;
@@ -39,7 +39,10 @@ public class UsuarioAnaliseService {
 	@Transactional
 	public void salvarUsuarioEmTabelaAnalise(UsuarioAnaliseRequest usuarioRequest, HttpServletRequest request,
 			Status status) {
-		UsuarioAnalise usuarioAnalise = new UsuarioAnalise();
+
+		Optional<UsuarioAnalise> analise = analiseUsuarioRepository.findByUsuario_IdUsuario(usuarioRequest.fkUsuario());
+		//UsuarioAnalise usuarioAnalise = new UsuarioAnalise();
+		UsuarioAnalise usuarioAnalise = analise.orElseGet(UsuarioAnalise::new);
 		var user = usuarioService.findById(usuarioRequest.fkUsuario())
 				.orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 
@@ -49,7 +52,7 @@ public class UsuarioAnaliseService {
 		usuarioAnalise.setUsuario(user);
 		usuarioAnalise.setAnalista(analistaService.getAnalistaToken(request));
 		usuarioAnalise.setDataEntradaAnalise(LocalDateTime.now());
-		analiseRepository.save(usuarioAnalise);
+		analiseUsuarioRepository.save(usuarioAnalise);
 	}
 
 //	public void salvarRespostaUsuarioEmAnalise(UsuarioAnaliseRequest usuarioRequest) {
@@ -76,7 +79,7 @@ public class UsuarioAnaliseService {
 	public void aprovarUsuarioEmAnalise(UsuarioAnaliseRequest usuarioRequest, Integer id) {
 
 		var resposta = respostaUsuarioAnaliseRepository.findById(id);
-		var analise = analiseRepository.findByUsuario_IdUsuario(usuarioRequest.fkUsuario())
+		var analise = analiseUsuarioRepository.findByUsuario_IdUsuario(usuarioRequest.fkUsuario())
 				.orElseThrow(() -> new RuntimeException("Não existe usuario para analise com esse id"));
 		Optional<Usuario> usuario = usuarioService.findById(usuarioRequest.fkUsuario());
 
@@ -88,7 +91,7 @@ public class UsuarioAnaliseService {
 
 				Status novoStatus = (analise.getRespostaAnalise().getIdRespostaAnalise() != id) ? Status.IV : Status.VA;
 				usuarioService.mudaStatusUsuarioEmAnalise(analise.getUsuario(), novoStatus);
-				analiseRepository.saveAndFlush(analise);
+				analiseUsuarioRepository.saveAndFlush(analise);
 			}
 		} catch (RuntimeException e) {
 			throw new PessoaNotFoundException("Operação indisponivel com esse status");
@@ -97,7 +100,7 @@ public class UsuarioAnaliseService {
 	}
 
 	public void recusarUsuarioEmAnalise(UsuarioAnaliseRequest usuarioRequest, Integer id, HttpServletRequest request) {
-		var analise = analiseRepository.findByUsuario_IdUsuario(usuarioRequest.fkUsuario())
+		var analise = analiseUsuarioRepository.findByUsuario_IdUsuario(usuarioRequest.fkUsuario())
 				.orElseThrow(() -> new RuntimeException("Não existe usuario para analise com esse id"));
 		var respostaRecusar = respostaUsuarioAnaliseRepository.findById(id);
 
@@ -111,7 +114,7 @@ public class UsuarioAnaliseService {
 
 				Status novoStatus = (analise.getRespostaAnalise().getIdRespostaAnalise() != id) ? Status.VA : Status.IV;
 				usuarioService.mudaStatusUsuarioEmAnalise(analise.getUsuario(), novoStatus);
-				analiseRepository.saveAndFlush(analise);
+				analiseUsuarioRepository.saveAndFlush(analise);
 			}
 
 		} catch (RuntimeException e) {
