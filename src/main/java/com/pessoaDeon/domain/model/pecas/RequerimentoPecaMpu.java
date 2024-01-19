@@ -1,8 +1,9 @@
 package com.pessoaDeon.domain.model.pecas;
 
-import java.io.Serializable;
+import java.time.LocalDate;
 
-import jakarta.persistence.CascadeType;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,29 +16,33 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="tipo_pergunta_peca", schema="peca")
-public class TipoPerguntaPeca implements Serializable {
+@Table(name = "requerimento_peca_mpu", schema = "peca")
+public class RequerimentoPecaMpu {
 
-    private static final long serialVersionUID = 1L;
-
-	@Id
+    @Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	private String pergunta;
+	private String observacao;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="fk_tipo_peca")
-	private TipoPeca tipoPeca;
+	@DateTimeFormat(pattern="dd/MM/yyyy HH:mm:ss")
+	private LocalDate dataCriacao;
+
+	@ManyToOne
+	@JoinColumn(name="fk_requerimento")
+	private RequerimentoMpu requerimentoMpu;
 	
 	@ManyToOne
-	@JoinColumn(name="fk_bloco")
-	private BlocoPerguntas bloco;
+	@JoinColumn(name="fk_peca")
+	private Peca peca;
 	
-	private Boolean ativo;
+	private Boolean status_ativo;
+
+	private String ip;
 }

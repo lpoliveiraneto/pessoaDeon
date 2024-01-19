@@ -1,7 +1,4 @@
 package com.pessoaDeon.domain.model.pecas;
-
-import java.io.Serializable;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,10 +8,8 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name="bloco_perguntas", schema="peca")
-public class BlocoPerguntas implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+@Table(name = "relacionamentos", schema = "peca")
+public class TipoRelacionamento {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
