@@ -16,16 +16,13 @@ public class TipoPerguntaPecaDto {
 	
 	private String pergunta;
 	
-	private Integer tipoPeca;
-	
 	private Boolean ativo;
 
 	private List<TipoRespostaPeca> tipoRespostaPeca;
 
-	public TipoPerguntaPecaDto(Integer id, String pergunta, Integer tipoPeca, Boolean ativo) {
+	public TipoPerguntaPecaDto(Integer id, String pergunta, Boolean ativo) {
 		this.id = id;
 		this.pergunta = pergunta;
-		this.tipoPeca = tipoPeca;
 		this.ativo = ativo;
 	}
 }

@@ -1,22 +1,18 @@
 package com.pessoaDeon.domain.service.pecas;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pessoaDeon.domain.model.dto.pecas.PerguntaRespostaDto;
 import com.pessoaDeon.domain.model.dto.pecas.TipoPerguntaPecaDto;
 import com.pessoaDeon.domain.model.pecas.PerguntaResposta;
-import com.pessoaDeon.domain.model.pecas.RequerimentoMpu;
-import com.pessoaDeon.domain.model.pecas.TipoPeca;
 import com.pessoaDeon.domain.model.pecas.TipoPerguntaPeca;
 import com.pessoaDeon.domain.model.pecas.TipoRespostaPeca;
 import com.pessoaDeon.domain.model.pecas.TituloRequerimentoMpu;
 import com.pessoaDeon.domain.repository.pecas.PerguntaRespostaRepository;
-import com.pessoaDeon.domain.repository.pecas.RequerimentoMpuRepository;
-import com.pessoaDeon.domain.repository.pecas.TipoPecaRepository;
 import com.pessoaDeon.domain.repository.pecas.TipoPerguntaRepository;
 import com.pessoaDeon.domain.repository.pecas.TituloRequerimentoMpuRepository;
 
@@ -30,17 +26,12 @@ public class PerguntaRespostaService {
   private PerguntaRespostaRepository perguntaRespostaRepository;
 
   @Autowired
-  private TipoPecaRepository tipoPecaRepository;
-
-  @Autowired
   private TituloRequerimentoMpuRepository tituloRequerimentoMpuRepository;
   
-  @Autowired
-  private RequerimentoMpuRepository requerimentoMpuRepository;
 
-    public PerguntaRespostaDto listaResposta(TipoPeca tp, Integer bloco) {
+    public PerguntaRespostaDto listaResposta(Integer bloco) {
         List<TipoPerguntaPecaDto> listaResposta = new ArrayList<>();
-        List<TipoPerguntaPeca> perguntasPorBloco = listaPerguntasPorBloco(tp, bloco);
+        List<TipoPerguntaPeca> perguntasPorBloco = listaPerguntasPorBloco(bloco);
         PerguntaRespostaDto list = new PerguntaRespostaDto();
         
         if (!perguntasPorBloco.isEmpty()) {
@@ -74,7 +65,6 @@ public class PerguntaRespostaService {
             tipoPerguntaPecaDto.setId(tipoRespostaPeca.getPergunta().getId());
             tipoPerguntaPecaDto.setAtivo(tipoRespostaPeca.getPergunta().getAtivo());
             tipoPerguntaPecaDto.setPergunta(tipoRespostaPeca.getPergunta().getPergunta());
-            tipoPerguntaPecaDto.setTipoPeca(tipoRespostaPeca.getPergunta().getTipoPeca().getIdTipo());
             listaResposta.add(tipoRespostaPeca.getResposta());
         }
 
@@ -87,14 +77,8 @@ public class PerguntaRespostaService {
         return perguntaRespostaRepository.findByPerguntaId(perguntaId);
     }
 
-    private List<TipoPerguntaPeca> listaPerguntasPorBloco(TipoPeca tp, Integer bloco) {
-        TipoPeca peca = tipoPecaRepository.findById(tp.getIdTipo()).orElse(null);
-
-        if (peca != null) {
-            return tipoPerguntaRepository.findByTipoPecaAndAtivoIsTrueAndBlocoIdOrderByIdAsc(peca, bloco);
-        } else {
-            return Collections.emptyList();
-        }
+    private List<TipoPerguntaPeca> listaPerguntasPorBloco(Integer bloco) {
+    	return tipoPerguntaRepository.findByAtivoIsTrueAndBlocoIdOrderByIdAsc(bloco);
     }
 
     private List<PerguntaResposta> findByPerguntaAndAtivaIsTrueOrderByIdAsc(TipoPerguntaPeca tipoPerguntaPeca){
@@ -106,8 +90,8 @@ public class PerguntaRespostaService {
      * @param tp
      * @return retorna a lista de titulos para a medida protetiva
      */
-    public List<TituloRequerimentoMpu> listaTituloRequerimento(TipoPeca tp) {
-        List<TituloRequerimentoMpu> lista = tituloRequerimentoMpuRepository.findByTipoPecaAndStatusAtivoIsTrue(tp);
+    public List<TituloRequerimentoMpu> listaTituloRequerimento() {
+        List<TituloRequerimentoMpu> lista = tituloRequerimentoMpuRepository.findByStatusAtivoIsTrue();
         return lista;
     }
 }
