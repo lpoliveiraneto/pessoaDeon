@@ -57,21 +57,25 @@ public class PerguntaRespostaService {
         return perguntaRespostaDto;
     }
 
-    private TipoPerguntaPecaDto montaDto(List<PerguntaResposta> resposta){
+    private TipoPerguntaPecaDto montaDto(List<PerguntaResposta> resposta) {
+//        List<Integer> listaIdsPerguntaResposta = new ArrayList<>();
         List<TipoRespostaPeca> listaResposta = new ArrayList<>();
         TipoPerguntaPecaDto tipoPerguntaPecaDto = new TipoPerguntaPecaDto();
 
-        for (PerguntaResposta tipoRespostaPeca : resposta) {
-            tipoPerguntaPecaDto.setId(tipoRespostaPeca.getPergunta().getId());
-            tipoPerguntaPecaDto.setAtivo(tipoRespostaPeca.getPergunta().getAtivo());
-            tipoPerguntaPecaDto.setPergunta(tipoRespostaPeca.getPergunta().getPergunta());
-            listaResposta.add(tipoRespostaPeca.getResposta());
+        for (PerguntaResposta perguntaResposta : resposta) {
+//            listaIdsPerguntaResposta.add(perguntaResposta.getId());
+            tipoPerguntaPecaDto.setId(perguntaResposta.getPergunta().getId());
+            tipoPerguntaPecaDto.setAtivo(perguntaResposta.getPergunta().getAtivo());
+            tipoPerguntaPecaDto.setPergunta(perguntaResposta.getPergunta().getPergunta());
+            listaResposta.add(perguntaResposta.getResposta());
         }
 
+//        tipoPerguntaPecaDto.setFkPerguntaResposta(listaIdsPerguntaResposta); 
         tipoPerguntaPecaDto.setTipoRespostaPeca(listaResposta);
 
         return tipoPerguntaPecaDto;
     }
+
 
     public List<PerguntaResposta> obterRespostasPorPergunta(Integer perguntaId) {
         return perguntaRespostaRepository.findByPerguntaId(perguntaId);
