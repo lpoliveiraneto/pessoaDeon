@@ -1,5 +1,7 @@
-package com.pessoaDeon.domain.model.pecas;
+package com.pessoaDeon.domain.model.pecas.formulario_risco;
 
+import com.pessoaDeon.domain.model.pecas.Peca;
+import com.pessoaDeon.domain.model.pecas.formulario_risco.PerguntaRespostaFormularioRisco;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +26,7 @@ public class RespostaFormularioRisco {
 	
 	@ManyToOne
 	@JoinColumn(name="fk_pergunta_resposta")
-	private PerguntaResposta perguntaResposta;
+	private PerguntaRespostaFormularioRisco perguntaRespostaFormularioRisco;
 	
 	@ManyToOne
 	@JoinColumn(name="fk_peca")

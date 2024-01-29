@@ -37,7 +37,7 @@ public class Peca implements Serializable{
 	
 	private Boolean status;
 	
-	private String ip;
+//	private String ip;
 	
 	@ManyToOne
     @JoinColumn(name = "fk_tipo_peca")

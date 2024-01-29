@@ -1,7 +1,7 @@
 package com.pessoaDeon.domain.model.dto.pecas;
 import java.util.List;
 
-import com.pessoaDeon.domain.model.pecas.TipoRespostaPeca;
+import com.pessoaDeon.domain.model.pecas.formulario_risco.TipoRespostaFormularioRisco;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class TipoPerguntaPecaDto {
 	
 	private Boolean ativo;
 
-	private List<TipoRespostaPeca> tipoRespostaPeca;
+	private List<TipoRespostaFormularioRisco> tipoRespostaFormularioRisco;
 	
 	public TipoPerguntaPecaDto(Integer id, String pergunta, Boolean ativo) {
 		this.id = id;

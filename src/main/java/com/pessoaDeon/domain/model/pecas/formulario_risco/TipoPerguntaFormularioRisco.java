@@ -1,6 +1,8 @@
-package com.pessoaDeon.domain.model.pecas;
+package com.pessoaDeon.domain.model.pecas.formulario_risco;
 
 import java.io.Serializable;
+
+import com.pessoaDeon.domain.model.pecas.formulario_risco.BlocoPerguntas;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,24 +18,22 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name="pergunta_resposta", schema="formulario_risco")
-public class PerguntaResposta implements Serializable {
-    
+@NoArgsConstructor
+@Table(name="tipo_pergunta_peca", schema="formulario_risco")
+public class TipoPerguntaFormularioRisco implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne
-	@JoinColumn(name="fk_pergunta")
-	private TipoPerguntaPeca pergunta;
+	private String pergunta;
 	
 	@ManyToOne
-	@JoinColumn(name="fk_resposta")
-	private TipoRespostaPeca resposta;
+	@JoinColumn(name="fk_bloco")
+	private BlocoPerguntas bloco;
 	
-	private Boolean ativa;
+	private Boolean ativo;
 }
