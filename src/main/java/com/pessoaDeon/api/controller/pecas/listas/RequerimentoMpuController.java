@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.pessoaDeon.domain.model.pecas.TipoPeca;
 import com.pessoaDeon.domain.model.pecas.TituloRequerimentoMpu;
 import com.pessoaDeon.domain.service.pecas.PerguntaRespostaService;
 
@@ -20,7 +17,7 @@ public class RequerimentoMpuController {
     private PerguntaRespostaService perguntaRespostaService;
 	
 	@GetMapping
-    public List<TituloRequerimentoMpu> listarTituloAndRespostas(@RequestParam(value = "peca") TipoPeca peca){ 
-    	return perguntaRespostaService.listaTituloRequerimento(peca);
+    public List<TituloRequerimentoMpu> listarTituloAndRespostas(){ 
+    	return perguntaRespostaService.listaTituloRequerimento();
     }
 }
