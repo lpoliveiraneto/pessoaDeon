@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "relacionamentos", schema = "peca")
+@Table(name = "relacionamentos", schema = "mpu")
 public class TipoRelacionamento {
 
 	@Id

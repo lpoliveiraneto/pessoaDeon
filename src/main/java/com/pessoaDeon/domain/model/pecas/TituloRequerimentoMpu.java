@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,7 +20,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "titulo_requerimento_mpu", schema = "peca")
+@Table(name = "titulo_requerimento_mpu", schema = "mpu")
 public class TituloRequerimentoMpu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,10 +30,6 @@ public class TituloRequerimentoMpu implements Serializable {
 	private Integer id;
 	
 	private String descricao;
-	
-	@ManyToOne
-	@JoinColumn(name="fk_tipo_peca")
-	private TipoPeca tipoPeca;
 	
 	private Boolean statusAtivo;
 	

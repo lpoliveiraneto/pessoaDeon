@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "requerimento_mpu", schema = "peca")
+@Table(name = "requerimento_mpu", schema = "mpu")
 public class RequerimentoMpu implements Serializable{
 
     private static final long serialVersionUID = 1L;

@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="pergunta_resposta", schema="peca")
+@Table(name="pergunta_resposta", schema="formulario_risco")
 public class PerguntaResposta implements Serializable {
     
     private static final long serialVersionUID = 1L;

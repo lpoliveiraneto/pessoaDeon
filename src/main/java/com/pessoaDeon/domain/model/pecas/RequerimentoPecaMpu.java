@@ -22,7 +22,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "requerimento_peca_mpu", schema = "peca")
+@Table(name = "requerimento_peca_mpu", schema = "mpu")
 public class RequerimentoPecaMpu {
 
     @Id

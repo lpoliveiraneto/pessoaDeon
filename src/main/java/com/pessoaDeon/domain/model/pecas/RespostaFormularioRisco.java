@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name="respostas_formulario_peca", schema="peca")
+@Table(name="respostas_formulario_peca", schema="formulario_risco")
 public class RespostaFormularioRisco {
     
     @Id

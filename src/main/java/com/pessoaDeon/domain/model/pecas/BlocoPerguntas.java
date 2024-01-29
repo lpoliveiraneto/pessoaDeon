@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name="bloco_perguntas", schema="peca")
+@Table(name="bloco_perguntas", schema="formulario_risco")
 public class BlocoPerguntas implements Serializable{
 
 	private static final long serialVersionUID = 1L;

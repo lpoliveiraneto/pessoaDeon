@@ -20,7 +20,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name="peca", schema="peca")
+@Table(name="peca", schema="public")
 public class Peca implements Serializable{
 
     private static final long serialVersionUID = 1L;

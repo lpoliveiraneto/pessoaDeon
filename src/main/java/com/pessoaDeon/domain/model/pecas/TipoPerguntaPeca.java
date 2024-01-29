@@ -1,8 +1,6 @@
 package com.pessoaDeon.domain.model.pecas;
 
 import java.io.Serializable;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +18,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="tipo_pergunta_peca", schema="peca")
+@Table(name="tipo_pergunta_peca", schema="formulario_risco")
 public class TipoPerguntaPeca implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,10 +28,6 @@ public class TipoPerguntaPeca implements Serializable {
 	private Integer id;
 	
 	private String pergunta;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="fk_tipo_peca")
-	private TipoPeca tipoPeca;
 	
 	@ManyToOne
 	@JoinColumn(name="fk_bloco")
