@@ -3,12 +3,12 @@ package com.pessoaDeon.domain.service.pecas;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.pessoaDeon.domain.model.pecas.requerimento_mpu.RequerimentoPecaMpu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pessoaDeon.domain.model.pecas.Peca;
-import com.pessoaDeon.domain.model.pecas.RequerimentoPecaMpu;
-import com.pessoaDeon.domain.model.pecas.RespostaFormularioRisco;
+import com.pessoaDeon.domain.model.pecas.Peca;//import com.pessoaDeon.domain.model.pecas.RequerimentoPecaMpu;
+import com.pessoaDeon.domain.model.pecas.formulario_risco.RespostaFormularioRisco;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.repository.pecas.PecaRepository;
 
@@ -36,8 +36,7 @@ public class PecaService {
         
     }
 	public void salvarPessoasPeca(Peca peca, List<Pessoa> listaPessoas) {
-		//for (Pessoa pessoasPeca : listaPessoas) {
-		//}
+
 	}
 
 	public void salvarProvidenciasPeca(Peca peca, List<RequerimentoPecaMpu> listaRequerimento) {
@@ -55,15 +54,8 @@ public class PecaService {
 		Peca formularioRisco = new Peca();
 		formularioRisco.setDataCriacao(LocalDate.now());
 		formularioRisco.setStatus(true);
-		//formularioRisco.set setListProvidenciaPeca(null);
-		//formularioRisco.setListaPessoasPeca(null);
-		//formularioRisco.setTipoPeca(tpRepository.findOne(3));
-		//formularioRisco.setOcorrencia(peca.getOcorrencia());
+
 		pecaRepository.save(formularioRisco);
-
-		//salvarRespostas(listaRespostas, formularioRisco);
-
-		//salvarPessoasFormulario(peca, formularioRisco);
 
 	}
 }

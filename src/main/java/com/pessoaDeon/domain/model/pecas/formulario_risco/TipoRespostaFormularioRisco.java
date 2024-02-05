@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.model.pecas;
+package com.pessoaDeon.domain.model.pecas.formulario_risco;
 
 import java.io.Serializable;
 
@@ -18,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="tipo_resposta_peca", schema="formulario_risco")
-public class TipoRespostaPeca implements Serializable {
+public class TipoRespostaFormularioRisco implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

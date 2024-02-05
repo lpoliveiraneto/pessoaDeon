@@ -1,20 +1,21 @@
 package com.pessoaDeon.domain.repository.pecas;
 
 import java.util.List;
+
+import com.pessoaDeon.domain.model.pecas.formulario_risco.PerguntaRespostaFormularioRisco;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.pessoaDeon.domain.model.pecas.PerguntaResposta;
-import com.pessoaDeon.domain.model.pecas.TipoPerguntaPeca;
-import com.pessoaDeon.domain.model.pecas.TipoRespostaPeca;
+import com.pessoaDeon.domain.model.pecas.formulario_risco.TipoPerguntaFormularioRisco;
+import com.pessoaDeon.domain.model.pecas.formulario_risco.TipoRespostaFormularioRisco;
 
 @Repository
-public interface PerguntaRespostaRepository extends JpaRepository<PerguntaResposta, Integer>{
+public interface PerguntaRespostaRepository extends JpaRepository<PerguntaRespostaFormularioRisco, Integer>{
 
-    List<PerguntaResposta> findByPerguntaAndAtivaIsTrueOrderByIdAsc(TipoPerguntaPeca pergunta);
+    List<PerguntaRespostaFormularioRisco> findByPerguntaAndAtivaIsTrueOrderByIdAsc(TipoPerguntaFormularioRisco pergunta);
 
-    List<PerguntaResposta> findByPerguntaId(Integer idPergunta);
+    List<PerguntaRespostaFormularioRisco> findByPerguntaId(Integer idPergunta);
 
-    List<TipoRespostaPeca> findRespostasByPerguntaId(Integer perguntaId);
+    List<TipoRespostaFormularioRisco> findRespostasByPerguntaId(Integer perguntaId);
 
-    PerguntaResposta findPerguntaRespostaById(Integer perguntaId);
+    PerguntaRespostaFormularioRisco findPerguntaRespostaById(Integer perguntaId);
 }

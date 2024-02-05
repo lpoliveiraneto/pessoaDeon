@@ -1,4 +1,4 @@
-package com.pessoaDeon.domain.model.pecas;
+package com.pessoaDeon.domain.model.pecas.formulario_risco;
 
 import java.io.Serializable;
 

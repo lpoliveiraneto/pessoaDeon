@@ -2,12 +2,12 @@ package com.pessoaDeon.domain.repository.pecas;
 
 import java.util.List;
 
+import com.pessoaDeon.domain.model.pecas.formulario_risco.TipoPerguntaFormularioRisco;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.pessoaDeon.domain.model.pecas.TipoPerguntaPeca;
 
 @Repository
-public interface TipoPerguntaRepository extends JpaRepository<TipoPerguntaPeca, Integer>{
+public interface TipoPerguntaRepository extends JpaRepository<TipoPerguntaFormularioRisco, Integer>{
 
-    List<TipoPerguntaPeca> findByAtivoIsTrueAndBlocoIdOrderByIdAsc(Integer bloco);
+    List<TipoPerguntaFormularioRisco> findByAtivoIsTrueAndBlocoIdOrderByIdAsc(Integer bloco);
 }

@@ -2,11 +2,12 @@ package com.pessoaDeon.api.controller.pecas.listas;
 
 import java.util.List;
 
+import com.pessoaDeon.domain.model.pecas.requerimento_mpu.TituloRequerimentoMpu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.pessoaDeon.domain.model.pecas.TituloRequerimentoMpu;
+//import com.pessoaDeon.domain.model.pecas.TituloRequerimentoMpu;
 import com.pessoaDeon.domain.service.pecas.PerguntaRespostaService;
 
 @RestController
@@ -17,7 +18,7 @@ public class RequerimentoMpuController {
     private PerguntaRespostaService perguntaRespostaService;
 	
 	@GetMapping
-    public List<TituloRequerimentoMpu> listarTituloAndRespostas(){ 
+    public List<TituloRequerimentoMpu> listarTituloAndRespostas(){
     	return perguntaRespostaService.listaTituloRequerimento();
     }
 }

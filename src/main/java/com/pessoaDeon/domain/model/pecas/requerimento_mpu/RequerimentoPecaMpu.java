@@ -1,7 +1,8 @@
-package com.pessoaDeon.domain.model.pecas;
+package com.pessoaDeon.domain.model.pecas.requerimento_mpu;
 
 import java.time.LocalDate;
 
+import com.pessoaDeon.domain.model.pecas.Peca;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;

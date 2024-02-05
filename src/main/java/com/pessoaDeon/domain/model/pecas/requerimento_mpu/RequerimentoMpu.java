@@ -1,13 +1,17 @@
-package com.pessoaDeon.domain.model.pecas;
+package com.pessoaDeon.domain.model.pecas.requerimento_mpu;
 
 import java.io.Serializable;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,8 +24,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "titulo_requerimento_mpu", schema = "mpu")
-public class TituloRequerimentoMpu implements Serializable {
+@Table(name = "requerimento_mpu", schema = "mpu")
+public class RequerimentoMpu implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -31,8 +35,15 @@ public class TituloRequerimentoMpu implements Serializable {
 	
 	private String descricao;
 	
+	private Boolean especificar;
+	
 	private Boolean statusAtivo;
 	
-	@OneToMany(mappedBy = "tituloRequerimento",cascade=CascadeType.ALL)
-	private List<RequerimentoMpu> listaProvidencias;
+	@OneToMany(mappedBy="requerimentoMpu", cascade= CascadeType.ALL)
+	private List<RequerimentoPecaMpu> listRequerimentoPeca;
+	
+    @ManyToOne
+    @JsonIgnore
+	@JoinColumn(name="fk_titulo_requerimento")
+	private TituloRequerimentoMpu tituloRequerimento;
 }
