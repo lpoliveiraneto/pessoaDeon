@@ -99,8 +99,11 @@ public class SenhaResetService {
 
 	
 	@Transactional
-	public ResponseEntity<?> enviarCodigoResetSenha(String email, String numeroDocumento, LocalDate dataNascimento) {
-	    Optional<Pessoa> pessoa = pessoaService.getPessoaByNumeroDocumento(numeroDocumento);
+	public ResponseEntity<?> enviarCodigoResetSenha(String email, String tipoDocumento, String numeroDocumento, LocalDate dataNascimento) {
+	    
+		Optional<Pessoa> pessoa = pessoaService.existsPessoaDeon(numeroDocumento, tipoDocumento);
+		
+//		pessoaService.getPessoaByNumeroDocumento(numeroDocumento);
 	    if (!pessoa.isPresent()) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma pessoa encontrada com o número do documento ou data de nascimento informados!");
 	    }

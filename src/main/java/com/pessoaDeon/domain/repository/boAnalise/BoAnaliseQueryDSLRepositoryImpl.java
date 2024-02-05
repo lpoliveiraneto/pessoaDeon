@@ -110,8 +110,6 @@ public class BoAnaliseQueryDSLRepositoryImpl implements BoAnaliseQueryDSLReposit
 
         //total de resultados da subconsulta
         long total = countQuery.fetchOne();
-
-        //consulta principal
         List<BoDeon> bosPendentes = queryFactory
                 .selectFrom(qBoDeon)
                 .distinct()

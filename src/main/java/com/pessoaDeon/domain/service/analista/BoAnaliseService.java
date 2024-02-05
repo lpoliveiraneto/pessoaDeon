@@ -47,7 +47,7 @@ public class BoAnaliseService {
 
     public Page<BosAnalisadosResponseDto> getBoAnalise(Pageable pageable){
 
-        List<BoAnalise> bosAnalise = boAnaliseRepository.findAll();
+        Page<BoAnalise> bosAnalise = boAnaliseRepository.findAll(pageable);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosAnalise.forEach(b -> {
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
@@ -58,8 +58,7 @@ public class BoAnaliseService {
     }
 
     public Page<BosAnalisadosResponseDto> getBoAnalisados(Pageable pageable){
-        //List<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrue();
-        List<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusFalseNotViolenciaDomestica(entityManager);
+        Page<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrueNotViolenciaDom(entityManager, pageable);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosAnalise.forEach(b ->{
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
@@ -70,7 +69,7 @@ public class BoAnaliseService {
     }
 
     public Page<BosAnalisadosResponseDto> getBoAnalisadosViolenciaDomestica(Pageable pageable){
-        List<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrueViolenciaDomestica(entityManager);
+        Page<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrueViolenciaDomestica(entityManager, pageable);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosAnalise.forEach(b ->{
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
@@ -82,7 +81,7 @@ public class BoAnaliseService {
 
     public Page<BosAnalisadosResponseDto> getBoEmAnalise(Pageable pageable){
         ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
-        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseNotViolenciaDomestica(entityManager);
+        Page<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseNotViolenciaDomestica(entityManager, pageable);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosEmAnalise.forEach(b -> {
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
@@ -93,7 +92,7 @@ public class BoAnaliseService {
 
     public Page<BosAnalisadosResponseDto> getBoEmAnaliseViolenciaDomestica(Pageable pageable){
         ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
-        List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseViolenciaDomestica(entityManager);
+        Page<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseViolenciaDomestica(entityManager, pageable);
         List<BosAnalisadosResponseDto> bos = new ArrayList<>();
         bosEmAnalise.forEach(b -> {
             BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
@@ -166,7 +165,7 @@ public class BoAnaliseService {
 		
 		try {
 			if (boDeon.getStatus().equals(Status.EA)) {
-				analiseBo.setStatus(false);
+				analiseBo.setStatus(true);
 				analiseBo.setAnalista(analistaService.getAnalistaToken(request));
 				analiseBo.setDataAnalise(LocalDateTime.now());
 				analiseBo.setRespostaAnaliseBo(resposta);

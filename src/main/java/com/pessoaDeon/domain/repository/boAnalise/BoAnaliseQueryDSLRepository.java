@@ -3,16 +3,22 @@ package com.pessoaDeon.domain.repository.boAnalise;
 import com.pessoaDeon.domain.model.analista.BoAnalise;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
+/**
+ * esses metodos estão configurados no arquivo BoAnaliseQueryDSLRepositoryImpl.java
+ * */
 public interface BoAnaliseQueryDSLRepository {
 
- public List<BoAnalise> findByStatusFalseViolenciaDomestica(EntityManager entityManager);
+ public Page<BoAnalise> findByStatusFalseViolenciaDomestica(EntityManager entityManager, Pageable pageable);
 
- public List<BoAnalise> findByStatusTrueViolenciaDomestica(EntityManager entityManager);
+ public Page<BoAnalise> findByStatusTrueViolenciaDomestica(EntityManager entityManager, Pageable pageable);
 
- public List<BoDeon> getBosPendentesViolenciaDomestica(EntityManager entityManager);
+ public Page<BoDeon> getBosPendentesViolenciaDomestica(EntityManager entityManager, Pageable pageable);
 
- public List<BoAnalise> findByStatusFalseNotViolenciaDomestica(EntityManager entityManager);
+ public Page<BoAnalise> findByStatusFalseNotViolenciaDomestica(EntityManager entityManager, Pageable pageable);
+ 
+ public Page<BoAnalise> findByStatusTrueNotViolenciaDom(EntityManager entityManager, Pageable pageable);
+ 
 }
