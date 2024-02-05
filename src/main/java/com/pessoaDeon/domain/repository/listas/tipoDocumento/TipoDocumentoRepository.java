@@ -8,4 +8,6 @@ import com.pessoaDeon.domain.model.listas.TipoDocumento;
 @Repository
 public interface TipoDocumentoRepository extends JpaRepository<TipoDocumento, Integer> {
 
+	TipoDocumento findByValor(String tipoDocumento);
+
 }

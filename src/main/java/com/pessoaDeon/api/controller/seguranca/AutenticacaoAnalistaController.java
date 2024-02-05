@@ -67,12 +67,12 @@ public class AutenticacaoAnalistaController {
         }
     }
     
-    @GetMapping("/esqueciMinhaSenha")
-    public ResponseEntity<?> EsqueciMinhaSenha(@RequestParam(name = "email", required = true) String email, 
-    		@RequestParam(name = "dataNascimento", required = true) LocalDate dataNascimento,
-    		@RequestParam(name = "cpf", required = true) String cpf){
-    	return senhaResetService.enviarCodigoResetSenha(email, cpf, dataNascimento);	
-    }
+//    @GetMapping("/esqueciMinhaSenha")
+//    public ResponseEntity<?> EsqueciMinhaSenha(@RequestParam(name = "email", required = true) String email, 
+//    		@RequestParam(name = "dataNascimento", required = true) LocalDate dataNascimento,
+//    		@RequestParam(name = "cpf", required = true) String cpf){
+//    	return senhaResetService.enviarCodigoResetSenha(email, cpf, dataNascimento);	
+//    }
     
     @PostMapping("/resetSenha")
     public ResponseEntity<?> resetSenha(@RequestParam(name = "codigo") String codigo,

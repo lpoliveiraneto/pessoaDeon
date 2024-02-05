@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.pessoaDeon.domain.exception.PessoaAlreadyRegisteredException;
+import com.pessoaDeon.domain.exception.PessoaNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.model.listas.TipoDocumento;
+import com.pessoaDeon.domain.repository.listas.tipoDocumento.TipoDocumentoRepository;
 import com.pessoaDeon.domain.repository.pessoa.PessoaRepository;
 
 import jakarta.transaction.Transactional;
@@ -20,6 +22,9 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+    
+    @Autowired
+    private TipoDocumentoRepository tipoDocumentoRepository;
    
     public List<Pessoa> listarPessoas() {
         return pessoaRepository.findAll();
@@ -40,7 +45,7 @@ public class PessoaService {
 		return pessoa2;
     }
     
-    private Pessoa existsPessoa(Pessoa pessoa, TipoDocumento tipoDocumento) {
+    public Pessoa existsPessoa(Pessoa pessoa, TipoDocumento tipoDocumento) {
     	Optional<Pessoa> pessoaOpt = null;
     	
     	pessoaOpt = pessoaRepository.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, pessoa.getNumeroDocumento());
@@ -52,6 +57,22 @@ public class PessoaService {
 		} 
     	
     	return pessoa2;
+    }
+    
+    /**
+     * @author hilbertofilho
+     * Esse metodo é invocado para o redefinir senha do usuario
+     * quando o metodo recebe o tipo e numero do documento, vai ser feito uma busca na tabela TipoDocumento para saber qual é o valor 
+     * após ter o tipoDocumento, vai ser feito a busca da pessoa pelo Tipo e pelo numero do documento
+     * */
+    public Optional<Pessoa> existsPessoaDeon(String numeroDocumento, String tipoDocumento) {
+    	Optional<Pessoa> pessoaOpt = null;
+    	TipoDocumento tipo = tipoDocumentoRepository.findByValor(tipoDocumento.toUpperCase());
+    	pessoaOpt = pessoaRepository.findByTipoDocumentoAndNumeroDocumento(tipo, numeroDocumento);
+    	if (pessoaOpt.isEmpty()) {
+			throw new PessoaNotFoundException("Pessoa não consta na base de dados");
+		}
+    	return pessoaOpt;
     }
     
     private List<Pessoa> verificaPessoaTriChave(Pessoa pessoa) {
@@ -102,5 +123,4 @@ public class PessoaService {
 	public boolean existsPessoaNumeroDocumento(String numeroDocumento){
 		return pessoaRepository.existsByNumeroDocumento(numeroDocumento);
 	}
-	
 }
