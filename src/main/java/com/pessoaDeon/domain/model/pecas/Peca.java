@@ -2,18 +2,15 @@ package com.pessoaDeon.domain.model.pecas;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pessoaDeon.domain.model.pecas.formulario_risco.RespostaFormularioRisco;
+import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.pessoaDeon.domain.model.bo.BoDeon;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,15 +26,14 @@ public class Peca implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	private String narrativa;
+	//private String narrativa;
 	
 	@ManyToOne
     @JoinColumn(name="fk_bo")
 	private BoDeon bo; 
 	
-	private Boolean status;
-	
-//	private String ip;
+	//private Boolean status;
+
 	
 	@ManyToOne
     @JoinColumn(name = "fk_tipo_peca")
@@ -46,7 +42,19 @@ public class Peca implements Serializable{
 	@DateTimeFormat(pattern="dd/MM/yyyy HH:mm:ss")
 	private LocalDate dataCriacao;
 	
-	// @JsonIgnore
-	// @OneToMany(mappedBy="peca", cascade= CascadeType.ALL, fetch=FetchType.LAZY)
-	// private List<RespostaFormularioRisco> listRespostaPeca;
+	 @JsonIgnore
+	 @OneToMany(mappedBy="peca", cascade= CascadeType.ALL, fetch=FetchType.LAZY)
+	 private List<RespostaFormularioRisco> listRespostaPeca;
+
+	 /**
+	  * @autor: Leonides Neto
+	  * Metódo estático para retornar uma peça com o bo criado e um tipoPeça escolhido
+	  * */
+	public static Peca criacaoPeca(BoDeon bo, TipoPeca tipoPeca){
+		Peca peca = new Peca();
+		peca.setBo(bo);
+		peca.setTipoPeca(tipoPeca);
+		peca.setDataCriacao(LocalDate.now());
+		return peca;
+	}
 }
