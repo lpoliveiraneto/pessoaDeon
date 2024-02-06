@@ -78,9 +78,10 @@ public class AutenticacaoController {
     
     @GetMapping("/esqueciMinhaSenha")
     public ResponseEntity<?> EsqueciMinhaSenha(@RequestParam(name = "email", required = true) String email, 
-    		@RequestParam(name = "dataNascimento", required = true) LocalDate dataNascimento,
-    		@RequestParam(name = "cpf", required = true) String cpf){
-    	return senhaResetService.enviarCodigoResetSenha(email, cpf, dataNascimento);	
+    		@RequestParam(name = "tipoDocumento", required = true) String tipoDocumento, 
+    		@RequestParam(name = "numeroDocumento") String numeroDocumento, 
+    		@RequestParam(name = "dataNascimento", required = true) LocalDate dataNascimento){
+    	return senhaResetService.enviarCodigoResetSenha(email,  tipoDocumento, numeroDocumento, dataNascimento);	
     }
     
     @PostMapping("/resetSenha")

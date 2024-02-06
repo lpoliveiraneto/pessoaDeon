@@ -16,7 +16,9 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
 	List<Pessoa> findByNomeAndNomeMaeAndDataNascimento(String nome, String nomeMae, LocalDate dataNascimento);
 
 	Optional<Pessoa> findByTipoDocumentoAndNumeroDocumento(TipoDocumento tipoDocumento, String numeroDocumento);
-
+	
+	Optional<Pessoa> findByTipoDocumentoDescricaoAndNumeroDocumento(String tipoDocumento, String numeroDocumento);
+	
 	Optional<Pessoa> findByEmailEmail(String email);
 
 	Optional<Pessoa> findByNumeroDocumento(String numeroDocumento);
