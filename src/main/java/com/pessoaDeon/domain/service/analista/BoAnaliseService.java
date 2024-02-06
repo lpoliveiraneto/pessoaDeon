@@ -15,14 +15,19 @@ import org.springframework.stereotype.Service;
 import com.pessoaDeon.domain.exception.BoAnaliseNotFoundException;
 import com.pessoaDeon.domain.exception.BoNotFoundException;
 import com.pessoaDeon.domain.model.analista.BoAnalise;
+import com.pessoaDeon.domain.model.analista.QBoAnalise;
+import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.dto.bo.BoAnaliseRequest;
 import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.BoRequestDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
+import com.pessoaDeon.domain.model.natureza.QNaturezaBo;
 import com.pessoaDeon.domain.repository.bo.ProtocoloRepository;
 import com.pessoaDeon.domain.repository.boAnalise.BoAnaliseRepository;
 import com.pessoaDeon.domain.repository.respostaBo.RespostaAnaliseBoRepository;
 import com.pessoaDeon.domain.service.bo.BoService;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -58,47 +63,23 @@ public class BoAnaliseService {
     }
 
     public Page<BosAnalisadosResponseDto> getBoAnalisados(Pageable pageable){
-        Page<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrueNotViolenciaDom(entityManager, pageable);
-        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
-        bosAnalise.forEach(b ->{
-            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
-            bos.add(bo);
-        });
-
-        return new PageImpl<>(bos, pageable, bos.size());
-    }
-
-    public Page<BosAnalisadosResponseDto> getBoAnalisadosViolenciaDomestica(Pageable pageable){
-        Page<BoAnalise> bosAnalise = boAnaliseRepository.findByStatusTrueViolenciaDomestica(entityManager, pageable);
-        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
-        bosAnalise.forEach(b ->{
-            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
-            bos.add(bo);
-        });
-
-        return new PageImpl<>(bos, pageable, bos.size());
+        Page<BosAnalisadosResponseDto> bosAnalisados = findByStatusTrueNotViolenciaDomestica(entityManager, pageable);
+        return bosAnalisados;
     }
 
     public Page<BosAnalisadosResponseDto> getBoEmAnalise(Pageable pageable){
-        ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
-        Page<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseNotViolenciaDomestica(entityManager, pageable);
-        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
-        bosEmAnalise.forEach(b -> {
-            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
-            bos.add(bo);
-        });
-        return new PageImpl<>(bos, pageable, bos.size());
+        Page<BosAnalisadosResponseDto> bosEmAnalise = findByStatusFalseNotViolenciaDomestica(entityManager, pageable);
+        return bosEmAnalise;
+    }
+    
+    public Page<BosAnalisadosResponseDto> getBoAnalisadosViolenciaDomestica(Pageable pageable){
+    	Page<BosAnalisadosResponseDto> bosAnalisadosViolencia = findByStatusTrueViolenciaDomestica(entityManager, pageable);
+    	return bosAnalisadosViolencia;
     }
 
     public Page<BosAnalisadosResponseDto> getBoEmAnaliseViolenciaDomestica(Pageable pageable){
-        ///List<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalse();
-        Page<BoAnalise> bosEmAnalise = boAnaliseRepository.findByStatusFalseViolenciaDomestica(entityManager, pageable);
-        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
-        bosEmAnalise.forEach(b -> {
-            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
-            bos.add(bo);
-        });
-        return new PageImpl<>(bos, pageable, bos.size());
+        Page<BosAnalisadosResponseDto> bosEmAnaliseViolencia = findByStatusFalseViolenciaDomestica(entityManager, pageable);
+        return bosEmAnaliseViolencia;
     }
 
     private BosAnalisadosResponseDto getBoAnalisetoBosAnalisadosResponseDto(BoAnalise b) {
@@ -178,4 +159,157 @@ public class BoAnaliseService {
 			throw new BoAnaliseNotFoundException("Operação indisponivel com esse status");
 		}
 	}
+	
+	  /**
+	  * @author hilbertofilho
+	  * encontra bos analisados que não sejam violência domestica
+	  * 
+	  * */
+	public Page<BosAnalisadosResponseDto> findByStatusTrueNotViolenciaDomestica(EntityManager entityManager, Pageable pageable) {
+		final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+	    QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+	    QBoDeon qBoDeon = QBoDeon.boDeon;
+	    QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+
+	    JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	    JPAQuery<Long> countQuery = queryFactory
+	            .select(qBoAnalise.idAnalise.count())
+	            .from(qBoAnalise)
+	            .join(qBoAnalise.boDeon, qBoDeon)
+	            .join(qBoDeon.listaNaturezas, qNaturezaBo)
+	            .where(qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA)));
+
+	    Long total = countQuery.fetchOne();
+	    List<BoAnalise> bosPendentes = queryFactory
+	            .selectFrom(qBoAnalise)
+	            .distinct()
+	            .join(qBoAnalise.boDeon, qBoDeon)
+	            .join(qBoDeon.listaNaturezas, qNaturezaBo)
+	            .where(qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA)))
+	            .distinct()
+	            .offset(pageable.getOffset())
+	            .limit(pageable.getPageSize())
+	            .fetch();
+	    List<BosAnalisadosResponseDto> bos = new ArrayList<>();
+	    bosPendentes.forEach(bo -> {
+	    	BosAnalisadosResponseDto bosAnalisadosResponseDto = getBoAnalisetoBosAnalisadosResponseDto(bo);
+	    	bos.add(bosAnalisadosResponseDto);
+	    });
+	    return new PageImpl<>(bos, pageable, total);
+	}
+	
+	/**
+     * @author hilbertofilho
+     * encontra bos não analisados que não sejam violencia domestica
+     * busca o bos que por algum motivo ficaram EM ANALISE
+     * 
+     * */
+    public Page<BosAnalisadosResponseDto> findByStatusFalseNotViolenciaDomestica(EntityManager entityManager, Pageable pageable) {
+
+    	final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+        QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+        QBoDeon qBoDeon = QBoDeon.boDeon;
+        QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
+        //subconsulta para contar o total de resultados
+        JPAQuery<Long> countQuery = queryFactory
+                .select(qBoAnalise.idAnalise.count())
+                .from(qBoAnalise)
+                .join(qBoAnalise.boDeon, qBoDeon)
+                .join(qBoDeon.listaNaturezas, qNaturezaBo)
+                .where(qBoAnalise.status.isFalse().and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA)));
+
+        //total de resultados
+        long total = countQuery.fetchOne();
+
+        //consulta principal
+        List<BoAnalise> bosEmAnalise = queryFactory
+                .selectFrom(qBoAnalise)
+                .distinct()
+                .join(qBoAnalise.boDeon, qBoDeon)
+                .join(qBoDeon.listaNaturezas, qNaturezaBo)
+                .where(qBoAnalise.status.isFalse().and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
+        bosEmAnalise.forEach(b -> {
+            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
+            bos.add(bo);
+        });
+        
+        return new PageImpl<>(bos, pageable, total);
+    }
+    
+    public Page<BosAnalisadosResponseDto> findByStatusTrueViolenciaDomestica(EntityManager entityManager, Pageable pageable) {
+
+        final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+        QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+        QBoDeon qBoDeon = QBoDeon.boDeon;
+        QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        JPAQuery<Long> countQuery = queryFactory
+                .select(qBoAnalise.idAnalise.count())
+                .from(qBoAnalise)
+                .join(qBoAnalise.boDeon, qBoDeon)
+                .join(qBoDeon.listaNaturezas, qNaturezaBo)
+                .where(qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA))
+                		.and(qBoAnalise.boDeon.status.eq(Status.VA)).and(qBoAnalise.boDeon.status.eq(Status.IV)));
+        long total = countQuery.fetchOne();
+        List<BoAnalise> bosAnalisadosViolencia = queryFactory
+                .selectFrom(qBoAnalise)
+                .distinct()
+                .join(qBoAnalise.boDeon, qBoDeon)
+                .join(qBoDeon.listaNaturezas, qNaturezaBo)
+                .where(qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(qBoAnalise.idAnalise.desc())
+                .fetch();
+        
+        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
+        bosAnalisadosViolencia.forEach(b ->{
+            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
+            bos.add(bo);
+        });
+        return new PageImpl<>(bos, pageable, total);
+    }
+    
+    public Page<BosAnalisadosResponseDto> findByStatusFalseViolenciaDomestica(EntityManager entityManager, Pageable pageable) {
+
+        final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+        QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+        QBoDeon qBoDeon = QBoDeon.boDeon;
+        QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(qBoAnalise.idAnalise.count())
+                .from(qBoAnalise)
+                .join(qBoAnalise.boDeon, qBoDeon)
+                .join(qBoDeon.listaNaturezas, qNaturezaBo)
+                .where(qBoAnalise.status.isFalse().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA)));
+        long total = countQuery.fetchOne();
+
+        List<BoAnalise> bosEmAnalise = queryFactory
+                .selectFrom(qBoAnalise)
+                .distinct()
+                .join(qBoAnalise.boDeon, qBoDeon)
+                .join(qBoDeon.listaNaturezas, qNaturezaBo)
+                .where(qBoAnalise.status.isFalse().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        List<BosAnalisadosResponseDto> bos = new ArrayList<>();
+        bosEmAnalise.forEach(b -> {
+            BosAnalisadosResponseDto bo = getBoAnalisetoBosAnalisadosResponseDto(b);
+            bos.add(bo);
+        });
+        
+        return new PageImpl<>(bos, pageable, total);
+    }
 }

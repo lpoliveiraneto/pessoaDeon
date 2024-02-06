@@ -281,7 +281,9 @@ public class BoService {
 			query = boRepository.buildQuery(tipoPesquisa, parametro, predicate, entityManager);
 		}
 	    long count = query.fetchCount();
-	    List<BoDeon> listaBos = query.distinct().offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	    List<BoDeon> listaBos = query.distinct().offset(pageable.getOffset()).limit(pageable.getPageSize())
+	    		.orderBy(qBoDeon.dataRegistro.asc())
+	    		.fetch();
 	    List<BosPendentesResponseDto> bos = processResults(listaBos);
 	    return new PageImpl<>(bos, pageable, count);
 	}
