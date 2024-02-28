@@ -62,21 +62,33 @@ public class BoAnaliseService {
         return new PageImpl<>(bos, pageable, bos.size());
     }
 
+    /**
+     * A implementacao desse metodo abaixo era feita em metodo aqui dentro da classe, porém esta desativada, em caso de alterações, eles estão todos funcionando
+     * */
     public Page<BosAnalisadosResponseDto> getBoAnalisados(Pageable pageable){
         Page<BosAnalisadosResponseDto> bosAnalisados = findByStatusTrueNotViolenciaDomestica(entityManager, pageable);
         return bosAnalisados;
     }
 
+    /**
+     * A implementacao desse metodo abaixo era feita em metodo aqui dentro da classe, porém esta desativada, em caso de alterações, eles estão todos funcionando
+     * */
     public Page<BosAnalisadosResponseDto> getBoEmAnalise(Pageable pageable){
         Page<BosAnalisadosResponseDto> bosEmAnalise = findByStatusFalseNotViolenciaDomestica(entityManager, pageable);
         return bosEmAnalise;
     }
     
+    /**
+     * A implementacao desse metodo abaixo era feita em metodo aqui dentro da classe, porém esta desativada, em caso de alterações, eles estão todos funcionando
+     * */
     public Page<BosAnalisadosResponseDto> getBoAnalisadosViolenciaDomestica(Pageable pageable){
     	Page<BosAnalisadosResponseDto> bosAnalisadosViolencia = findByStatusTrueViolenciaDomestica(entityManager, pageable);
     	return bosAnalisadosViolencia;
     }
 
+    /**
+     * A implementacao desse metodo abaixo era feita em metodo aqui dentro da classe, porém esta desativada, em caso de alterações, eles estão todos funcionando
+     * */
     public Page<BosAnalisadosResponseDto> getBoEmAnaliseViolenciaDomestica(Pageable pageable){
         Page<BosAnalisadosResponseDto> bosEmAnaliseViolencia = findByStatusFalseViolenciaDomestica(entityManager, pageable);
         return bosEmAnaliseViolencia;
@@ -186,6 +198,7 @@ public class BoAnaliseService {
 	            .join(qBoAnalise.boDeon, qBoDeon)
 	            .join(qBoDeon.listaNaturezas, qNaturezaBo)
 	            .where(qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA)))
+	            .orderBy(qBoAnalise.dataAnalise.asc())
 	            .distinct()
 	            .offset(pageable.getOffset())
 	            .limit(pageable.getPageSize())

@@ -1,5 +1,7 @@
 package com.pessoaDeon.domain.repository.bo;
 
+import com.pessoaDeon.domain.model.analista.BoAnalise;
+import com.pessoaDeon.domain.model.analista.QBoAnalise;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.QBoDeon;
 import com.pessoaDeon.domain.model.bo.QProtocolo;
@@ -55,7 +57,7 @@ public class BoQueryDSLRepositoryImpl implements BoQueryDSLRepository{
         if (tipoPesquisa != null) {
             switch (tipoPesquisa) {
                 case PROTOCOLO:
-                    query.leftJoin(qProtocolo).on(qBoDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.eq(parametro).and(predicate));
+                    query.leftJoin(qProtocolo).on(qBoDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.containsIgnoreCase(parametro).and(predicate));
                     break;
                 case COMUNICANTE:
                     //query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
@@ -81,6 +83,60 @@ public class BoQueryDSLRepositoryImpl implements BoQueryDSLRepository{
                     break;
                 case NATUREZA:
                     query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+                    query.leftJoin(qNaturezaBo.naturezaDeon, qNaturezaDeon)
+                            .where(qNaturezaDeon.nome.containsIgnoreCase(parametro).and(predicate));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return query;
+    }
+    
+    
+    public JPAQuery<BoAnalise> pesquisaBosAnalisados(TipoPesquisa tipoPesquisa, String parametro, Predicate predicate, EntityManager entityManager) {
+        QBoDeon qBoDeon = QBoDeon.boDeon;
+    	QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+        QProtocolo qProtocolo = QProtocolo.protocolo;
+        QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+        QNaturezaDeon qNaturezaDeon = QNaturezaDeon.naturezaDeon;
+        QEnvolvimento qEnvolvimento = QEnvolvimento.envolvimento;
+        QEnvolvido qEnvolvido = QEnvolvido.envolvido;
+        QPessoa qPessoa = QPessoa.pessoa;
+        JPAQuery<BoAnalise> query = new JPAQueryFactory(entityManager).select(qBoAnalise)
+        		.from(qBoAnalise)
+        		.join(qBoAnalise.boDeon, qBoDeon)
+        		.join(qBoAnalise.boDeon.listaNaturezas, qNaturezaBo)
+                .where(predicate);
+        if (tipoPesquisa != null) {
+            switch (tipoPesquisa) {
+                case PROTOCOLO:
+                    query.leftJoin(qProtocolo).on(qBoAnalise.boDeon.eq(qProtocolo.bo)).where(qProtocolo.numero.contains(parametro).and(predicate));
+                    break;
+                case COMUNICANTE:
+                    //query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+                    query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
+                    query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
+                    query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
+                            .where(qPessoa.nome.containsIgnoreCase(parametro).and(predicate));
+                    break;
+                case CPF:
+                    //query.leftJoin(qBoDeon.listaNaturezas, qNaturezaBo);
+                    query.leftJoin(qEnvolvimento).on(qNaturezaBo.eq(qEnvolvimento.naturezaBo));
+                    query.leftJoin(qEnvolvido).on(qEnvolvido.eq(qEnvolvimento.envolvido));
+                    query.leftJoin(qPessoa).on(qEnvolvido.pessoa.eq(qPessoa))
+                            .where(qPessoa.numeroDocumento.containsIgnoreCase(parametro).and(predicate));
+                    break;
+                case DATA_REGISTRO:
+                    DateTimeFormatter formatoDataHora = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate data = LocalDate.parse(parametro, formatoDataHora);
+                    LocalTime horaInicio = LocalTime.of(0, 0, 0);
+                    LocalDateTime tInicial = LocalDateTime.of(data, horaInicio);
+                    LocalDateTime tFinal = tInicial.plusHours(23).plusMinutes(59).plusSeconds(59);
+                    query.where(qBoAnalise.boDeon.dataRegistro.between(tInicial, tFinal).and(predicate));
+                    break;
+                case NATUREZA:
+                    query.leftJoin(qBoAnalise.boDeon.listaNaturezas, qNaturezaBo);
                     query.leftJoin(qNaturezaBo.naturezaDeon, qNaturezaDeon)
                             .where(qNaturezaDeon.nome.containsIgnoreCase(parametro).and(predicate));
                     break;

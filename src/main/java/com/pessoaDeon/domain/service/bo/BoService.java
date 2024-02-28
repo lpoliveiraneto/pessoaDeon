@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pessoaDeon.config.security.TokenService;
 import com.pessoaDeon.domain.model.analista.BoAnalise;
+import com.pessoaDeon.domain.model.analista.QBoAnalise;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.bo.EnderecoLocalFato;
 import com.pessoaDeon.domain.model.bo.Protocolo;
@@ -29,6 +30,7 @@ import com.pessoaDeon.domain.model.dto.EnvolvidoBoDto;
 import com.pessoaDeon.domain.model.dto.NaturezaDeonResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BoDto;
 import com.pessoaDeon.domain.model.dto.bo.BoDtoResponse;
+import com.pessoaDeon.domain.model.dto.bo.BosAnalisadosResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPendentesResponseDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.dto.integracao.BoResponseDto;
@@ -287,10 +289,10 @@ public class BoService {
 	    List<BosPendentesResponseDto> bos = processResults(listaBos);
 	    return new PageImpl<>(bos, pageable, count);
 	}
-
+	
 	private List<BosPendentesResponseDto> processResults(List<BoDeon> listaBos) {
-	    return listaBos.stream().map(b -> {
-	    	BosPendentesResponseDto bo = new BosPendentesResponseDto();
+		return listaBos.stream().map(b -> {
+			BosPendentesResponseDto bo = new BosPendentesResponseDto();
 			bo.setIdBo(b.getIdBo());
 			var natureza = b.getListaNaturezas().get(0).getNaturezaDeon();
 			var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
@@ -300,7 +302,54 @@ public class BoService {
 			bo.setNome(envolvimento.getEnvolvido() != null ? envolvimento.getEnvolvido().getPessoa().getNome() : "NÃO INFORMADO");
 			bo.setProtocolo(protocoloRepository.findByBoIdBo(b.getIdBo()).getNumero());
 			return bo;
-	    }).collect(Collectors.toList());
+		}).collect(Collectors.toList());
+	}
+	
+	/**
+	 * esse metodo recebe requisicao tanto do controller de Ocorrencias normais e de Ocorrencias do tipo Violencia Domestica
+	 * dentro do metodo existe verificação para cada tipo de perfil
+	 * dependendo do perfil vai ser enviado o predicado com o parametro correspondente
+	 * o metodo pesquisaBosAnalisados está implementado em BoQueryDSLRepositoryImpl.java
+	 * */
+	public Page<BosAnalisadosResponseDto> pesquisaBosAnalisados(Pageable pageable, TipoPesquisa tipoPesquisa, String parametro, String perfil) {
+	    final Integer FK__VIOLENCIA_DOMESTICA = 1064;
+	    JPAQuery<BoAnalise> query = new JPAQuery<>();
+	    QBoAnalise qBoAnalise = QBoAnalise.boAnalise;
+	    QNaturezaBo qNaturezaBo = QNaturezaBo.naturezaBo;
+	    Predicate predicate;
+
+	    if (perfil.equals("analista")) {
+	        predicate = qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.ne(FK__VIOLENCIA_DOMESTICA));
+	    } else if (perfil.equals("mulher")) {
+	        predicate = qBoAnalise.status.isTrue().and(qNaturezaBo.naturezaDeon.naturezaSigma.eq(FK__VIOLENCIA_DOMESTICA));
+	    } else {
+	        throw new IllegalArgumentException("Perfil inválido: " + perfil);
+	    }
+
+	    query = boRepository.pesquisaBosAnalisados(tipoPesquisa, parametro, predicate, entityManager);
+
+	    long count = query.fetchCount();
+	    List<BoAnalise> listaBos = query.offset(pageable.getOffset()).limit(pageable.getPageSize())
+	            .orderBy(qBoAnalise.dataAnalise.desc())
+	            .fetch();
+	    List<BosAnalisadosResponseDto> bos = processResultsAnalisadas(listaBos);
+	    return new PageImpl<>(bos, pageable, count);
+	}
+	
+
+	private List<BosAnalisadosResponseDto> processResultsAnalisadas(List<BoAnalise> listaBos) {
+		return listaBos.stream().map(b -> {
+			BosAnalisadosResponseDto bo = new BosAnalisadosResponseDto();
+			bo.setIdBo(b.getBoDeon().getIdBo());
+			bo.setProtocolo(protocoloRepository.findByBoIdBo(b.getBoDeon().getIdBo()).getNumero());
+			bo.setNomeAnalista(b.getAnalista().getNome());
+			var natureza = b.getBoDeon().getListaNaturezas().get(0).getNaturezaDeon();
+			var codigo = ((natureza.getCodigo() != null && !natureza.getCodigo().isBlank()) ? " - " + natureza.getCodigo() : "");
+			bo.setNatureza(natureza.getNome() + codigo);
+			bo.setDataAnalise(b.getDataAnalise());
+			bo.setDataRegistro(b.getBoDeon().getDataRegistro());
+			return bo;
+		}).collect(Collectors.toList());
 	}
 
 	@ReadOnlyProperty
