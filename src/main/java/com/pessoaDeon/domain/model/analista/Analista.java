@@ -83,8 +83,14 @@ public class Analista implements UserDetails {
     @JoinTable(name = "analista_perfis")
     private List<Perfil> perfis = new ArrayList<>();
 
-    public void adicionarPerfil(Perfil perfil){
-        perfis.add(perfil);
+    public void adicionarPerfil(Perfil perfil) {
+    	if(!this.perfis.contains(perfil)) {
+    		this.perfis.add(perfil);
+    	}
+    }
+    
+    public void addPerfil(Perfil perfil) {
+    	perfis.add(perfil);
     }
 
 	@Override

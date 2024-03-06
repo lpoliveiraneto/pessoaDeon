@@ -1,11 +1,16 @@
 package com.pessoaDeon.domain.service.analista;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,6 +31,7 @@ import com.pessoaDeon.domain.model.dto.analista.AnalistaResponseDto;
 import com.pessoaDeon.domain.model.dto.analista.AnalistaReturnDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
+import com.pessoaDeon.domain.model.security.Perfil;
 import com.pessoaDeon.domain.model.security.Usuario;
 import com.pessoaDeon.domain.repository.analista.AnalistaRepository;
 import com.pessoaDeon.domain.repository.listas.perfil.PerfilRepository;
@@ -40,25 +46,25 @@ public class AnalistaService {
 
 	@Autowired
 	private AnalistaRepository analistaRepository;
-	
+
 	@Autowired
 	private PessoaService pessoaService;
-	
+
 	@Autowired
 	private PerfilRepository perfilRepository;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Value("${url.api-integracao}")
 	private String URL;
-	
+
 	public Optional<Analista> findById(Integer id) {
 		return analistaRepository.findById(id);
 	}
@@ -66,56 +72,58 @@ public class AnalistaService {
 	/**
 	 * 
 	 * @return metodo para salvar analista
-	 * */
+	 */
 	@Transactional
-	public Analista salvarAnalista(AnalistaRequest analistaRequest, HttpServletRequest http, AnalistaResponseDto analistaSigma) {
+	public Analista salvarAnalista(AnalistaRequest analistaRequest, HttpServletRequest http,
+			AnalistaResponseDto analistaSigma) {
 
-		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
+		if (!verificaFuncionarioSigmaAtivo(analistaSigma)) {
 			throw new PessoaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
 		}
-		
-		if(!pessoaService.existsPessoaNumeroDocumento(analistaRequest.cpf())){
+
+		if (!pessoaService.existsPessoaNumeroDocumento(analistaRequest.cpf())) {
 			throw new PessoaNotFoundException("Pessoa não consta no banco de dados, cadastre-o!");
 		}
 		Pessoa pessoa = pessoaService.buscaPessoaCpf(analistaRequest.cpf());
 		Usuario usuario = usuarioRepository.findByPessoa(pessoa).get();
-		
-		if(usuarioService.getUsuarioStatusAndContaAtiva(usuario.getIdUsuario(), Status.VA) == null ) {
+
+		if (usuarioService.getUsuarioStatusAndContaAtiva(usuario.getIdUsuario(), Status.VA) == null) {
 			throw new PessoaNotFoundException("Usuario não está com conta ativa!");
 		}
-		
-		Analista analista = analistaRequestToAnalista(analistaRequest,analistaSigma, pessoa);
+
+		Analista analista = analistaRequestToAnalista(analistaRequest, analistaSigma, pessoa);
 		return analistaRepository.save(analista);
 	}
-	
+
 	/**
 	 * @param cpf
-	 * @return verifica pelo cpf se o funcionario esta no banco do sigma 
-	 * e se consta na tabela pessoa da DEON
+	 * @return verifica pelo cpf se o funcionario esta no banco do sigma e se consta
+	 *         na tabela pessoa da DEON
 	 * 
-	 * */
+	 */
 	public AnalistaReturnDto verificaAnalista(String cpf, HttpServletRequest http) {
 		var analistaSigma = buscaFuncionarioSigma(cpf, http);
 
 		AnalistaReturnDto analistaReturnDto = new AnalistaReturnDto(analistaSigma, null, null);
-		
-		if(!verificaFuncionarioSigmaAtivo(analistaSigma)) {
+
+		if (!verificaFuncionarioSigmaAtivo(analistaSigma)) {
 			throw new AnalistaNotFoundException("Funcionario não está ativo no SIGMA, cadastre-o!");
 		}
-		
-		if(!pessoaService.existsPessoaNumeroDocumento(cpf)){
+
+		if (!pessoaService.existsPessoaNumeroDocumento(cpf)) {
 			analistaReturnDto.setMessage("Pessoa não consta no banco de dados, cadastre-o!");
-		}else {
+		} else {
 			analistaReturnDto.setPessoa(verificaPessoaPeloNumeroDocumento(cpf));
 		}
 		return analistaReturnDto;
 	}
 
 	@Transactional
-	private Analista analistaRequestToAnalista(AnalistaRequest analistaRequest, AnalistaResponseDto analistaSigma, Pessoa pessoa) {
+	private Analista analistaRequestToAnalista(AnalistaRequest analistaRequest, AnalistaResponseDto analistaSigma,
+			Pessoa pessoa) {
 		final long PERFIL_ANALISTA = 3;
 		Analista analista = new Analista();
-		
+
 		var verifica = analistaRepository.existsByLogin(analistaRequest.cpf());
 		if (verifica.equals(true)) {
 			throw new AnalistaNotFoundException("Analista já está cadastrado!");
@@ -136,10 +144,10 @@ public class AnalistaService {
 		return analista;
 	}
 
-	public Pessoa verificaPessoaPeloNumeroDocumento(String numeroDocumento){
+	public Pessoa verificaPessoaPeloNumeroDocumento(String numeroDocumento) {
 		return pessoaService.buscaPessoaCpf(numeroDocumento);
 	}
-	
+
 	public AnalistaResponseDto buscaFuncionarioSigma(String cpf, HttpServletRequest http) {
 		var tokenJWT = recuperarToken(http);
 		if (tokenJWT != null) {
@@ -149,27 +157,28 @@ public class AnalistaService {
 				headers.set("Authorization", tokenJWT);
 				RestTemplate template = new RestTemplate();
 				HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
-				ResponseEntity<AnalistaResponseDto> response = template.exchange(URL + "buscaFuncionario?cpf=" + cpf,  HttpMethod.GET, requestEntity, AnalistaResponseDto.class);
-				return response.getStatusCode().value() == 200 ? response.getBody() : null;					
+				ResponseEntity<AnalistaResponseDto> response = template.exchange(URL + "buscaFuncionario?cpf=" + cpf,
+						HttpMethod.GET, requestEntity, AnalistaResponseDto.class);
+				return response.getStatusCode().value() == 200 ? response.getBody() : null;
 			} catch (Exception e) {
 				throw new EnviaBoSigmaException(e.getMessage());
 			}
 		}
- 		return null;
+		return null;
 	}
-	
+
 	private String recuperarToken(HttpServletRequest request) {
-        var authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader != null){
-            return authorizationHeader.replace("Bearer ","");
-        }
-        return null;
-    }
-	
+		var authorizationHeader = request.getHeader("Authorization");
+		if (authorizationHeader != null) {
+			return authorizationHeader.replace("Bearer ", "");
+		}
+		return null;
+	}
+
 	private boolean verificaFuncionarioSigmaAtivo(AnalistaResponseDto analistaSigma) {
 		return analistaSigma.getAtivo() == true;
 	}
-	
+
 	public Analista getAnalistaToken(HttpServletRequest request) {
 		Analista analista = getAnalistaByToken(request);
 		return analista;
@@ -190,4 +199,69 @@ public class AnalistaService {
 		return analista != null ? analista : null;
 	}
 
+	public Page<AnalistaResponseDto> getAllAnalistas(Pageable pageable) {
+		Page<Analista> analistas = analistaRepository.findAll(pageable);
+		List<AnalistaResponseDto> responseDto = new ArrayList<>();
+
+		analistas.forEach(a -> {
+			AnalistaResponseDto analistaResponseDto = converteAnalista(a);
+			responseDto.add(analistaResponseDto);
+		});
+		return new PageImpl<>(responseDto, pageable, responseDto.size());
+	}
+
+	public AnalistaResponseDto converteAnalista(Analista analista) {
+		AnalistaResponseDto analistaResponseDto = new AnalistaResponseDto();
+		analistaResponseDto.setIdAnalista(analista.getIdAnalista());
+		analistaResponseDto.setIdFuncionario(analista.getFuncionarioSigma());
+		analistaResponseDto.setNome(analista.getNome());
+		analistaResponseDto.setNomeMae(analista.getPessoa().getNomeMae());
+		analistaResponseDto.setDataNascimento(analista.getPessoa().getDataNascimento());
+		analistaResponseDto.setDataInsercao(analista.getData_cadastro());
+		analistaResponseDto.setAtivo(analista.getStatus());
+		analistaResponseDto.setMatricula(analista.getMatricula());
+		analistaResponseDto.setLogin(analista.getLogin());
+		analistaResponseDto.setFuncao(analista.getFuncao());
+		analistaResponseDto.setCargo(analista.getCargo());
+		analistaResponseDto.setPerfis(analista.getPerfis());
+		return analistaResponseDto;
+	}
+	
+	public void adicionarPerfis(Integer idAnalista, List<String> nomesPerfis) {
+		Analista analista = analistaRepository.findById(idAnalista)
+		        .orElseThrow(() -> new IllegalArgumentException("Funcionario não encontrado: " + idAnalista));
+		    
+		    for (String nomePerfil : nomesPerfis) {
+		        if(!analista.getPerfis().stream().anyMatch(perfil -> perfil.getNome().equals(nomePerfil))) {
+		            Perfil perfil = perfilRepository.findByNome(nomePerfil)
+		                .orElseThrow(() -> new IllegalArgumentException("Perfil não encontrado: " + nomePerfil));
+		            
+		            analista.getPerfis().add(perfil);
+		        }
+		    }
+		    
+		    analistaRepository.save(analista);
+    }
+	
+	public void updateAnalista(Integer idAnalista) {
+		Analista analistaAtual = new Analista();
+		var analista = findById(idAnalista).get();
+		if (analista == null) {
+			throw new AnalistaNotFoundException("Funcionario não encontrado");
+		}
+		analistaAtual.setLogin(analista.getLogin());
+		analistaAtual.setMatricula(analista.getMatricula());
+		analistaAtual.setStatus(analista.getStatus());
+		analistaAtual.setCargo(analista.getCargo());
+		analistaAtual.setFuncao(analista.getFuncao());
+	}
+
+	public void desativarAnalista(Integer id) {
+		var analistaExists = analistaRepository.findById(id)
+				.orElseThrow(() -> new AnalistaNotFoundException("Funcionario não encontrado na base de dados!"));
+		if (analistaExists != null) {
+			analistaExists.setStatus(false);
+		}
+		analistaRepository.saveAndFlush(analistaExists);
+	}
 }

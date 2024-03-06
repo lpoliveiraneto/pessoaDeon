@@ -31,6 +31,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/analista/**").hasRole("ADM");
+                    req.requestMatchers(HttpMethod.PUT, "/api/v1/analista/**").hasRole("ADM");
                     req.requestMatchers(HttpMethod.POST, "/api/v1/autenticacaoAnalista/**").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/resetSenha").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/cadastro/salvar").permitAll();
