@@ -1,14 +1,11 @@
 package com.pessoaDeon.api.controller.seguranca;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,10 +43,15 @@ public class AutenticacaoAnalistaController {
         try{
             var authentication = manager.authenticate(authenticationToken);
             Analista user = (Analista) authentication.getPrincipal();
+            if (user.getStatus().equals(true)) {
+				
             var tokenJWT = tokenService.gerarTokenAnalista(user);
             var pessoa = pessoaService.buscaPessoaCpf(dados.cpf());
             String primeiroNomeUltimo = primeiroEUltimonome(pessoa.getNome());
             return ResponseEntity.ok(new DadosTokenAnalistaJwt(user.getIdAnalista().toString(),primeiroNomeUltimo,tokenJWT, user.getPerfis(), pessoa.getId()));
+            }else {
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sua conta de funcionario foi desativada");
+            }
 
         }catch (AuthenticationException e){
 //        	String msg = "Usuario ou senha invalidos!";
