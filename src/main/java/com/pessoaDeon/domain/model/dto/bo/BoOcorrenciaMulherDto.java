@@ -1,14 +1,19 @@
 package com.pessoaDeon.domain.model.dto.bo;
 
+import java.util.List;
+
 import com.pessoaDeon.domain.model.dto.EnvolvidosRequestDto;
-import com.pessoaDeon.domain.model.dto.pecas.PerguntaRespostaDto;
 import com.pessoaDeon.domain.model.dto.pecas.RequerimentoMpuDto;
 import com.pessoaDeon.domain.model.dto.pecas.RespostasFormularioDto;
-import com.pessoaDeon.domain.model.pecas.formulario_risco.RespostaFormularioRisco;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BoOcorrenciaMulherDto{
 	private BoDto bo;
 	private EnvolvidosRequestDto envolvidos;
-	private RespostasFormularioDto respostasFormulario;
-	private RequerimentoMpuDto respostaRequerimento;
+	private List<RespostasFormularioDto> respostasFormulario;
+	private List<RequerimentoMpuDto> respostaRequerimento;
 }
