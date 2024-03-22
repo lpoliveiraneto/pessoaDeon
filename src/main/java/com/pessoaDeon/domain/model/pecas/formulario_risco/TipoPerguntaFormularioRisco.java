@@ -36,4 +36,6 @@ public class TipoPerguntaFormularioRisco implements Serializable {
 	private BlocoPerguntas bloco;
 	
 	private Boolean ativo;
+	
+	private Boolean checkbox;
 }

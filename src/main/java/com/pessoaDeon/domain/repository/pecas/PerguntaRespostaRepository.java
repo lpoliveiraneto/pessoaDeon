@@ -18,4 +18,9 @@ public interface PerguntaRespostaRepository extends JpaRepository<PerguntaRespos
     List<TipoRespostaFormularioRisco> findRespostasByPerguntaId(Integer perguntaId);
 
     PerguntaRespostaFormularioRisco findPerguntaRespostaById(Integer perguntaId);
+    
+//    @Query("SELECT pr FROM PerguntaRespostaFormularioRisco pr WHERE pr.fk_pergunta= ?1 AND pr.fk_resposta = ?2")
+//    PerguntaRespostaFormularioRisco findPerguntaidandRespotaId(Integer perguntaId, Integer respostaId);
+    
+    PerguntaRespostaFormularioRisco findByPerguntaIdAndRespostaIdAndAtivaIsTrue(Integer perguntaId, Integer respostaId);
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pessoaDeon.domain.service.pecas.PerguntaRespostaService;
 
 @RestController
-@RequestMapping("/api/v1/listas/requerimento")
+@RequestMapping("/api/v1/lista/requerimento")
 public class RequerimentoMpuController {
 
 	@Autowired

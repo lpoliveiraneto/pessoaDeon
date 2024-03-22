@@ -3,17 +3,16 @@ package com.pessoaDeon.domain.service.pecas;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.pessoaDeon.domain.model.bo.BoDeon;
-import com.pessoaDeon.domain.model.pecas.TipoPeca;
-import com.pessoaDeon.domain.model.pecas.requerimento_mpu.RequerimentoPecaMpu;
-import com.pessoaDeon.domain.repository.pecas.TipoPecaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.pecas.Peca;//import com.pessoaDeon.domain.model.pecas.RequerimentoPecaMpu;
-import com.pessoaDeon.domain.model.pecas.formulario_risco.RespostaFormularioRisco;
+import com.pessoaDeon.domain.model.pecas.TipoPeca;
+import com.pessoaDeon.domain.model.pecas.requerimento_mpu.RequerimentoPecaMpu;
 import com.pessoaDeon.domain.model.pessoa.Pessoa;
 import com.pessoaDeon.domain.repository.pecas.PecaRepository;
+import com.pessoaDeon.domain.repository.pecas.TipoPecaRepository;
 
 @Service
 public class PecaService {
@@ -63,6 +62,10 @@ public class PecaService {
 		pecaRepository.save(formulario);
 
 	}
+	public Peca pesquisaFormularioRisco(Integer idBo, Integer idFormularioRisco) {
+		var formRisco = tipoPecaRepository.findById(idFormularioRisco).get();
+		return pecaRepository.findByBoIdBoAndTipoPeca(idBo, formRisco);
+	}
 
 //	public void salvarFormulario(Peca peca, List<RespostaFormularioRisco> listaRespostas) {
 //		Peca formularioRisco = new Peca();
@@ -72,4 +75,5 @@ public class PecaService {
 //		pecaRepository.saveAndFlush(formularioRisco);
 //
 //	}
+	
 }

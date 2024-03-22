@@ -17,12 +17,15 @@ public class TipoPerguntaPecaDto {
 	private String pergunta;
 	
 	private Boolean ativo;
+	
+	private Boolean checkbox;
 
 	private List<TipoRespostaFormularioRisco> tipoRespostaFormularioRisco;
 	
-	public TipoPerguntaPecaDto(Integer id, String pergunta, Boolean ativo) {
+	public TipoPerguntaPecaDto(Integer id, String pergunta, Boolean ativo, Boolean checkbox) {
 		this.id = id;
 		this.pergunta = pergunta;
 		this.ativo = ativo;
+		this.checkbox = checkbox;
 	}
 }

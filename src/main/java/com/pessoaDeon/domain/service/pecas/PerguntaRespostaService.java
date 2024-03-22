@@ -68,6 +68,7 @@ public class PerguntaRespostaService {
             tipoPerguntaPecaDto.setId(perguntaRespostaFormularioRisco.getPergunta().getId());
             tipoPerguntaPecaDto.setAtivo(perguntaRespostaFormularioRisco.getPergunta().getAtivo());
             tipoPerguntaPecaDto.setPergunta(perguntaRespostaFormularioRisco.getPergunta().getPergunta());
+            tipoPerguntaPecaDto.setCheckbox(perguntaRespostaFormularioRisco.getPergunta().getCheckbox());
             listaResposta.add(perguntaRespostaFormularioRisco.getResposta());
         }
 
