@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pessoaDeon.domain.model.bo.BoDeon;
 import com.pessoaDeon.domain.model.dto.bo.BoDtoResponse;
 import com.pessoaDeon.domain.model.dto.bo.BoEnvolvidosRequest;
+import com.pessoaDeon.domain.model.dto.bo.BoOcorrenciaMulherDto;
 import com.pessoaDeon.domain.model.dto.bo.BosPessoaResponseDto;
 import com.pessoaDeon.domain.model.enumeration.Status;
 import com.pessoaDeon.domain.repository.bo.BoRepository;
@@ -49,6 +50,12 @@ public class BoController {
 	@PostMapping("/salvarBo")
 	public ResponseEntity<?> salvarOcorrencia(@RequestBody BoEnvolvidosRequest boEnvolvidosRequest){
 		boDeonFactoryService.salvarBo(boEnvolvidosRequest.getBo(), boEnvolvidosRequest.getEnvolvidos());
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping("/ocorrenciaMulher/salvarBo")
+	public ResponseEntity<?> salvarOcorrenciaMulher(@RequestBody BoOcorrenciaMulherDto BoOcorrenciaMulherDto){
+		//boDeonFactoryService.salvarBo(boEnvolvidosRequest.getBo(), boEnvolvidosRequest.getEnvolvidos());
 		return ResponseEntity.ok().build();
 	}
 	
